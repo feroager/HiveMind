@@ -1,3 +1,4 @@
+/*
 package com.example.server;
 
 import javafx.fxml.FXML;
@@ -12,3 +13,4 @@ public class HelloController {
         welcomeText.setText("Welcome to JavaFX Application!");
     }
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.example.server;
 
 import javafx.application.Application;
@@ -21,3 +22,5 @@ public class HelloApplication extends Application {
         launch();
     }
 }
+
+ */
