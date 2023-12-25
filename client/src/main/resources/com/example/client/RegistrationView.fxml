@@ -14,11 +14,23 @@
 <StackPane prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: #343541;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.RegistrationController">
 
     <VBox alignment="CENTER">
-        <Text fill="WHITE" text="Sign up to Chat">
-            <font>
-                <Font size="24" />
-            </font>
-        </Text>
+      <HBox prefHeight="100.0" prefWidth="200.0" spacing="35.0">
+         <children>
+            <Button fx:id="BackRegistration" mnemonicParsing="false" onAction="#onActionBackRegistration" text="⬅">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+              <Text fill="WHITE" text="Sign up to Chat">
+                  <font>
+                      <Font size="24" />
+                  </font>
+              </Text>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </HBox>
         <HBox prefHeight="55.0" prefWidth="300.0" spacing="10.0">
             <children>
                 <Text fill="WHITE" text="Email" wrappingWidth="100.98046875">
@@ -62,7 +74,7 @@
             </padding>
         </HBox>
 
-        <Button text="Sign Up">
+        <Button fx:id="SignUpRegistration" onAction="#onActionSignUpRegistration" text="Sign Up">
             <styleClass>
                 <String fx:value="button" />
             </styleClass>

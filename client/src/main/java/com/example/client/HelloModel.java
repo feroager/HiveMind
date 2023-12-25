@@ -8,8 +8,14 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class HelloModel extends Application {
+
     @Override
     public void start(Stage stage) throws IOException {
+        setHelloView(stage);
+    }
+
+    public static void setHelloView(Stage stage) throws IOException
+    {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloModel.class.getResource("HelloView.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         stage.setTitle("Hello!");
