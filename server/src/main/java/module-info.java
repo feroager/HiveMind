@@ -8,6 +8,6 @@ module com.example.server {
     exports com.example.server;
     exports com.example.message;
     opens com.example.message to javafx.fxml;
-    exports com.example.support;
-    opens com.example.support to javafx.fxml;
+    exports com.example.utils;
+    opens com.example.utils to javafx.fxml;
 }

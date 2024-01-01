@@ -1,4 +1,4 @@
-package com.example.support;
+package com.example.utils;
 
 public class UserClient extends User
 {
