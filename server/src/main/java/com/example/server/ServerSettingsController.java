@@ -46,6 +46,9 @@ public class ServerSettingsController {
             String dbUsername = dbUsernameField.getText();
             String dbPassword = dbPasswordField.getText();
 
+            DbManager.closeConnection();
+
+
             // Get a connection to the database
             Connection connection = DbManager.getConnection(dbUrl, dbUsername, dbPassword);
 
