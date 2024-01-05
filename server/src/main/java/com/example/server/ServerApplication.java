@@ -10,15 +10,10 @@ public class ServerApplication {
     private static int serverNumberPort;
     private static ServerSocket serverSocket;
 
-    public static void main(String[] args) {
-        ConsoleHelper.writeMessage("Insert server port: ");
-        serverNumberPort = ConsoleHelper.readInt();
-
-        new ServerApplication().startServer();
-    }
-
     public void startServer() {
         try {
+            ConsoleHelper.writeMessage("Insert server port: ");
+            serverNumberPort = ConsoleHelper.readInt();
             serverSocket = new ServerSocket(serverNumberPort);
             ConsoleHelper.writeMessage("Server's running");
             while (true) {

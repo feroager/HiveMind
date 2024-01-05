@@ -8,6 +8,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class ServerUI extends Application {
+
+    private static ServerApplication serverApplication;
     @Override
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ServerSettingsView.fxml"));
@@ -15,6 +17,11 @@ public class ServerUI extends Application {
         primaryStage.setTitle("Project Chat Server");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        serverApplication = new ServerApplication();
+
+
+
     }
 
     public static void main(String[] args) {
