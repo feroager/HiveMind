@@ -1,39 +1,48 @@
 package com.example.message;
 
 /**
- * The enumeration defines the basic types of messages exchanged between the server and the client
+ * Enumeration representing message types for communication between the client and the server.
+ * Each message type has an associated value that is used in the communication protocol.
  */
 public enum MessageType {
     /**
-     * The server requests a login and password
+     * Request for user login.
      */
-    PASS_REQUEST,
+    LOGIN_REQUEST("LOGIN_REQUEST"),
+
     /**
-     * The client sends the login and password.
+     * Response to a user login request.
      */
-    USER_PASS,
+    LOGIN_RESPONSE("LOGIN_RESPONSE"),
+
     /**
-     * The client requests registration and sends a login and password
+     * Request for user registration.
      */
-    REGISTER_REQUESTED,
+    REGISTER_REQUEST("REGISTER_REQUEST"),
+
     /**
-     * The server informs that login was successful
+     * Response to a user registration request.
      */
-    PASS_ACCEPTED,
+    REGISTER_RESPONSE("REGISTER_RESPONSE");
+
+    private final String value;
+
     /**
-     * The server reports that login has failed
+     * Constructs a MessageType with the specified value.
+     *
+     * @param value The value associated with the message type.
      */
-    PASS_DENIED,
+    MessageType(String value) {
+        this.value = value;
+    }
+
     /**
-     * The server informs that the registration was successful
+     * Gets the value associated with the message type.
+     *
+     * @return The value of the message type.
      */
-    REGISTER_ACCEPTED,
-    /**
-     * The server reports that registration has failed
-     */
-    REGISTER_DENIED,
-    /**
-     * Regular text message
-     */
-    TEXT
+    public String getValue() {
+        return value;
+    }
 }
+

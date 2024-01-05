@@ -1,11 +1,16 @@
 package com.example.server;
 
 import java.sql.Connection;
+
+import com.example.database.dao.UserDao;
+import com.example.database.dbutils.DbManager;
+import com.example.database.models.User;
 import com.example.utils.ConsoleHelper;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 
 public class ServerApplication {
     private static int serverNumberPort;
@@ -14,7 +19,6 @@ public class ServerApplication {
     private static ServerSettingsController serverSettingsController;
 
     public void startServer() {
-
 
         try {
             ConsoleHelper.writeMessage("Insert server port: ");
