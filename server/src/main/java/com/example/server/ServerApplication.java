@@ -14,6 +14,8 @@ public class ServerApplication {
     private static ServerSettingsController serverSettingsController;
 
     public void startServer() {
+
+
         try {
             ConsoleHelper.writeMessage("Insert server port: ");
             serverNumberPort = ConsoleHelper.readInt();

@@ -46,11 +46,11 @@ public class ServerSettingsController {
             String dbUsername = dbUsernameField.getText();
             String dbPassword = dbPasswordField.getText();
 
-            DbManager.closeConnection();
-
+            DbManager.initialize(dbUrl, dbUsername, dbPassword);
 
             // Get a connection to the database
-            Connection connection = DbManager.getConnection(dbUrl, dbUsername, dbPassword);
+            Connection connection = DbManager.getConnection();
+            serverApplication.setConnectionDb(connection);
 
             // Additional operations related to starting the server can be placed here
             // ...

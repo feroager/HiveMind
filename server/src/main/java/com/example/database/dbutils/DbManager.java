@@ -8,46 +8,40 @@ import java.sql.SQLException;
  * Manages the database connection.
  */
 public class DbManager {
-    private static Connection connection;
+    private static String dbUrl;
+    private static String dbUsername;
+    private static String dbPassword;
 
     private DbManager() {
         // Private constructor to ensure the class is used as a singleton.
     }
 
     /**
-     * Gets a connection to the database based on the provided information.
+     * Initializes the database connection parameters.
      *
-     * @param dbUrl      The URL of the database.
-     * @param dbUsername The username for the database connection.
-     * @param dbPassword The password for the database connection.
-     * @return A database connection.
-     * @throws SQLException If a database access error occurs.
+     * @param url      The URL of the database.
+     * @param username The username for the database connection.
+     * @param password The password for the database connection.
      */
-    public static Connection getConnection(String dbUrl, String dbUsername, String dbPassword) throws SQLException {
-        if (connection == null || connection.isClosed()) {
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                connection = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace(); // or handle it in a different way
-                throw new SQLException("Database driver not found.");
-            }
-        }
-        return connection;
+    public static void initialize(String url, String username, String password) {
+        dbUrl = url;
+        dbUsername = username;
+        dbPassword = password;
     }
 
     /**
-     * Closes the database connection.
+     * Gets a new connection to the database based on the provided information.
+     *
+     * @return A new database connection.
+     * @throws SQLException If a database access error occurs.
      */
-    public static void closeConnection() {
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace(); // or handle it in a different way
-            } finally {
-                connection = null;
-            }
+    public static Connection getConnection() throws SQLException {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            return DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace(); // or handle it in a different way
+            throw new SQLException("Database driver not found.");
         }
     }
 }
