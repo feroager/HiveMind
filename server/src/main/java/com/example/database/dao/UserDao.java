@@ -66,6 +66,29 @@ public class UserDao {
     }
 
     /**
+     * Retrieves a user by email.
+     *
+     * @param email The email address of the user.
+     * @return The user with the specified email, or null if not found.
+     */
+    public User getUserByEmail(String email) {
+        String sql = "SELECT * FROM users WHERE email = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, email);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return mapUserFromResultSet(resultSet);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
      * Retrieves all users from the database.
      *
      * @return A list of all users.
@@ -185,5 +208,4 @@ public class UserDao {
             e.printStackTrace();
         }
     }
-
 }
