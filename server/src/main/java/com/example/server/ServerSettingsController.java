@@ -13,7 +13,7 @@ import java.sql.SQLException;
  * Controller for the server settings UI.
  */
 public class ServerSettingsController {
-
+    private static ServerApplication serverApplication;
     @FXML
     private TextField dbIpField;
 

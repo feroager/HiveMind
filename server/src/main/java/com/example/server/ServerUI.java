@@ -10,6 +10,7 @@ import java.io.IOException;
 public class ServerUI extends Application {
 
     private static ServerApplication serverApplication;
+    private static ServerSettingsController serverSettingsController;
     @Override
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ServerSettingsView.fxml"));
@@ -19,8 +20,8 @@ public class ServerUI extends Application {
         primaryStage.show();
 
         serverApplication = new ServerApplication();
-
-
+        serverSettingsController = fxmlLoader.getController();
+        serverApplication.setServerSettingsController(serverSettingsController);
 
     }
 
