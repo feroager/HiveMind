@@ -14,7 +14,7 @@ import java.net.SocketAddress;
  * It provides methods for sending and receiving {@link Message} objects.
  *
  */
-public class Connection implements Closeable {
+public class ConnectionHost implements Closeable {
 
     /**
      * The underlying socket for the connection.
@@ -37,7 +37,7 @@ public class Connection implements Closeable {
      * @param socket The socket representing the connection.
      * @throws IOException If an I/O error occurs while creating the connection.
      */
-    public Connection(Socket socket) throws IOException {
+    public ConnectionHost(Socket socket) throws IOException {
         this.socket = socket;
         this.out = new ObjectOutputStream(socket.getOutputStream());
         this.in = new ObjectInputStream(socket.getInputStream());
