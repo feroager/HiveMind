@@ -20,8 +20,6 @@ public class ServerUI extends Application {
         primaryStage.show();
 
         serverApplication = new ServerApplication();
-        serverSettingsController = fxmlLoader.getController();
-        serverApplication.setServerSettingsController(serverSettingsController);
 
     }
 

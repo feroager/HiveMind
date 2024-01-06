@@ -15,8 +15,6 @@ import java.sql.SQLException;
 public class ServerApplication {
     private static int serverNumberPort;
     private static ServerSocket serverSocket;
-    private static Connection connectionDb;
-    private static ServerSettingsController serverSettingsController;
 
     public void startServer() {
 
@@ -44,23 +42,4 @@ public class ServerApplication {
 
     }
 
-    public static Connection getConnectionDb()
-    {
-        return connectionDb;
-    }
-
-    public static void setConnectionDb(Connection connectionDb)
-    {
-        ServerApplication.connectionDb = connectionDb;
-    }
-
-    public static ServerSettingsController getServerSettingsController()
-    {
-        return serverSettingsController;
-    }
-
-    public static void setServerSettingsController(ServerSettingsController serverSettingsController)
-    {
-        ServerApplication.serverSettingsController = serverSettingsController;
-    }
 }
