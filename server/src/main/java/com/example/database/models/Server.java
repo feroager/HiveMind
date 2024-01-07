@@ -1,12 +1,14 @@
 package com.example.database.models;
 
 //import java.security.Timestamp;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * Represents the 'servers' table in the database.
  */
-public class Server implements BaseModel {
+public class Server implements BaseModel, Serializable
+{
 
     private int serverId;
     private String name;

@@ -1,9 +1,12 @@
 package com.example.database.models;
 
+import java.io.Serializable;
+
 /**
  * Represents the 'channels' table in the database.
  */
-public class Channel implements BaseModel {
+public class Channel implements BaseModel, Serializable
+{
 
     private int channelId;
     private int serverId;

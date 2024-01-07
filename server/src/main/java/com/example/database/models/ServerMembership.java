@@ -1,9 +1,12 @@
 package com.example.database.models;
 
+import java.io.Serializable;
+
 /**
  * Represents the 'server_memberships' table in the database.
  */
-public class ServerMembership implements BaseModel {
+public class ServerMembership implements BaseModel, Serializable
+{
 
     private int membershipId;
     private int userId;

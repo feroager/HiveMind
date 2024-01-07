@@ -1,11 +1,13 @@
 package com.example.database.models;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * Represents the 'messages' table in the database.
  */
-public class Message implements BaseModel {
+public class Message implements BaseModel, Serializable
+{
 
     private int messageId;
     private int userId;
