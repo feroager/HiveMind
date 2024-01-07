@@ -2,6 +2,7 @@ package com.example.server;
 
 import com.example.database.dbutils.DbManager;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -51,14 +52,14 @@ public class ServerSettingsController {
 
             // Get a connection to the database
             Connection connection = DbManager.getConnection();
-
-            // Additional operations related to starting the server can be placed here
-            // ...
-
-            // Update statuses
-            serverOn();
             dataBaseOn();
-            new ServerApplication();
+
+            // Start the server in a new thread
+            new Thread(() -> {
+                new ServerApplication(Integer.parseInt(portField.getText()), this).startServer();
+            }).start();
+
+
         } catch (SQLException e) {
             e.printStackTrace(); // or handle it in a different way
             // Update statuses in case of an error
@@ -67,28 +68,32 @@ public class ServerSettingsController {
         }
     }
 
-    private void dataBaseOff()
-    {
-        dbStatusLabel.setText("OFF");
-        dbStatusLabel.setTextFill(javafx.scene.paint.Color.RED);
+    public void dataBaseOff() {
+        Platform.runLater(() -> {
+            dbStatusLabel.setText("OFF");
+            dbStatusLabel.setTextFill(javafx.scene.paint.Color.RED);
+        });
     }
 
-    private void serverOff()
-    {
-        serverStatusLabel.setText("OFF");
-        serverStatusLabel.setTextFill(javafx.scene.paint.Color.RED);
+    public void serverOff() {
+        Platform.runLater(() -> {
+            serverStatusLabel.setText("OFF");
+            serverStatusLabel.setTextFill(javafx.scene.paint.Color.RED);
+        });
     }
 
-    private void dataBaseOn()
-    {
-        dbStatusLabel.setText("ON");
-        dbStatusLabel.setTextFill(javafx.scene.paint.Color.GREEN);
+    public void dataBaseOn() {
+        Platform.runLater(() -> {
+            dbStatusLabel.setText("ON");
+            dbStatusLabel.setTextFill(javafx.scene.paint.Color.GREEN);
+        });
     }
 
-    private void serverOn()
-    {
-        serverStatusLabel.setText("ON");
-        serverStatusLabel.setTextFill(javafx.scene.paint.Color.GREEN);
+    public void serverOn() {
+        Platform.runLater(() -> {
+            serverStatusLabel.setText("ON");
+            serverStatusLabel.setTextFill(javafx.scene.paint.Color.GREEN);
+        });
     }
 
 }

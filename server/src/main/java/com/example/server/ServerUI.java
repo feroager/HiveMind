@@ -19,8 +19,6 @@ public class ServerUI extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        serverApplication = new ServerApplication();
-
     }
 
     public static void main(String[] args) {

@@ -1,5 +1,7 @@
 package com.example.message;
 
+import com.example.models.User;
+
 import java.io.Serializable;
 
 /**
@@ -17,6 +19,8 @@ public class Message implements Serializable {
      */
     private final String data;
 
+    private final User user;
+
     /**
      * Constructs a message with the specified type and no data.
      *
@@ -24,6 +28,14 @@ public class Message implements Serializable {
      */
     public Message(MessageType type) {
         this.type = type;
+        this.data = null;
+        this.user = null;
+    }
+
+    public Message(MessageType type, User user)
+    {
+        this.type = type;
+        this.user = user;
         this.data = null;
     }
 
@@ -36,6 +48,7 @@ public class Message implements Serializable {
     public Message(MessageType type, String data) {
         this.type = type;
         this.data = data;
+        this.user = null;
     }
 
     /**
@@ -54,6 +67,11 @@ public class Message implements Serializable {
      */
     public String getData() {
         return data;
+    }
+
+    public User getUser()
+    {
+        return user;
     }
 }
 
