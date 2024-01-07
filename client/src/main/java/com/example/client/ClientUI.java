@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HelloModel extends Application {
+public class ClientUI extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -16,7 +16,7 @@ public class HelloModel extends Application {
 
     public static void setHelloView(Stage stage) throws IOException
     {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloModel.class.getResource("HelloView.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(ClientUI.class.getResource("HelloView.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         stage.setTitle("Hello!");
         stage.setResizable(false);
