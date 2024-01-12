@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<StackPane prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: #343541;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.RegistrationController">
+<StackPane prefHeight="340.0" prefWidth="300.0" style="-fx-background-color: #343541;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.RegistrationController">
 
-    <VBox alignment="CENTER">
+    <VBox alignment="CENTER" prefHeight="328.0" prefWidth="300.0">
       <HBox prefHeight="100.0" prefWidth="200.0" spacing="35.0">
          <children>
             <Button fx:id="BackRegistration" mnemonicParsing="false" onAction="#onActionBackRegistration" text="⬅">
@@ -31,6 +26,32 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
       </HBox>
+        <HBox prefHeight="55.0" prefWidth="300.0" spacing="10.0">
+            <children>
+                <Text fill="WHITE" text="IP" wrappingWidth="101.828125">
+                    <font>
+                        <Font size="24" />
+                    </font>
+                </Text>
+                <TextField />
+            </children>
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </padding>
+        </HBox>
+        <HBox prefHeight="55.0" prefWidth="300.0" spacing="10.0">
+            <children>
+                <Text fill="WHITE" text="Port" wrappingWidth="100.98046875">
+                    <font>
+                        <Font size="24" />
+                    </font>
+                </Text>
+                <TextField />
+            </children>
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </padding>
+        </HBox>
         <HBox prefHeight="55.0" prefWidth="300.0" spacing="10.0">
             <children>
                 <Text fill="WHITE" text="Email" wrappingWidth="100.98046875">
