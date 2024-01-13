@@ -1,11 +1,14 @@
 package com.example.client;
 
+import com.example.message.Message;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -36,6 +39,23 @@ public class RegistrationController {
     @FXML
     private TextField portRegistartion;
 
+    @FXML
+    private Label resultLabelRegistartion;
+
+    public void setResultLabelRegistartionText(Message result)
+    {
+        Platform.runLater(() -> {
+            if(result.getData()=="Registration was successful, you can log in")
+            {
+                resultLabelRegistartion.setTextFill(javafx.scene.paint.Color.GREEN);
+            }
+            else
+            {
+                resultLabelRegistartion.setTextFill(javafx.scene.paint.Color.RED);
+            }
+            resultLabelRegistartion.setText(result.getData());
+        });
+    }
 
     @FXML
     void onActionBackRegistration(ActionEvent event) {
@@ -44,6 +64,7 @@ public class RegistrationController {
     @FXML
     void onActionSignUpRegistration(ActionEvent event) {
         ClientApplication clientApplication = new ClientApplication(ipRegistartion.getText(), Integer.parseInt(portRegistartion.getText()));
+        clientApplication.setRegistrationController(this);
         clientApplication.register(userNameRegistartion.getText(), passwordRegistartion.getText(), emailRegistartion.getText());
     }
 

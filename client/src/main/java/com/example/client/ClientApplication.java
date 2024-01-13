@@ -13,6 +13,8 @@ public class ClientApplication {
     private String serverIp;
     private int serverPort;
 
+    private RegistrationController registrationController;
+
     public ClientApplication(String serverIp, int serverPort) {
         this.serverIp = serverIp;
         this.serverPort = serverPort;
@@ -51,6 +53,8 @@ public class ClientApplication {
                 Message response = connectionHost.receive();
 
                 if (response.getType() == MessageType.REGISTER_RESPONSE) {
+                    if(registrationController!=null)
+                        registrationController.setResultLabelRegistartionText(response);
                     ConsoleHelper.writeMessage(response.getData());
                 } else {
                     ConsoleHelper.writeMessage("Unexpected response type from the server.");
@@ -64,6 +68,8 @@ public class ClientApplication {
         }
     }
 
-
-
+    public void setRegistrationController(RegistrationController registrationController)
+    {
+        this.registrationController = registrationController;
+    }
 }
