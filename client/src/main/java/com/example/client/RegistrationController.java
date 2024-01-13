@@ -45,7 +45,7 @@ public class RegistrationController {
     public void setResultLabelRegistartionText(Message result)
     {
         Platform.runLater(() -> {
-            if(result.getData()=="Registration was successful, you can log in")
+            if(result.getData().equals("Registration was successful, you can log in"))
             {
                 resultLabelRegistartion.setTextFill(javafx.scene.paint.Color.GREEN);
             }
