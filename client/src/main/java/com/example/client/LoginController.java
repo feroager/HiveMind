@@ -39,4 +39,8 @@ public class LoginController {
         }
     }
 
+    public static void setMainView() {
+
+    }
+
 }

@@ -14,6 +14,7 @@ public class ClientApplication {
     private int serverPort;
 
     private RegistrationController registrationController;
+    private LoginController loginController;
 
     public ClientApplication(String serverIp, int serverPort) {
         this.serverIp = serverIp;
@@ -38,7 +39,36 @@ public class ClientApplication {
     }
 
     public void login(String username, String password) {
+        User loginUser = new User(0, username, password, null);
+        Message loginRequest = new Message(MessageType.LOGIN_REQUEST, loginUser);
 
+        try (Socket socket = new Socket(serverIp, serverPort)) {
+            try (ConnectionHost connectionHost = new ConnectionHost(socket)) {
+
+                connectionHost.send(loginRequest);
+
+                Message response = connectionHost.receive();
+
+                if (response.getType() == MessageType.LOGIN_RESPONSE) {
+                    if(loginController != null && Boolean.parseBoolean(response.getData()))
+                    {
+                        ConsoleHelper.writeMessage("Login");
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else {
+                    ConsoleHelper.writeMessage("Unexpected response type from the server.");
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                ConsoleHelper.writeMessage("Error while communicating with " + socket.getRemoteSocketAddress());
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void register(String username, String password, String email) {
