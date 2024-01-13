@@ -15,6 +15,11 @@ import java.util.List;
 public class UserDao {
     private final Connection connection;
 
+    /**
+     * Constructs a UserDao with a specified database connection.
+     *
+     * @param connection The database connection.
+     */
     public UserDao(Connection connection) {
         this.connection = connection;
     }
@@ -26,11 +31,9 @@ public class UserDao {
      * @return The user with the specified ID, or null if not found.
      */
     public User getUserById(int userId) {
-        String sql = "SELECT * FROM users WHERE userId = ?";
+        String sql = "SELECT * FROM users WHERE user_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-
             statement.setInt(1, userId);
-
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return mapUserFromResultSet(resultSet);
@@ -51,9 +54,7 @@ public class UserDao {
     public User getUserByUsername(String username) {
         String sql = "SELECT * FROM users WHERE username = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-
             statement.setString(1, username);
-
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return mapUserFromResultSet(resultSet);
@@ -74,9 +75,7 @@ public class UserDao {
     public User getUserByEmail(String email) {
         String sql = "SELECT * FROM users WHERE email = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-
             statement.setString(1, email);
-
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return mapUserFromResultSet(resultSet);
@@ -98,7 +97,6 @@ public class UserDao {
         List<User> users = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
-
             while (resultSet.next()) {
                 User user = mapUserFromResultSet(resultSet);
                 users.add(user);
@@ -118,7 +116,6 @@ public class UserDao {
     public int addUser(User user) {
         String sql = "INSERT INTO users (username, password, email) VALUES (?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getPassword());
             statement.setString(3, user.getEmail());
@@ -144,9 +141,8 @@ public class UserDao {
      * @return True if the update was successful, false otherwise.
      */
     public boolean updateUser(User user) {
-        String sql = "UPDATE users SET username = ?, password = ?, email = ? WHERE userId = ?";
+        String sql = "UPDATE users SET username = ?, password = ?, email = ? WHERE user_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getPassword());
             statement.setString(3, user.getEmail());
@@ -167,9 +163,8 @@ public class UserDao {
      * @return True if the deletion was successful, false otherwise.
      */
     public boolean deleteUser(int userId) {
-        String sql = "DELETE FROM users WHERE userId = ?";
+        String sql = "DELETE FROM users WHERE user_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-
             statement.setInt(1, userId);
 
             int affectedRows = statement.executeUpdate();
@@ -188,7 +183,7 @@ public class UserDao {
      * @throws SQLException If a database access error occurs.
      */
     private User mapUserFromResultSet(ResultSet resultSet) throws SQLException {
-        int userId = resultSet.getInt("userId");
+        int userId = resultSet.getInt("user_id");
         String username = resultSet.getString("username");
         String password = resultSet.getString("password");
         String email = resultSet.getString("email");
