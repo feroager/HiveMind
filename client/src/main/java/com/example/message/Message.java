@@ -1,6 +1,6 @@
 package com.example.message;
 
-import com.example.models.User;
+import com.example.database.models.User;
 
 import java.io.Serializable;
 

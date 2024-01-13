@@ -1,8 +1,12 @@
-package com.example.models;
+package com.example.database.models;
+
+import java.io.Serializable;
+
 /**
  * Represents the 'users' table in the database.
  */
-public class User implements BaseModel {
+public class User implements BaseModel, Serializable
+{
 
     private int userId;
     private String username;

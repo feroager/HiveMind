@@ -6,11 +6,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class RegistrationController {
+
 
     @FXML
     private Button BackRegistration;
@@ -19,12 +22,29 @@ public class RegistrationController {
     private Button SignUpRegistration;
 
     @FXML
+    private TextField emailRegistartion;
+
+    @FXML
+    private TextField ipRegistartion;
+
+    @FXML
+    private TextField userNameRegistartion;
+
+    @FXML
+    private PasswordField passwordRegistartion;
+
+    @FXML
+    private TextField portRegistartion;
+
+
+    @FXML
     void onActionBackRegistration(ActionEvent event) {
         setHelloView(BackRegistration);
     }
     @FXML
     void onActionSignUpRegistration(ActionEvent event) {
-
+        ClientApplication clientApplication = new ClientApplication(ipRegistartion.getText(), Integer.parseInt(portRegistartion.getText()));
+        clientApplication.register(userNameRegistartion.getText(), passwordRegistartion.getText(), emailRegistartion.getText());
     }
 
     public static void setHelloView(Button button) {
