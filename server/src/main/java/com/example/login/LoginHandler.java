@@ -22,11 +22,13 @@ public class LoginHandler {
     /**
      * Logs in a user and returns the login status.
      *
-     * @param username The username of the user.
-     * @param password The password of the user.
+     * @param userLoginPassword User(Login and Password).
      * @return The login status.
      */
-    public LoginStatus loginUser(String username, String password) {
+    public LoginStatus loginUser(User userLoginPassword) {
+        String username = userLoginPassword.getUsername();
+        String password = userLoginPassword.getPassword();
+
         if (!isValidUsername(username) || !isValidPassword(password)) {
             return LoginStatus.INTERNAL_ERROR;
         }

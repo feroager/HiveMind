@@ -2,6 +2,8 @@ package com.example.server;
 
 import com.example.database.dao.UserDao;
 import com.example.database.dbutils.DbManager;
+import com.example.login.LoginHandler;
+import com.example.login.LoginStatus;
 import com.example.message.Message;
 import com.example.message.MessageType;
 import com.example.registration.RegistrationHandler;
@@ -14,10 +16,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ServerApplication {
     private int port;
     private ServerSettingsController serverSettingsController;
+    private static Map<String, ConnectionHost> connectionMap = new ConcurrentHashMap<>();
 
     public ServerApplication(int port, ServerSettingsController serverSettingsController) {
         this.port = port;
@@ -110,7 +115,35 @@ public class ServerApplication {
         }
 
         private void handleLoginRequest(ConnectionHost connection, Message request) throws IOException, SQLException {
-            // You do later
+            // Perform registration using LoginHandler
+            UserDao userDao = new UserDao(DbManager.getConnection());
+            LoginHandler loginHandler = new LoginHandler(userDao);
+            LoginStatus loginStatus = loginHandler.loginUser(request.getUser());
+
+            Message response;
+            if(loginStatus == LoginStatus.INTERNAL_ERROR)
+            {
+                response = new Message(MessageType.LOGIN_RESPONSE,"Complete your login and password.");
+            }
+            else if(loginStatus == LoginStatus.USER_NOT_FOUND)
+            {
+                response = new Message(MessageType.LOGIN_RESPONSE,"Such a user does not exist.");
+            }
+            else if(loginStatus == LoginStatus.INVALID_PASSWORD)
+            {
+                response = new Message(MessageType.LOGIN_RESPONSE,"Invalid password");
+            }
+            else if(loginStatus == LoginStatus.SUCCESS)
+            {
+                response = new Message(MessageType.LOGIN_RESPONSE,"true");
+            }
+            else
+            {
+                throw new IOException();
+            }
+
+            // Send a response back to the client
+            connection.send(response);
         }
 
     }
