@@ -13,7 +13,7 @@
     <!-- Top -->
     <top>
         <!-- Server bar with scrollbar -->
-        <ScrollPane style="-fx-background-color: #343541;">
+        <ScrollPane style="-fx-background: #343541;">
             <content>
                 <HBox />
             </content>
@@ -23,7 +23,7 @@
     <!-- Left -->
     <left>
         <!-- Channel list with scrollbar -->
-        <ScrollPane style="-fx-background-color: #343541;">
+        <ScrollPane style="-fx-background: #343541;">
             <VBox>
                 <!-- UI elements for channels -->
             </VBox>
@@ -33,15 +33,11 @@
     <!-- Center -->
     <center>
          <!-- Message list -->
-         <ScrollPane style="-fx-background-color: #343541;">
+         <ScrollPane style="-fx-background: #343541;">
              <content>
-                 <VBox maxHeight="4000.0" maxWidth="4000.0" prefHeight="337.0" prefWidth="562.0" style="-fx-background-color: #343541;" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
-               <children>
-                  <Button mnemonicParsing="false" text="Button" />
-                  <Button mnemonicParsing="false" text="Button" />
-                  <Button mnemonicParsing="false" text="Button" />
-               </children>
-            </VBox>
+                 <VBox style="-fx-background-color: #343541;" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                        <!-- Elementy UI kanałów -->
+                    </VBox>
              </content>
          </ScrollPane>
     </center>
