@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<!-- fx:controller="com.example.controllers.MainController" -->
+
+<BorderPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #343541;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <!-- Top -->
+    <top>
+        <!-- Server bar with scrollbar -->
+        <ScrollPane style="-fx-background-color: #343541;">
+            <content>
+                <HBox />
+            </content>
+        </ScrollPane>
+    </top>
+
+    <!-- Left -->
+    <left>
+        <!-- Channel list with scrollbar -->
+        <ScrollPane style="-fx-background-color: #343541;">
+            <VBox>
+                <!-- UI elements for channels -->
+            </VBox>
+        </ScrollPane>
+    </left>
+
+    <!-- Center -->
+    <center>
+         <!-- Message list -->
+         <ScrollPane style="-fx-background-color: #343541;">
+             <content>
+                 <VBox maxHeight="4000.0" maxWidth="4000.0" prefHeight="337.0" prefWidth="562.0" style="-fx-background-color: #343541;" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+               <children>
+                  <Button mnemonicParsing="false" text="Button" />
+                  <Button mnemonicParsing="false" text="Button" />
+                  <Button mnemonicParsing="false" text="Button" />
+               </children>
+            </VBox>
+             </content>
+         </ScrollPane>
+    </center>
+
+    <!-- Bottom -->
+    <bottom>
+        <!-- Username bar with logout button -->
+        <HBox style="-fx-background-color: #343541;">
+            <Label text="Username" />
+            <Button text="Logout" />
+        </HBox>
+    </bottom>
+</BorderPane>
