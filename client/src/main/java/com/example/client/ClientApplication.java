@@ -53,10 +53,15 @@ public class ClientApplication {
                     if(loginController != null && Boolean.parseBoolean(response.getData()))
                     {
                         ConsoleHelper.writeMessage("Login");
+                        loginController.setMainView();
+                    }
+                    else if(loginController != null)
+                    {
+                        loginController.setResultLabelLogin(response);
                     }
                     else
                     {
-
+                        ConsoleHelper.writeMessage("LoginContoller error.");
                     }
                 }
                 else {
@@ -101,5 +106,10 @@ public class ClientApplication {
     public void setRegistrationController(RegistrationController registrationController)
     {
         this.registrationController = registrationController;
+    }
+
+    public void setLoginController(LoginController loginController)
+    {
+        this.loginController = loginController;
     }
 }

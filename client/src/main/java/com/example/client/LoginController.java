@@ -1,11 +1,17 @@
 package com.example.client;
 
+import com.example.message.Message;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -19,13 +25,30 @@ public class LoginController {
     private Button SignInLogin;
 
     @FXML
+    private TextField ipFieldLogin;
+
+    @FXML
+    private PasswordField passwordFieldLogin;
+
+    @FXML
+    private TextField portFieldLogin;
+
+    @FXML
+    private Label resultLabelLogin;
+
+    @FXML
+    private TextField usernameFieldLogin;
+
+    @FXML
     void onActionBackLogin(ActionEvent event) {
         setHelloView(BackLogin);
     }
 
     @FXML
     void onActionSignInLogin(ActionEvent event) {
-
+        ClientApplication clientApplication = new ClientApplication(ipFieldLogin.getText(), Integer.parseInt(portFieldLogin.getText()));
+        clientApplication.setLoginController(this);
+        clientApplication.login(usernameFieldLogin.getText(), passwordFieldLogin.getText());
     }
 
     public static void setHelloView(Button button) {
@@ -39,8 +62,24 @@ public class LoginController {
         }
     }
 
-    public static void setMainView() {
-
+    public void setMainView() {
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(MainController.class.getResource("/com/example/client/MainView.fxml"));
+                Parent mainView = loader.load();
+                Stage primaryStage = (Stage) BackLogin.getScene().getWindow();
+                primaryStage.setScene(new Scene(mainView));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
+    public void setResultLabelLogin(Message result)
+    {
+        Platform.runLater(() -> {
+            resultLabelLogin.setTextFill(javafx.scene.paint.Color.RED);
+            resultLabelLogin.setText(result.getData());
+        });
+    }
 }
