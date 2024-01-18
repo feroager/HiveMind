@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 
 <!-- fx:controller="com.example.controllers.MainController" -->
 
@@ -13,9 +9,9 @@
     <!-- Top -->
     <top>
         <!-- Server bar with scrollbar -->
-        <ScrollPane style="-fx-background: #343541;">
+        <ScrollPane hbarPolicy="ALWAYS" prefHeight="74.0" style="-fx-background: #343541;" vbarPolicy="NEVER">
             <content>
-                <HBox />
+                <fx:include source="ServersView.fxml" />
             </content>
         </ScrollPane>
     </top>
@@ -24,30 +20,19 @@
     <left>
         <!-- Channel list with scrollbar -->
         <ScrollPane style="-fx-background: #343541;">
-            <VBox>
-                <!-- UI elements for channels -->
-            </VBox>
+            <fx:include source="ChannelsView.fxml" />
         </ScrollPane>
     </left>
 
     <!-- Center -->
     <center>
          <!-- Message list -->
-         <ScrollPane style="-fx-background: #343541;">
-             <content>
-                 <VBox style="-fx-background-color: #343541;" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
-                        <!-- Elementy UI kanałów -->
-                    </VBox>
-             </content>
+         <ScrollPane prefHeight="300.0" prefWidth="564.0" style="-fx-background: #343541;">
+             <fx:include source="MessagesView.fxml" />
          </ScrollPane>
     </center>
 
-    <!-- Bottom -->
     <bottom>
-        <!-- Username bar with logout button -->
-        <HBox style="-fx-background-color: #343541;">
-            <Label text="Username" />
-            <Button text="Logout" />
-        </HBox>
+        <fx:include source="FooterView.fxml" />
     </bottom>
 </BorderPane>
