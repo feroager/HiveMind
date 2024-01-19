@@ -1,8 +1,8 @@
 package com.example.client;
 
 import com.example.message.Message;
-import com.example.message.MessageType;
 import com.example.database.models.User;
+import com.example.message.MessageType;
 import com.example.utils.ConnectionHost;
 import com.example.utils.ConsoleHelper;
 

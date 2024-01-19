@@ -23,7 +23,11 @@ public enum MessageType {
     /**
      * Response to a user registration request.
      */
-    REGISTER_RESPONSE("REGISTER_RESPONSE");
+    REGISTER_RESPONSE("REGISTER_RESPONSE"),
+    /**
+     * User logout request
+     */
+    LOGOUT_REQUEST("LOGOUT_REQUEST");
 
     private final String value;
 
