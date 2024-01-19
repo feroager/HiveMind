@@ -115,13 +115,18 @@ public class ServerApplication {
         }
 
         private void handleLoginRequest(ConnectionHost connection, Message request) throws IOException, SQLException {
+            Message response;
+
             // Perform registration using LoginHandler
             UserDao userDao = new UserDao(DbManager.getConnection());
             LoginHandler loginHandler = new LoginHandler(userDao);
             LoginStatus loginStatus = loginHandler.loginUser(request.getUser());
 
-            Message response;
-            if(loginStatus == LoginStatus.INTERNAL_ERROR)
+            if(connectionMap.containsKey(request.getUser().getUsername()))
+            {
+                response = new Message(MessageType.LOGIN_RESPONSE,"This user is already logged in.");
+            }
+            else if(loginStatus == LoginStatus.INTERNAL_ERROR)
             {
                 response = new Message(MessageType.LOGIN_RESPONSE,"Complete your login and password.");
             }
@@ -136,6 +141,7 @@ public class ServerApplication {
             else if(loginStatus == LoginStatus.SUCCESS)
             {
                 response = new Message(MessageType.LOGIN_RESPONSE,"true");
+                connectionMap.put(request.getUser().getUsername(), connection);
             }
             else
             {

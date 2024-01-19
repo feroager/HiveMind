@@ -68,6 +68,7 @@ public class LoginController {
                 FXMLLoader loader = new FXMLLoader(MainController.class.getResource("/com/example/client/MainView.fxml"));
                 Parent mainView = loader.load();
                 Stage primaryStage = (Stage) BackLogin.getScene().getWindow();
+                primaryStage.setResizable(true);
                 primaryStage.setScene(new Scene(mainView));
             } catch (IOException e) {
                 e.printStackTrace();
