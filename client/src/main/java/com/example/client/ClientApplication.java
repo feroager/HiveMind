@@ -27,6 +27,7 @@ public class ClientApplication {
             this.serverIp = serverIp;
             this.serverPort = serverPort;
             this.mainController = mainController;
+            this.footerController = mainController.getFooterController();
         }
 
 
