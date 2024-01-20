@@ -2,6 +2,7 @@ package com.example.client;
 
 import com.example.message.Message;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -62,7 +63,9 @@ public class LoginController {
         }
     }
 
-    public void setMainView() {
+    public MainController setMainView() {
+        final SimpleObjectProperty<MainController> mainControllerProperty = new SimpleObjectProperty<>();
+
         Platform.runLater(() -> {
             try {
                 FXMLLoader loader = new FXMLLoader(MainController.class.getResource("/com/example/client/MainView.fxml"));
@@ -70,10 +73,14 @@ public class LoginController {
                 Stage primaryStage = (Stage) BackLogin.getScene().getWindow();
                 primaryStage.setResizable(true);
                 primaryStage.setScene(new Scene(mainView));
+
+                mainControllerProperty.set(loader.getController());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
+
+        return mainControllerProperty.get();
     }
 
     public void setResultLabelLogin(Message result)

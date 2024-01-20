@@ -12,9 +12,30 @@ import java.net.Socket;
 public class ClientApplication {
     private String serverIp;
     private int serverPort;
-
     private RegistrationController registrationController;
     private LoginController loginController;
+
+    private static class ClientHandler extends Thread {
+
+        private String serverIp;
+        private int serverPort;
+        private MainController mainController;
+        private FooterController footerController;
+
+        public ClientHandler(String serverIp, int serverPort, MainController mainController)
+        {
+            this.serverIp = serverIp;
+            this.serverPort = serverPort;
+            this.mainController = mainController;
+        }
+
+
+        @Override
+        public void run()
+        {
+
+        }
+    }
 
     public ClientApplication(String serverIp, int serverPort) {
         this.serverIp = serverIp;
@@ -53,7 +74,8 @@ public class ClientApplication {
                     if(loginController != null && Boolean.parseBoolean(response.getData()))
                     {
                         ConsoleHelper.writeMessage("Login");
-                        loginController.setMainView();
+                        MainController mainController = loginController.setMainView();
+
                     }
                     else if(loginController != null)
                     {
