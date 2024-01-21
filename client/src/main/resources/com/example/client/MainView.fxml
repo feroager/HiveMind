@@ -32,6 +32,6 @@
     </center>
 
     <bottom>
-        <fx:include source="FooterView.fxml" />
+        <fx:include source="FooterView.fxml" fx:id="footer"/>
     </bottom>
 </BorderPane>

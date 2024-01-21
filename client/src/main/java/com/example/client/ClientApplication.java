@@ -21,13 +21,15 @@ public class ClientApplication {
         private int serverPort;
         private MainController mainController;
         private FooterController footerController;
+        private Message message;
 
-        public ClientHandler(String serverIp, int serverPort, MainController mainController)
+        public ClientHandler(String serverIp, int serverPort, MainController mainController, Message message)
         {
             this.serverIp = serverIp;
             this.serverPort = serverPort;
             this.mainController = mainController;
             this.footerController = mainController.getFooterController();
+            this.message=message;
         }
 
 
@@ -75,7 +77,11 @@ public class ClientApplication {
                     if(loginController != null && Boolean.parseBoolean(response.getData()))
                     {
                         ConsoleHelper.writeMessage("Login");
-                        MainController mainController = loginController.setMainView();
+                        loginController.setMainView();
+                        MainController mainController = loginController.getMainController();
+                        if(mainController == null)
+                            System.out.println("mainContorller is null");
+                        new ClientHandler(serverIp, serverPort, mainController, response).start();
 
                     }
                     else if(loginController != null)

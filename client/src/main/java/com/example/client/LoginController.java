@@ -40,6 +40,8 @@ public class LoginController {
     @FXML
     private TextField usernameFieldLogin;
 
+    private MainController mainController;
+
     @FXML
     void onActionBackLogin(ActionEvent event) {
         setHelloView(BackLogin);
@@ -63,24 +65,20 @@ public class LoginController {
         }
     }
 
-    public MainController setMainView() {
-        final SimpleObjectProperty<MainController> mainControllerProperty = new SimpleObjectProperty<>();
-
-        Platform.runLater(() -> {
+    public void setMainView() {
+        //Platform.runLater(() -> {
             try {
                 FXMLLoader loader = new FXMLLoader(MainController.class.getResource("/com/example/client/MainView.fxml"));
                 Parent mainView = loader.load();
                 Stage primaryStage = (Stage) BackLogin.getScene().getWindow();
-                primaryStage.setResizable(true);
                 primaryStage.setScene(new Scene(mainView));
+                MainController mainController = loader.getController();
+                this.mainController = mainController;
 
-                mainControllerProperty.set(loader.getController());
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        });
-
-        return mainControllerProperty.get();
+        //});
     }
 
     public void setResultLabelLogin(Message result)
@@ -89,5 +87,10 @@ public class LoginController {
             resultLabelLogin.setTextFill(javafx.scene.paint.Color.RED);
             resultLabelLogin.setText(result.getData());
         });
+    }
+
+    public MainController getMainController()
+    {
+        return mainController;
     }
 }

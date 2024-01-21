@@ -1,6 +1,7 @@
 package com.example.client;
 
 import com.example.message.Message;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -19,6 +20,10 @@ public class FooterController {
     }
     public void setUsernameLabelFooter(Message message)
     {
-        this.usernameLabelFooter.setText(message.getUser().getUsername());
+        Platform.runLater(() -> {
+            this.usernameLabelFooter.setText(message.getUser().getUsername());
+        });
     }
+
+
 }
