@@ -1,6 +1,7 @@
 package com.example.database.models;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Represents the 'users' table in the database.
@@ -112,5 +113,18 @@ public class User implements BaseModel, Serializable
         setUserId(id);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        User otherUser = (User) obj;
+        return Objects.equals(username, otherUser.username) &&
+                Objects.equals(password, otherUser.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, password);
+    }
 }
 

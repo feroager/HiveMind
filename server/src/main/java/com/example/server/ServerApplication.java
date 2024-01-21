@@ -2,6 +2,7 @@ package com.example.server;
 
 import com.example.database.dao.UserDao;
 import com.example.database.dbutils.DbManager;
+import com.example.database.models.User;
 import com.example.login.LoginHandler;
 import com.example.login.LoginStatus;
 import com.example.message.Message;
@@ -22,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ServerApplication {
     private int port;
     private ServerSettingsController serverSettingsController;
-    private static Map<String, ConnectionHost> connectionMap = new ConcurrentHashMap<>();
+    private static Map<User, ConnectionHost> connectionMap = new ConcurrentHashMap<>();
 
     public ServerApplication(int port, ServerSettingsController serverSettingsController) {
         this.port = port;
@@ -121,6 +122,7 @@ public class ServerApplication {
             UserDao userDao = new UserDao(DbManager.getConnection());
             LoginHandler loginHandler = new LoginHandler(userDao);
             LoginStatus loginStatus = loginHandler.loginUser(request.getUser());
+            userDao.closeConnection();
 
             if(connectionMap.containsKey(request.getUser().getUsername()))
             {
@@ -140,8 +142,11 @@ public class ServerApplication {
             }
             else if(loginStatus == LoginStatus.SUCCESS)
             {
-                response = new Message(MessageType.LOGIN_RESPONSE,"true");
-                connectionMap.put(request.getUser().getUsername(), connection);
+                UserDao userDaoLogin = new UserDao(DbManager.getConnection());
+                User userLogin = userDaoLogin.getUserByUsername(request.getUser().getUsername());
+                userDaoLogin.closeConnection();
+                connectionMap.put(userLogin, connection);
+                response = new Message(MessageType.LOGIN_RESPONSE, userLogin, "true");
             }
             else
             {

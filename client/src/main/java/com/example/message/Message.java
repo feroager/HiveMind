@@ -51,6 +51,15 @@ public class Message implements Serializable {
         this.user = null;
     }
 
+
+    public Message(MessageType type, User user, String data)
+    {
+        this.type = type;
+        this.user = user;
+        this.data = data;
+    }
+
+
     /**
      * Gets the type of the message.
      *

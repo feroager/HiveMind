@@ -36,7 +36,7 @@ public class ClientApplication {
         @Override
         public void run()
         {
-
+            footerController.setUsernameLabelFooter(message);
         }
     }
 
