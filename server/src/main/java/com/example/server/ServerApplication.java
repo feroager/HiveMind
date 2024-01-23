@@ -124,7 +124,7 @@ public class ServerApplication {
             LoginStatus loginStatus = loginHandler.loginUser(request.getUser());
             userDao.closeConnection();
 
-            if(connectionMap.containsKey(request.getUser().getUsername()))
+            if(connectionMap.containsKey(request.getUser()))
             {
                 response = new Message(MessageType.LOGIN_RESPONSE,"This user is already logged in.");
             }
