@@ -18,6 +18,11 @@ class ClientHandler extends Thread
         this.mainController = mainController;
         this.footerController = mainController.getFooterController();
         this.message = message;
+        footerController.setClientHandler(this);
+    }
+
+    public void handleLogout() {
+
     }
 
 
