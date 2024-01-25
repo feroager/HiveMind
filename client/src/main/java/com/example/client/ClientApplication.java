@@ -41,44 +41,50 @@ public class ClientApplication {
         User loginUser = new User(0, username, password, null);
         Message loginRequest = new Message(MessageType.LOGIN_REQUEST, loginUser);
 
-        try (Socket socket = new Socket(serverIp, serverPort)) {
-            try (ConnectionHost connectionHost = new ConnectionHost(socket)) {
+        Socket socket = null;
+        ConnectionHost connectionHost = null;
 
-                connectionHost.send(loginRequest);
+        try {
+            socket = new Socket(serverIp, serverPort);
+            connectionHost = new ConnectionHost(socket);
 
-                Message response = connectionHost.receive();
+            connectionHost.send(loginRequest);
 
-                if (response.getType() == MessageType.LOGIN_RESPONSE) {
-                    if(loginController != null && Boolean.parseBoolean(response.getData()))
-                    {
-                        ConsoleHelper.writeMessage("Login");
-                        loginController.setMainView();
-                        MainController mainController = loginController.getMainController();
-                        if(mainController == null)
-                            System.out.println("mainContorller is null");
-                        new ClientHandler(serverIp, serverPort, mainController, response).start();
+            Message response = connectionHost.receive();
 
-                    }
-                    else if(loginController != null)
-                    {
-                        loginController.setResultLabelLogin(response);
-                    }
-                    else
-                    {
-                        ConsoleHelper.writeMessage("LoginContoller error.");
-                    }
+            if (response.getType() == MessageType.LOGIN_RESPONSE) {
+                if (loginController != null && Boolean.parseBoolean(response.getData())) {
+                    ConsoleHelper.writeMessage("Login");
+                    loginController.setMainView();
+                    MainController mainController = loginController.getMainController();
+                    if (mainController == null)
+                        System.out.println("mainContorller is null");
+                    new ClientHandler(serverIp, serverPort, mainController, response, socket, connectionHost).start();
+                } else if (loginController != null) {
+                    loginController.setResultLabelLogin(response);
+                } else {
+                    ConsoleHelper.writeMessage("LoginContoller error.");
                 }
-                else {
-                    ConsoleHelper.writeMessage("Unexpected response type from the server.");
+            } else {
+                ConsoleHelper.writeMessage("Unexpected response type from the server.");
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            ConsoleHelper.writeMessage("Error while communicating with " + (socket != null ? socket.getRemoteSocketAddress() : "unknown"));
+            e.printStackTrace();
+        } finally {
+            try {
+                if (connectionHost != null) {
+                    connectionHost.close();
                 }
-            } catch (IOException | ClassNotFoundException e) {
-                ConsoleHelper.writeMessage("Error while communicating with " + socket.getRemoteSocketAddress());
+                if (socket != null && !socket.isClosed()) {
+                    socket.close();
+                }
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
+
 
     public void register(String username, String password, String email) {
         User registerUser = new User(0, username, password, email);
