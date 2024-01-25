@@ -24,7 +24,7 @@ public class FooterController {
     }
 
     @FXML
-    void onActionLogoutButton(ActionEvent event) {
+    void onActionLogoutButton() {
         if (clientHandler != null) {
             clientHandler.handleLogout();
         }
