@@ -71,17 +71,6 @@ public class ClientApplication {
         } catch (IOException | ClassNotFoundException e) {
             ConsoleHelper.writeMessage("Error while communicating with " + (socket != null ? socket.getRemoteSocketAddress() : "unknown"));
             e.printStackTrace();
-        } finally {
-            try {
-                if (connectionHost != null) {
-                    connectionHost.close();
-                }
-                if (socket != null && !socket.isClosed()) {
-                    socket.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
