@@ -65,9 +65,10 @@ public class ServerApplication {
                     else if (request.getType() == MessageType.REGISTER_REQUEST) {
                         handleRegisterRequest(connectionHost, request);
                     }
-                    else
+                    else if (request.getType() == MessageType.LOGOUT_REQUEST)
                     {
-
+                        handleLogutRequest(connectionHost, request);
+                        break;
                     }
                     // Add more cases for other message types as needed
                 }
@@ -75,6 +76,35 @@ public class ServerApplication {
             catch (IOException | ClassNotFoundException | SQLException e) {
                 ConsoleHelper.writeMessage("Error while communicating with " + socket.getRemoteSocketAddress());
                 e.printStackTrace();
+            }
+            finally
+            {
+                try
+                {
+                    socket.close();
+                } catch(IOException e)
+                {
+                    ConsoleHelper.writeMessage("Problem with socket close.");
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        private void handleLogutRequest(ConnectionHost connectionHost, Message request)
+        {
+            User user = request.getUser();
+            if(connectionMap.containsKey(user))
+            {
+                ConsoleHelper.writeMessage(request.getUser().getUsername() + " has logged out.");
+                connectionMap.remove(user);
+            }
+            try
+            {
+                connectionHost.close();
+            } catch(IOException e)
+            {
+                ConsoleHelper.writeMessage("Problem with conntectionHost close.");
+                throw new RuntimeException(e);
             }
         }
 
@@ -147,6 +177,7 @@ public class ServerApplication {
                 userDaoLogin.closeConnection();
                 connectionMap.put(userLogin, connection);
                 response = new Message(MessageType.LOGIN_RESPONSE, userLogin, "true");
+                ConsoleHelper.writeMessage(request.getUser().getUsername() + " has logged in.");
             }
             else
             {
