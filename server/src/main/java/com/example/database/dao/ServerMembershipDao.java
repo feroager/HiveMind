@@ -51,6 +51,31 @@ public class ServerMembershipDao {
      * @param userId The ID of the user.
      * @return A list of all server memberships for the specified user.
      */
+    public List<ServerMembership> getMembershipsByUserId(int userId) {
+        String sql = "SELECT * FROM server_memberships WHERE user_id = ?";
+        List<ServerMembership> serverMemberships = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, userId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    ServerMembership serverMembership = mapServerMembershipFromResultSet(resultSet);
+                    serverMemberships.add(serverMembership);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return serverMemberships;
+    }
+
+
+
+    /**
+     * Retrieves all server memberships for a specific user from the database.
+     *
+     * @param userId The ID of the user.
+     * @return A list of all server memberships for the specified user.
+     */
     public List<ServerMembership> getServerMembershipsByUserId(int userId) {
         String sql = "SELECT * FROM server_memberships WHERE user_id = ?";
         List<ServerMembership> serverMemberships = new ArrayList<>();

@@ -1,6 +1,6 @@
 package com.example.utils;
 
-import com.example.message.Message;
+import com.example.message.CommunicationMessage;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.net.SocketAddress;
 
 /**
  * The {@code Connection} class represents a network connection between a client and a server.
- * It provides methods for sending and receiving {@link Message} objects.
+ * It provides methods for sending and receiving {@link CommunicationMessage} objects.
  *
  */
 public class ConnectionHost implements Closeable {
@@ -44,27 +44,27 @@ public class ConnectionHost implements Closeable {
     }
 
     /**
-     * Sends a {@link Message} through the connection.
+     * Sends a {@link CommunicationMessage} through the connection.
      *
-     * @param message The message to be sent.
+     * @param communicationMessage The message to be sent.
      * @throws IOException If an I/O error occurs while sending the message.
      */
-    public void send(Message message) throws IOException {
+    public void send(CommunicationMessage communicationMessage) throws IOException {
         synchronized (out) {
-            out.writeObject(message);
+            out.writeObject(communicationMessage);
         }
     }
 
     /**
-     * Receives a {@link Message} from the connection.
+     * Receives a {@link CommunicationMessage} from the connection.
      *
      * @return The received message.
      * @throws IOException            If an I/O error occurs while receiving the message.
      * @throws ClassNotFoundException If the class of the serialized object cannot be found.
      */
-    public Message receive() throws IOException, ClassNotFoundException {
+    public CommunicationMessage receive() throws IOException, ClassNotFoundException {
         synchronized (in) {
-            return (Message) in.readObject();
+            return (CommunicationMessage) in.readObject();
         }
     }
 

@@ -2,10 +2,14 @@ package com.example.server;
 
 import com.example.database.dao.UserDao;
 import com.example.database.dbutils.DbManager;
+import com.example.database.models.Channel;
+import com.example.database.models.Message;
+import com.example.database.models.Server;
 import com.example.database.models.User;
 import com.example.login.LoginHandler;
 import com.example.login.LoginStatus;
-import com.example.message.Message;
+import com.example.login.UserInfoRetrievalHandler;
+import com.example.message.CommunicationMessage;
 import com.example.message.MessageType;
 import com.example.registration.RegistrationHandler;
 import com.example.registration.RegistrationStatus;
@@ -15,8 +19,8 @@ import com.example.utils.ConsoleHelper;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -55,7 +59,7 @@ public class ServerApplication {
             try (ConnectionHost connectionHost = new ConnectionHost(socket)) {
                 while (true) {
                     // Receive a message from the client
-                    Message request = connectionHost.receive();
+                    CommunicationMessage request = connectionHost.receive();
 
                     // Process the message based on its type
                     if (request.getType() == MessageType.LOGIN_REQUEST)
@@ -90,7 +94,7 @@ public class ServerApplication {
             }
         }
 
-        private void handleLogutRequest(ConnectionHost connectionHost, Message request)
+        private void handleLogutRequest(ConnectionHost connectionHost, CommunicationMessage request)
         {
             User user = request.getUser();
             if(connectionMap.containsKey(user))
@@ -108,32 +112,32 @@ public class ServerApplication {
             }
         }
 
-        private void handleRegisterRequest(ConnectionHost connection, Message request) throws IOException, SQLException {
+        private void handleRegisterRequest(ConnectionHost connection, CommunicationMessage request) throws IOException, SQLException {
             // Perform registration using RegistrationHandler
             UserDao userDao = new UserDao(DbManager.getConnection());
             RegistrationHandler registrationHandler = new RegistrationHandler(userDao);
             RegistrationStatus registrationStatus = registrationHandler.registerUser(request.getUser());
 
-            Message response;
+            CommunicationMessage response;
             if(registrationStatus == RegistrationStatus.INTERNAL_ERROR)
             {
-                response = new Message(MessageType.REGISTER_RESPONSE,"Complete your login and email address.");
+                response = new CommunicationMessage(MessageType.REGISTER_RESPONSE,"Complete your login and email address.");
             }
             else if(registrationStatus == RegistrationStatus.USERNAME_TAKEN)
             {
-                response = new Message(MessageType.REGISTER_RESPONSE,"This username is already taken.");
+                response = new CommunicationMessage(MessageType.REGISTER_RESPONSE,"This username is already taken.");
             }
             else if(registrationStatus == RegistrationStatus.EMAIL_TAKEN)
             {
-                response = new Message(MessageType.REGISTER_RESPONSE,"This email is already taken");
+                response = new CommunicationMessage(MessageType.REGISTER_RESPONSE,"This email is already taken");
             }
             else if(registrationStatus == RegistrationStatus.SUCCESS)
             {
-                response = new Message(MessageType.REGISTER_RESPONSE,"Registration was successful, you can log in");
+                response = new CommunicationMessage(MessageType.REGISTER_RESPONSE,"Registration was successful, you can log in");
             }
             else if(registrationStatus == RegistrationStatus.DATABASE_ERROR)
             {
-                response = new Message(MessageType.REGISTER_RESPONSE,"Technical problems on the server side. Please try later");
+                response = new CommunicationMessage(MessageType.REGISTER_RESPONSE,"Technical problems on the server side. Please try later");
                 throw new SQLException();
             }
             else
@@ -145,8 +149,8 @@ public class ServerApplication {
             connection.send(response);
         }
 
-        private void handleLoginRequest(ConnectionHost connection, Message request) throws IOException, SQLException {
-            Message response;
+        private void handleLoginRequest(ConnectionHost connection, CommunicationMessage request) throws IOException, SQLException {
+            CommunicationMessage response;
 
             // Perform registration using LoginHandler
             UserDao userDao = new UserDao(DbManager.getConnection());
@@ -156,27 +160,30 @@ public class ServerApplication {
 
             if(connectionMap.containsKey(request.getUser()))
             {
-                response = new Message(MessageType.LOGIN_RESPONSE,"This user is already logged in.");
+                response = new CommunicationMessage(MessageType.LOGIN_RESPONSE,"This user is already logged in.");
             }
             else if(loginStatus == LoginStatus.INTERNAL_ERROR)
             {
-                response = new Message(MessageType.LOGIN_RESPONSE,"Complete your login and password.");
+                response = new CommunicationMessage(MessageType.LOGIN_RESPONSE,"Complete your login and password.");
             }
             else if(loginStatus == LoginStatus.USER_NOT_FOUND)
             {
-                response = new Message(MessageType.LOGIN_RESPONSE,"Such a user does not exist.");
+                response = new CommunicationMessage(MessageType.LOGIN_RESPONSE,"Such a user does not exist.");
             }
             else if(loginStatus == LoginStatus.INVALID_PASSWORD)
             {
-                response = new Message(MessageType.LOGIN_RESPONSE,"Invalid password");
+                response = new CommunicationMessage(MessageType.LOGIN_RESPONSE,"Invalid password");
             }
             else if(loginStatus == LoginStatus.SUCCESS)
             {
                 UserDao userDaoLogin = new UserDao(DbManager.getConnection());
                 User userLogin = userDaoLogin.getUserByUsername(request.getUser().getUsername());
                 userDaoLogin.closeConnection();
+                UserInfoRetrievalHandler userInfoRetrievalHandler = new UserInfoRetrievalHandler(DbManager.getConnection());
+                Map<Server, Map<Channel, List<Message>>> userServerInfo = userInfoRetrievalHandler.retrieveUserInfo(userLogin);
+                userInfoRetrievalHandler.closeConnection();
                 connectionMap.put(userLogin, connection);
-                response = new Message(MessageType.LOGIN_RESPONSE, userLogin, "true");
+                response = new CommunicationMessage(MessageType.LOGIN_RESPONSE, userLogin, userServerInfo, "true");
                 ConsoleHelper.writeMessage(request.getUser().getUsername() + " has logged in.");
             }
             else

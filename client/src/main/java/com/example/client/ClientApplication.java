@@ -1,6 +1,6 @@
 package com.example.client;
 
-import com.example.message.Message;
+import com.example.message.CommunicationMessage;
 import com.example.database.models.User;
 import com.example.message.MessageType;
 import com.example.utils.ConnectionHost;
@@ -8,6 +8,7 @@ import com.example.utils.ConsoleHelper;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Set;
 
 public class ClientApplication {
     private String serverIp;
@@ -39,7 +40,7 @@ public class ClientApplication {
 
     public void login(String username, String password) {
         User loginUser = new User(0, username, password, null);
-        Message loginRequest = new Message(MessageType.LOGIN_REQUEST, loginUser);
+        CommunicationMessage loginRequest = new CommunicationMessage(MessageType.LOGIN_REQUEST, loginUser);
 
         Socket socket = null;
         ConnectionHost connectionHost = null;
@@ -50,7 +51,7 @@ public class ClientApplication {
 
             connectionHost.send(loginRequest);
 
-            Message response = connectionHost.receive();
+            CommunicationMessage response = connectionHost.receive();
 
             if (response.getType() == MessageType.LOGIN_RESPONSE) {
                 if (loginController != null && Boolean.parseBoolean(response.getData())) {
@@ -59,6 +60,11 @@ public class ClientApplication {
                     MainController mainController = loginController.getMainController();
                     if (mainController == null)
                         System.out.println("mainContorller is null");
+                    var help = response.getUserServerInfo();
+                    for(var helpMe: response.getUserServerInfo().keySet())
+                    {
+                        System.out.println(helpMe.getName());
+                    }
                     new ClientHandler(serverIp, serverPort, mainController, response, socket, connectionHost).start();
                 } else if (loginController != null) {
                     loginController.setResultLabelLogin(response);
@@ -77,14 +83,14 @@ public class ClientApplication {
 
     public void register(String username, String password, String email) {
         User registerUser = new User(0, username, password, email);
-        Message registerRequest = new Message(MessageType.REGISTER_REQUEST, registerUser);
+        CommunicationMessage registerRequest = new CommunicationMessage(MessageType.REGISTER_REQUEST, registerUser);
 
         try (Socket socket = new Socket(serverIp, serverPort)) {
             try (ConnectionHost connectionHost = new ConnectionHost(socket)) {
 
                 connectionHost.send(registerRequest);
 
-                Message response = connectionHost.receive();
+                CommunicationMessage response = connectionHost.receive();
 
                 if (response.getType() == MessageType.REGISTER_RESPONSE) {
                     if(registrationController!=null)

@@ -1,8 +1,7 @@
 package com.example.client;
 
-import com.example.message.Message;
+import com.example.message.CommunicationMessage;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +11,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -86,7 +84,7 @@ public class LoginController {
         //});
     }
 
-    public void setResultLabelLogin(Message result)
+    public void setResultLabelLogin(CommunicationMessage result)
     {
         Platform.runLater(() -> {
             resultLabelLogin.setTextFill(javafx.scene.paint.Color.RED);

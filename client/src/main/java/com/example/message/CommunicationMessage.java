@@ -1,14 +1,20 @@
 package com.example.message;
 
+import com.example.database.models.Channel;
+import com.example.database.models.Message;
+import com.example.database.models.Server;
 import com.example.database.models.User;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Represents a message exchanged between the server and the client.
  * Instances of this class are used to encapsulate communication details.
  */
-public class Message implements Serializable {
+public class CommunicationMessage implements Serializable {
     /**
      * Enumerates the different types of messages.
      */
@@ -19,6 +25,8 @@ public class Message implements Serializable {
      */
     private final String data;
 
+    private Map<Server, Map<Channel, List<Message>>> userServerInfo;
+
     private final User user;
 
     /**
@@ -26,13 +34,13 @@ public class Message implements Serializable {
      *
      * @param type The type of the message.
      */
-    public Message(MessageType type) {
+    public CommunicationMessage(MessageType type) {
         this.type = type;
         this.data = null;
         this.user = null;
     }
 
-    public Message(MessageType type, User user)
+    public CommunicationMessage(MessageType type, User user)
     {
         this.type = type;
         this.user = user;
@@ -45,19 +53,29 @@ public class Message implements Serializable {
      * @param type The type of the message.
      * @param data The data associated with the message.
      */
-    public Message(MessageType type, String data) {
+    public CommunicationMessage(MessageType type, String data) {
         this.type = type;
         this.data = data;
         this.user = null;
     }
 
 
-    public Message(MessageType type, User user, String data)
+    public CommunicationMessage(MessageType type, User user, String data)
     {
         this.type = type;
         this.user = user;
         this.data = data;
     }
+
+    public CommunicationMessage(MessageType type, User user, Map<Server, Map<Channel, List<Message>>> userServerInfo, String data) {
+        this.userServerInfo = new HashMap<>();
+        this.type = type;
+        this.user = user;
+        this.data = data;
+        this.userServerInfo = userServerInfo;
+    }
+
+
 
 
     /**
@@ -81,6 +99,11 @@ public class Message implements Serializable {
     public User getUser()
     {
         return user;
+    }
+
+    public Map<Server, Map<Channel, List<Message>>> getUserServerInfo()
+    {
+        return userServerInfo;
     }
 }
 

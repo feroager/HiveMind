@@ -69,11 +69,11 @@ public class ServerDao {
      * @return The ID of the newly added server, or -1 if the insertion failed.
      */
     public int addServer(Server server) {
-        String sql = "INSERT INTO servers (name, admin_id, admin_code) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO servers (name, admin_id, server_code) VALUES (?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, server.getName());
             statement.setInt(2, server.getAdminId());
-            statement.setString(3, server.getAdminCode());
+            statement.setString(3, server.getServerCode()); // Zmiana na server.getServerCode()
 
             int affectedRows = statement.executeUpdate();
             if (affectedRows > 0) {
@@ -96,11 +96,11 @@ public class ServerDao {
      * @return True if the update was successful, false otherwise.
      */
     public boolean updateServer(Server server) {
-        String sql = "UPDATE servers SET name = ?, admin_id = ?, admin_code = ? WHERE server_id = ?";
+        String sql = "UPDATE servers SET name = ?, admin_id = ?, server_code = ? WHERE server_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, server.getName());
             statement.setInt(2, server.getAdminId());
-            statement.setString(3, server.getAdminCode());
+            statement.setString(3, server.getServerCode()); // Zmiana na server.getServerCode()
             statement.setInt(4, server.getServerId());
 
             int affectedRows = statement.executeUpdate();
@@ -141,10 +141,10 @@ public class ServerDao {
         int serverId = resultSet.getInt("server_id");
         String name = resultSet.getString("name");
         int adminId = resultSet.getInt("admin_id");
-        String adminCode = resultSet.getString("admin_code");
+        String serverCode = resultSet.getString("server_code"); // Zmiana na server_code
         Timestamp creationTimestamp = resultSet.getTimestamp("creation_timestamp");
 
-        return new Server(serverId, name, adminId, adminCode, creationTimestamp);
+        return new Server(serverId, name, adminId, serverCode, creationTimestamp);
     }
 
     /**

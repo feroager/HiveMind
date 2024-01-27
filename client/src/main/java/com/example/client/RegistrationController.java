@@ -1,6 +1,6 @@
 package com.example.client;
 
-import com.example.message.Message;
+import com.example.message.CommunicationMessage;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -42,7 +42,7 @@ public class RegistrationController {
     @FXML
     private Label resultLabelRegistartion;
 
-    public void setResultLabelRegistartionText(Message result)
+    public void setResultLabelRegistartionText(CommunicationMessage result)
     {
         Platform.runLater(() -> {
             if(result.getData().equals("Registration was successful, you can log in"))
