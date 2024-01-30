@@ -1,5 +1,8 @@
 package com.example.client;
 
+import com.example.database.models.Channel;
+import com.example.database.models.Message;
+import com.example.database.models.Server;
 import com.example.database.models.User;
 import com.example.message.CommunicationMessage;
 import com.example.message.MessageType;
@@ -8,18 +11,21 @@ import com.example.utils.ConsoleHelper;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.List;
+import java.util.Map;
 
 class ClientHandler extends Thread {
     private String serverIp;
     private int serverPort;
     private MainController mainController;
     private FooterController footerController;
+    private ServersController serversController;
     private CommunicationMessage communicationMessage;
     private Socket socket;
     private ConnectionHost connectionHost;
     private volatile boolean isLogged;
     private User loggedUser;
-
+    private Map<Server, Map<Channel, List<Message>>> userServerInfo;
     private int testVarable = 0;
 
     public ClientHandler(String serverIp, int serverPort, MainController mainController, CommunicationMessage communicationMessage, Socket socket, ConnectionHost connectionHost) {
@@ -27,13 +33,18 @@ class ClientHandler extends Thread {
         this.serverPort = serverPort;
         this.mainController = mainController;
         this.footerController = mainController.getFooterController();
+        this.serversController = mainController.getServersController();
         this.communicationMessage = communicationMessage;
         this.socket = socket;
         this.connectionHost = connectionHost;
+        this.loggedUser = communicationMessage.getUser();
+        this.userServerInfo = communicationMessage.getUserServerInfo();
         footerController.setClientHandler(this);
         footerController.setUsernameLabelFooter(communicationMessage);
+        serversController.setClientHandler(this);
+        serversController.initializeServersList();
         isLogged = true;
-        loggedUser = communicationMessage.getUser();
+
     }
 
     public void handleLogout() {
@@ -69,5 +80,9 @@ class ClientHandler extends Thread {
     }
 
 
+    public Map<Server, Map<Channel, List<Message>>> getUserServerInfo()
+    {
+        return userServerInfo;
+    }
 }
 

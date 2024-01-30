@@ -10,7 +10,7 @@
         <!-- Server bar with scrollbar -->
         <ScrollPane hbarPolicy="ALWAYS" prefHeight="74.0" style="-fx-background: #343541;" vbarPolicy="NEVER">
             <content>
-                <fx:include source="ServersView.fxml" />
+                <fx:include source="ServersView.fxml" fx:id="servers"/>
             </content>
         </ScrollPane>
     </top>
