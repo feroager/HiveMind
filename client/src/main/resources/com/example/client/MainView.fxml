@@ -19,7 +19,7 @@
     <left>
         <!-- Channel list with scrollbar -->
         <ScrollPane style="-fx-background: #343541;">
-            <fx:include source="ChannelsView.fxml" />
+            <fx:include source="ChannelsView.fxml" fx:id="channels" />
         </ScrollPane>
     </left>
 
@@ -27,7 +27,7 @@
     <center>
          <!-- Message list -->
          <ScrollPane prefHeight="300.0" prefWidth="564.0" style="-fx-background: #343541;">
-             <fx:include source="MessagesView.fxml" />
+             <fx:include source="MessagesView.fxml" fx:id="messages" />
          </ScrollPane>
     </center>
 

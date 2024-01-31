@@ -20,12 +20,14 @@ class ClientHandler extends Thread {
     private MainController mainController;
     private FooterController footerController;
     private ServersController serversController;
+    private ChannelsController channelsController;
+    private MessagesController messagesController;
     private CommunicationMessage communicationMessage;
     private Socket socket;
     private ConnectionHost connectionHost;
     private volatile boolean isLogged;
     private User loggedUser;
-    private Map<Server, Map<Channel, List<Message>>> userServerInfo;
+    private List<Server> userServerList;
     private int testVarable = 0;
 
     public ClientHandler(String serverIp, int serverPort, MainController mainController, CommunicationMessage communicationMessage, Socket socket, ConnectionHost connectionHost) {
@@ -34,15 +36,21 @@ class ClientHandler extends Thread {
         this.mainController = mainController;
         this.footerController = mainController.getFooterController();
         this.serversController = mainController.getServersController();
+        //this.channelsController = mainController.getChannelsController();
+        //this.messagesController = mainController.getMessagesController();
         this.communicationMessage = communicationMessage;
         this.socket = socket;
         this.connectionHost = connectionHost;
         this.loggedUser = communicationMessage.getUser();
-        this.userServerInfo = communicationMessage.getUserServerInfo();
+        this.userServerList = communicationMessage.getServerList();
         footerController.setClientHandler(this);
         footerController.setUsernameLabelFooter(communicationMessage);
         serversController.setClientHandler(this);
+        //serversController.setChannelsController(channelsController);
         serversController.initializeServersList();
+        //channelsController.setClientHandler(this);
+        //messagesController.setClientHandler(this);
+        //channelsController.setMessagesController(messagesController);
         isLogged = true;
 
     }
@@ -80,9 +88,9 @@ class ClientHandler extends Thread {
     }
 
 
-    public Map<Server, Map<Channel, List<Message>>> getUserServerInfo()
+    public List<Server> getUserServerList()
     {
-        return userServerInfo;
+        return userServerList;
     }
 }
 

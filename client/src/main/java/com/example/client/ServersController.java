@@ -1,5 +1,7 @@
 package com.example.client;
 
+import com.example.database.models.Channel;
+import com.example.database.models.Message;
 import com.example.database.models.Server;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,6 +14,7 @@ import javafx.scene.text.FontWeight;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
@@ -21,11 +24,11 @@ public class ServersController {
     @FXML
     private HBox serversContainer;
     private ClientHandler clientHandler;
+    private ChannelsController channelsController;
 
     public void initializeServersList() {
 
-        Set<Server> serverSet = clientHandler.getUserServerInfo().keySet();
-        List<Server> serverList = new ArrayList<>(serverSet);
+        List<Server> serverList = clientHandler.getUserServerList();
 
         // Iterate through the server list and create buttons
         for (Server server : serverList) {
@@ -62,8 +65,27 @@ public class ServersController {
         Tooltip tooltip = new Tooltip(server.getName());
         button.setTooltip(tooltip);
 
+        button.setOnAction(event -> handleServerButtonClick(server));
+
         return button;
     }
+
+    private void handleServerButtonClick(Server server) {
+
+        System.out.println("Button for server clicked: " + server.getName());
+
+        // Download the channel list for a given server
+        //Map<Channel, List<Message>> channelsForServer = getChannelsForServer(server);
+
+        // Update channel view
+        // channelsController.updateChannelsList(channelsForServer);
+    }
+
+//    private Map<Channel, List<Message>> getChannelsForServer(Server server) {
+//        Map<Channel, List<Message>> help = clientHandler.getUserServerInfo().get(server);
+//        return help;
+//    }
+
 
     private Color generateColor(String serverName) {
         // Simple algorithm to generate color based on the server name
@@ -88,5 +110,10 @@ public class ServersController {
 
     public void setClientHandler(ClientHandler clientHandler) {
         this.clientHandler = clientHandler;
+    }
+
+    public void setChannelsController(ChannelsController channelsController)
+    {
+        this.channelsController = channelsController;
     }
 }

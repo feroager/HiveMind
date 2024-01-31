@@ -26,7 +26,7 @@ public class CommunicationMessage implements Serializable {
      */
     private final String data;
 
-    private Map<Server, Map<Channel, List<Message>>> userServerInfo;
+    private List<Server> serverList;
 
     private final User user;
 
@@ -68,12 +68,11 @@ public class CommunicationMessage implements Serializable {
         this.data = data;
     }
 
-    public CommunicationMessage(MessageType type, User user, Map<Server, Map<Channel, List<Message>>> userServerInfo, String data) {
-        this.userServerInfo = new HashMap<>();
+    public CommunicationMessage(MessageType type, User user, List<Server> serverList, String data) {
         this.type = type;
         this.user = user;
         this.data = data;
-        this.userServerInfo = userServerInfo;
+        this.serverList = serverList;
     }
 
 
@@ -102,9 +101,10 @@ public class CommunicationMessage implements Serializable {
         return user;
     }
 
-    public Map<Server, Map<Channel, List<Message>>> getUserServerInfo()
+
+    public List<Server> getServerList()
     {
-        return userServerInfo;
+        return serverList;
     }
 }
 

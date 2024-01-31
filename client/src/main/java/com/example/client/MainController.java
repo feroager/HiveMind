@@ -10,6 +10,17 @@ public class MainController
     @FXML
     private ServersController serversController;
 
+    @FXML
+    private ChannelsController channelsController;
+
+    public MessagesController getMessagesController()
+    {
+        return messagesController;
+    }
+
+    @FXML
+    private MessagesController messagesController;
+
     public FooterController getFooterController() {
         return footerController;
     }
@@ -17,6 +28,11 @@ public class MainController
     public ServersController getServersController()
     {
         return serversController;
+    }
+
+    public ChannelsController getChannelsController()
+    {
+        return channelsController;
     }
 
     @FXML
@@ -28,6 +44,7 @@ public class MainController
             System.out.println("FooterController not is null.");
         }
     }
+
 
 
 }

@@ -60,8 +60,7 @@ public class ClientApplication {
                     MainController mainController = loginController.getMainController();
                     if (mainController == null)
                         System.out.println("mainContorller is null");
-                    var help = response.getUserServerInfo();
-                    for(var helpMe: response.getUserServerInfo().keySet())
+                    for(var helpMe: response.getServerList())
                     {
                         System.out.println(helpMe.getName());
                     }

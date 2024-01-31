@@ -180,10 +180,10 @@ public class ServerApplication {
                 User userLogin = userDaoLogin.getUserByUsername(request.getUser().getUsername());
                 userDaoLogin.closeConnection();
                 UserInfoRetrievalHandler userInfoRetrievalHandler = new UserInfoRetrievalHandler(DbManager.getConnection());
-                Map<Server, Map<Channel, List<Message>>> userServerInfo = userInfoRetrievalHandler.retrieveUserInfo(userLogin);
+                List<Server> serverList = userInfoRetrievalHandler.getUserServerList(userLogin);
                 userInfoRetrievalHandler.closeConnection();
                 connectionMap.put(userLogin, connection);
-                response = new CommunicationMessage(MessageType.LOGIN_RESPONSE, userLogin, userServerInfo, "true");
+                response = new CommunicationMessage(MessageType.LOGIN_RESPONSE, userLogin, serverList, "true");
                 ConsoleHelper.writeMessage(request.getUser().getUsername() + " has logged in.");
             }
             else
