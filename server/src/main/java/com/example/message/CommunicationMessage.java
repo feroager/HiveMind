@@ -28,6 +28,8 @@ public class CommunicationMessage implements Serializable {
 
     private List<Server> serverList;
 
+    private List<Channel> channelList;
+
     private final User user;
 
     /**
@@ -37,6 +39,13 @@ public class CommunicationMessage implements Serializable {
      */
     public CommunicationMessage(MessageType type) {
         this.type = type;
+        this.data = null;
+        this.user = null;
+    }
+
+    public CommunicationMessage(MessageType type, List<Channel> channelList) {
+        this.type = type;
+        this.channelList = channelList;
         this.data = null;
         this.user = null;
     }
@@ -105,6 +114,11 @@ public class CommunicationMessage implements Serializable {
     public List<Server> getServerList()
     {
         return serverList;
+    }
+
+    public List<Channel> getChannelList()
+    {
+        return channelList;
     }
 }
 

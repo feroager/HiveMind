@@ -1,5 +1,7 @@
 package com.example.message;
 
+import com.example.database.models.Channel;
+
 /**
  * Enumeration representing message types for communication between the client and the server.
  * Each message type has an associated value that is used in the communication protocol.
@@ -8,45 +10,45 @@ public enum MessageType {
     /**
      * Request for user login.
      */
-    LOGIN_REQUEST("LOGIN_REQUEST"),
+    LOGIN_REQUEST,
 
     /**
      * Response to a user login request.
      */
-    LOGIN_RESPONSE("LOGIN_RESPONSE"),
+    LOGIN_RESPONSE,
 
     /**
      * Request for user registration.
      */
-    REGISTER_REQUEST("REGISTER_REQUEST"),
+    REGISTER_REQUEST,
 
     /**
      * Response to a user registration request.
      */
-    REGISTER_RESPONSE("REGISTER_RESPONSE"),
+    REGISTER_RESPONSE,
+
     /**
-     * User logout request
+     * User logout request.
      */
-    LOGOUT_REQUEST("LOGOUT_REQUEST");
-
-    private final String value;
+    LOGOUT_REQUEST,
 
     /**
-     * Constructs a MessageType with the specified value.
+     * Enumeration representing a message type for requesting a list of channels.
+     */
+    CHANNEL_LIST_REQUEST,
+
+    /**
+     * Enumeration representing a message type for responding with a list of channels.
+     */
+    CHANNEL_LIST_RESPONSE;
+
+    /**
+     * Converts the message type to its string representation.
      *
-     * @param value The value associated with the message type.
+     * @return The string representation of the message type.
      */
-    MessageType(String value) {
-        this.value = value;
-    }
-
-    /**
-     * Gets the value associated with the message type.
-     *
-     * @return The value of the message type.
-     */
-    public String getValue() {
-        return value;
+    @Override
+    public String toString() {
+        return this.name(); // Returns the name of the enum constant (e.g., "LOGIN_REQUEST")
     }
 }
-
