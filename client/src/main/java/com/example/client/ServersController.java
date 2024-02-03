@@ -74,8 +74,13 @@ public class ServersController {
 
         System.out.println("Button for server clicked: " + server.getName());
 
+        clientHandler.setSelectedServer(server);
+        clientHandler.setChannelsListRequest(true);
+
+
+
         // Download the channel list for a given server
-        //Map<Channel, List<Message>> channelsForServer = getChannelsForServer(server);
+        //List<Channel> channelsForServer = clientHandler.
 
         // Update channel view
         // channelsController.updateChannelsList(channelsForServer);

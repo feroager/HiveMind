@@ -26,8 +26,11 @@ class ClientHandler extends Thread {
     private Socket socket;
     private ConnectionHost connectionHost;
     private volatile boolean isLogged;
+    private volatile boolean isChannelsListRequest;
     private User loggedUser;
     private List<Server> userServerList;
+    private Server selectedServer;
+    private List<Channel> userChannelList;
     private int testVarable = 0;
 
     public ClientHandler(String serverIp, int serverPort, MainController mainController, CommunicationMessage communicationMessage, Socket socket, ConnectionHost connectionHost) {
@@ -52,6 +55,7 @@ class ClientHandler extends Thread {
         //messagesController.setClientHandler(this);
         //channelsController.setMessagesController(messagesController);
         isLogged = true;
+        isChannelsListRequest = false;
 
     }
 
@@ -84,6 +88,21 @@ class ClientHandler extends Thread {
                 }
                 break;
             }
+
+            if (isChannelsListRequest)
+            {
+//                isChannelsListRequest = false;
+//                CommunicationMessage userChannelListRequest = new CommunicationMessage(MessageType.CHANNEL_LIST_REQUEST, loggedUser);
+//                try {
+//                    ConsoleHelper.writeMessage("Sent LOGOUT_REQUEST");
+//                    connectionHost.send(logOutRequest);
+//                } catch (IOException e) {
+//                    ConsoleHelper.writeMessage("Didn't sent LOGOUT_REQUEST");
+//                    System.out.println();
+//                    throw new RuntimeException(e);
+//                }
+
+            }
         }
     }
 
@@ -91,6 +110,20 @@ class ClientHandler extends Thread {
     public List<Server> getUserServerList()
     {
         return userServerList;
+    }
+
+    public List<Channel> getUserChannelList()
+    {
+        return userChannelList;
+    }
+
+    public void setSelectedServer(Server selectedServer)
+    {
+        this.selectedServer = selectedServer;
+    }
+    public void setChannelsListRequest(boolean channelsListRequest)
+    {
+        isChannelsListRequest = channelsListRequest;
     }
 }
 

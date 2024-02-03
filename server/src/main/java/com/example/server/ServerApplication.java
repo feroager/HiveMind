@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ServerApplication {
     private int port;
     private ServerSettingsController serverSettingsController;
-    private static Map<User, ConnectionHost> connectionMap = new ConcurrentHashMap<>();
+    private static Map<User, HandlerUser> connectionMap = new ConcurrentHashMap<>();
 
     public ServerApplication(int port, ServerSettingsController serverSettingsController) {
         this.port = port;
@@ -56,59 +56,36 @@ public class ServerApplication {
         @Override
         public void run()
         {
-            try (ConnectionHost connectionHost = new ConnectionHost(socket)) {
-                while (true) {
-                    // Receive a message from the client
-                    CommunicationMessage request = connectionHost.receive();
+            try
+            {
+                ConnectionHost connectionHost = new ConnectionHost(socket);
 
-                    // Process the message based on its type
-                    if (request.getType() == MessageType.LOGIN_REQUEST)
-                    {
-                        handleLoginRequest(connectionHost, request);
-                    }
-                    else if (request.getType() == MessageType.REGISTER_REQUEST) {
-                        handleRegisterRequest(connectionHost, request);
-                    }
-                    else if (request.getType() == MessageType.LOGOUT_REQUEST)
-                    {
-                        handleLogutRequest(connectionHost, request);
-                        break;
-                    }
-                    // Add more cases for other message types as needed
+                // Receive a message from the client
+                CommunicationMessage request = connectionHost.receive();
+
+                // Process the message based on its type
+                if (request.getType() == MessageType.LOGIN_REQUEST)
+                {
+                    handleLoginRequest(connectionHost, request);
                 }
+                else if (request.getType() == MessageType.REGISTER_REQUEST) {
+                    handleRegisterRequest(connectionHost, request);
+                    try
+                    {
+                        socket.close();
+                        connectionHost.close();
+                    } catch(IOException e)
+                    {
+                        ConsoleHelper.writeMessage("Problem with close.");
+                        throw new RuntimeException(e);
+                    }
+                }
+
+
             }
             catch (IOException | ClassNotFoundException | SQLException e) {
                 ConsoleHelper.writeMessage("Error while communicating with " + socket.getRemoteSocketAddress());
                 e.printStackTrace();
-            }
-            finally
-            {
-                try
-                {
-                    socket.close();
-                } catch(IOException e)
-                {
-                    ConsoleHelper.writeMessage("Problem with socket close.");
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-
-        private void handleLogutRequest(ConnectionHost connectionHost, CommunicationMessage request)
-        {
-            User user = request.getUser();
-            if(connectionMap.containsKey(user))
-            {
-                ConsoleHelper.writeMessage(request.getUser().getUsername() + " has logged out.");
-                connectionMap.remove(user);
-            }
-            try
-            {
-                connectionHost.close();
-            } catch(IOException e)
-            {
-                ConsoleHelper.writeMessage("Problem with conntectionHost close.");
-                throw new RuntimeException(e);
             }
         }
 
@@ -182,7 +159,9 @@ public class ServerApplication {
                 UserInfoRetrievalHandler userInfoRetrievalHandler = new UserInfoRetrievalHandler(DbManager.getConnection());
                 List<Server> serverList = userInfoRetrievalHandler.getUserServerList(userLogin);
                 userInfoRetrievalHandler.closeConnection();
-                connectionMap.put(userLogin, connection);
+                HandlerUser handlerUser = new HandlerUser(socket, connection, userLogin);
+                handlerUser.start();
+                connectionMap.put(userLogin, handlerUser);
                 response = new CommunicationMessage(MessageType.LOGIN_RESPONSE, userLogin, serverList, "true");
                 ConsoleHelper.writeMessage(request.getUser().getUsername() + " has logged in.");
             }
@@ -193,6 +172,65 @@ public class ServerApplication {
 
             // Send a response back to the client
             connection.send(response);
+            if(!response.getData().equals("true"))
+            {
+                connection.close();
+            }
+        }
+
+    }
+
+    private static class HandlerUser extends Thread {
+        private Socket socket;
+        private ConnectionHost connectionHost;
+        private User user;
+        private Server serverSelected;
+        private Channel channelSelected;
+
+        public HandlerUser(Socket socket, ConnectionHost connectionHost, User user)
+        {
+            this.socket = socket;
+            this.connectionHost = connectionHost;
+            this.user = user;
+        }
+        @Override
+        public void run()
+        {
+            try
+            {
+                while(true)
+                {
+                    CommunicationMessage request = connectionHost.receive();
+                    if (request.getType() == MessageType.LOGOUT_REQUEST)
+                    {
+                        handleLogutRequest(connectionHost, request);
+                        break;
+                    }
+                }
+
+            }
+            catch (IOException | ClassNotFoundException  e) {
+                ConsoleHelper.writeMessage("Error while communicating with " + socket.getRemoteSocketAddress());
+                e.printStackTrace();
+            }
+        }
+
+        private void handleLogutRequest(ConnectionHost connectionHost, CommunicationMessage request)
+        {
+            User user = request.getUser();
+            if(connectionMap.containsKey(user))
+            {
+                ConsoleHelper.writeMessage(request.getUser().getUsername() + " has logged out.");
+                connectionMap.remove(user);
+            }
+            try
+            {
+                connectionHost.close();
+            } catch(IOException e)
+            {
+                ConsoleHelper.writeMessage("Problem with conntectionHost close.");
+                throw new RuntimeException(e);
+            }
         }
 
     }
