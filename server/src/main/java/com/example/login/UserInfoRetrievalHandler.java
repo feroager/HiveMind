@@ -39,6 +39,15 @@ public class UserInfoRetrievalHandler {
 
     }
 
+    public List<Channel> getUserChannelList(Server server) throws IOException {
+        ChannelDao channelDao = new ChannelDao(connection);
+
+        List<Channel> channelList = channelDao.getChannelsByServerId(server.getServerId());
+
+        return channelList;
+
+    }
+
     public void closeConnection() {
         try {
             if (connection != null && !connection.isClosed()) {

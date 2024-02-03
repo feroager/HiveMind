@@ -206,6 +206,15 @@ public class ServerApplication {
                         handleLogutRequest(connectionHost, request);
                         break;
                     }
+                    else if(request.getType() == MessageType.CHANNEL_LIST_REQUEST)
+                    {
+                        ConsoleHelper.writeMessage("Recieve message CHANNEL_LIST_REQUEST");
+                        handleChannelListRequest(connectionHost, request);
+                    }
+                    else
+                    {
+                        ConsoleHelper.writeMessage("Bad MessageType");
+                    }
                 }
 
             }
@@ -213,6 +222,25 @@ public class ServerApplication {
                 ConsoleHelper.writeMessage("Error while communicating with " + socket.getRemoteSocketAddress());
                 e.printStackTrace();
             }
+        }
+
+        private void handleChannelListRequest(ConnectionHost connectionHost, CommunicationMessage request)
+        {
+            serverSelected = request.getServer();
+            try
+            {
+                UserInfoRetrievalHandler userInfoRetrievalHandler = new UserInfoRetrievalHandler(DbManager.getConnection());
+                List<Channel> channelList = userInfoRetrievalHandler.getUserChannelList(serverSelected);
+                userInfoRetrievalHandler.closeConnection();
+                connectionHost.send(new CommunicationMessage(MessageType.CHANNEL_LIST_RESPONSE, channelList));
+                ConsoleHelper.writeMessage("Sent CHANNEL_LIST_RESPONSE");
+            } catch(SQLException | IOException e)
+            {
+                ConsoleHelper.writeMessage("Problem with load Channel list");
+                e.printStackTrace();
+            }
+
+
         }
 
         private void handleLogutRequest(ConnectionHost connectionHost, CommunicationMessage request)

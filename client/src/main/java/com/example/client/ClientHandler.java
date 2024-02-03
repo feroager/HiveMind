@@ -91,16 +91,27 @@ class ClientHandler extends Thread {
 
             if (isChannelsListRequest)
             {
-//                isChannelsListRequest = false;
-//                CommunicationMessage userChannelListRequest = new CommunicationMessage(MessageType.CHANNEL_LIST_REQUEST, loggedUser);
-//                try {
-//                    ConsoleHelper.writeMessage("Sent LOGOUT_REQUEST");
-//                    connectionHost.send(logOutRequest);
-//                } catch (IOException e) {
-//                    ConsoleHelper.writeMessage("Didn't sent LOGOUT_REQUEST");
-//                    System.out.println();
-//                    throw new RuntimeException(e);
-//                }
+                isChannelsListRequest = false;
+                CommunicationMessage userChannelListRequest = new CommunicationMessage(MessageType.CHANNEL_LIST_REQUEST, loggedUser);
+                try {
+                    ConsoleHelper.writeMessage("Sent LOGOUT_REQUEST");
+                    CommunicationMessage communicationMessage = new CommunicationMessage(MessageType.CHANNEL_LIST_REQUEST, selectedServer);
+                    connectionHost.send(communicationMessage);
+                    CommunicationMessage response = connectionHost.receive();
+                    if(response.getType().equals(MessageType.CHANNEL_LIST_RESPONSE))
+                    {
+                        serversController.handleLoaderChannels(response.getChannelList());
+                    }
+                    else
+                    {
+                        ConsoleHelper.writeMessage("Bad type CommunicationMessage");
+                    }
+
+                } catch (IOException | ClassNotFoundException e) {
+                    ConsoleHelper.writeMessage("Didn't sent LOGOUT_REQUEST");
+                    System.out.println();
+                    throw new RuntimeException(e);
+                }
 
             }
         }

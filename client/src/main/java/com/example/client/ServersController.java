@@ -3,6 +3,7 @@ package com.example.client;
 import com.example.database.models.Channel;
 import com.example.database.models.Message;
 import com.example.database.models.Server;
+import com.example.utils.ConsoleHelper;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
@@ -76,14 +77,18 @@ public class ServersController {
 
         clientHandler.setSelectedServer(server);
         clientHandler.setChannelsListRequest(true);
+    }
 
-
-
-        // Download the channel list for a given server
-        //List<Channel> channelsForServer = clientHandler.
+    public void handleLoaderChannels(List<Channel> channelList)
+    {
+        ConsoleHelper.writeMessage("List of channals");
+        for(Channel channel: channelList)
+        {
+            System.out.println(channel.getName());
+        }
 
         // Update channel view
-        // channelsController.updateChannelsList(channelsForServer);
+        //channelsController.updateChannelsList(channelsForServer);
     }
 
 //    private Map<Channel, List<Message>> getChannelsForServer(Server server) {

@@ -19,18 +19,18 @@ public class CommunicationMessage implements Serializable {
     /**
      * Enumerates the different types of messages.
      */
-    private final MessageType type;
+    private MessageType type;
 
     /**
      * Stores the data associated with the message.
      */
-    private final String data;
+    private String data;
 
     private List<Server> serverList;
 
     private List<Channel> channelList;
-
-    private final User user;
+    private User user;
+    private Server server;
 
     /**
      * Constructs a message with the specified type and no data.
@@ -39,22 +39,17 @@ public class CommunicationMessage implements Serializable {
      */
     public CommunicationMessage(MessageType type) {
         this.type = type;
-        this.data = null;
-        this.user = null;
     }
 
     public CommunicationMessage(MessageType type, List<Channel> channelList) {
         this.type = type;
         this.channelList = channelList;
-        this.data = null;
-        this.user = null;
     }
 
     public CommunicationMessage(MessageType type, User user)
     {
         this.type = type;
         this.user = user;
-        this.data = null;
     }
 
     /**
@@ -66,7 +61,6 @@ public class CommunicationMessage implements Serializable {
     public CommunicationMessage(MessageType type, String data) {
         this.type = type;
         this.data = data;
-        this.user = null;
     }
 
 
@@ -84,7 +78,11 @@ public class CommunicationMessage implements Serializable {
         this.serverList = serverList;
     }
 
-
+    public CommunicationMessage(MessageType messageType, Server server)
+    {
+        this.type = messageType;
+        this.server = server;
+    }
 
 
     /**
@@ -119,6 +117,11 @@ public class CommunicationMessage implements Serializable {
     public List<Channel> getChannelList()
     {
         return channelList;
+    }
+
+    public Server getServer()
+    {
+        return server;
     }
 }
 
