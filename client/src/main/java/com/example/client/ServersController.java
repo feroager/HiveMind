@@ -88,7 +88,7 @@ public class ServersController {
         }
 
         // Update channel view
-        //channelsController.updateChannelsList(channelsForServer);
+        channelsController.updateChannelsList(channelList);
     }
 
 //    private Map<Channel, List<Message>> getChannelsForServer(Server server) {

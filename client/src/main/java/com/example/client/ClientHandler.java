@@ -39,7 +39,7 @@ class ClientHandler extends Thread {
         this.mainController = mainController;
         this.footerController = mainController.getFooterController();
         this.serversController = mainController.getServersController();
-        //this.channelsController = mainController.getChannelsController();
+        this.channelsController = mainController.getChannelsController();
         //this.messagesController = mainController.getMessagesController();
         this.communicationMessage = communicationMessage;
         this.socket = socket;
@@ -49,9 +49,9 @@ class ClientHandler extends Thread {
         footerController.setClientHandler(this);
         footerController.setUsernameLabelFooter(communicationMessage);
         serversController.setClientHandler(this);
-        //serversController.setChannelsController(channelsController);
+        serversController.setChannelsController(channelsController);
         serversController.initializeServersList();
-        //channelsController.setClientHandler(this);
+        channelsController.setClientHandler(this);
         //messagesController.setClientHandler(this);
         //channelsController.setMessagesController(messagesController);
         isLogged = true;
