@@ -1,6 +1,7 @@
 package com.example.message;
 
 import com.example.database.models.Channel;
+import com.example.database.models.Message;
 
 /**
  * Enumeration representing message types for communication between the client and the server.
@@ -40,7 +41,18 @@ public enum MessageType {
     /**
      * Enumeration representing a message type for responding with a list of channels.
      */
-    CHANNEL_LIST_RESPONSE;
+    CHANNEL_LIST_RESPONSE,
+
+    /**
+     * Enumeration representing a message type for requesting a list of channels.
+     */
+    MESSAGE_LIST_REQUEST,
+
+    /**
+     * Enumeration representing a message type for responding with a list of channels.
+     */
+    MESSAGE_LIST_RESPONSE;
+
 
     /**
      * Converts the message type to its string representation.

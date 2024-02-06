@@ -27,6 +27,7 @@ class ClientHandler extends Thread {
     private ConnectionHost connectionHost;
     private volatile boolean isLogged;
     private volatile boolean isChannelsListRequest;
+    private volatile boolean isMessagessListRequest;
     private User loggedUser;
     private List<Server> userServerList;
     private Server selectedServer;
@@ -57,6 +58,7 @@ class ClientHandler extends Thread {
         //channelsController.setMessagesController(messagesController);
         isLogged = true;
         isChannelsListRequest = false;
+        isMessagessListRequest = false;
 
     }
 
@@ -93,11 +95,10 @@ class ClientHandler extends Thread {
             if (isChannelsListRequest)
             {
                 isChannelsListRequest = false;
-                CommunicationMessage userChannelListRequest = new CommunicationMessage(MessageType.CHANNEL_LIST_REQUEST, loggedUser);
                 try {
-                    ConsoleHelper.writeMessage("Sent LOGOUT_REQUEST");
-                    CommunicationMessage communicationMessage = new CommunicationMessage(MessageType.CHANNEL_LIST_REQUEST, selectedServer);
-                    connectionHost.send(communicationMessage);
+                    ConsoleHelper.writeMessage("CHANNEL_LIST_REQUEST");
+                    CommunicationMessage userChannelListRequest = new CommunicationMessage(MessageType.CHANNEL_LIST_REQUEST, selectedServer);
+                    connectionHost.send(userChannelListRequest);
                     CommunicationMessage response = connectionHost.receive();
                     if(response.getType().equals(MessageType.CHANNEL_LIST_RESPONSE))
                     {
@@ -109,12 +110,41 @@ class ClientHandler extends Thread {
                     }
 
                 } catch (IOException | ClassNotFoundException e) {
-                    ConsoleHelper.writeMessage("Didn't sent LOGOUT_REQUEST");
+                    ConsoleHelper.writeMessage("Didn't sent CHANNEL_LIST_REQUEST");
                     System.out.println();
                     throw new RuntimeException(e);
                 }
 
             }
+
+
+            if (isMessagessListRequest)
+            {
+                isMessagessListRequest = false;
+                try {
+                    ConsoleHelper.writeMessage("Sent MESSAGE_LIST_REQUEST");
+                    CommunicationMessage userMessageListRequest = new CommunicationMessage(MessageType.MESSAGE_LIST_REQUEST, selectedChannel);
+                    connectionHost.send(userMessageListRequest);
+                    CommunicationMessage response = connectionHost.receive();
+                    if(response.getType().equals(MessageType.MESSAGE_LIST_RESPONSE))
+                    {
+                        channelsController.handleLoaderChannels(response.getMessageList());
+                    }
+                    else
+                    {
+                        ConsoleHelper.writeMessage("Bad type CommunicationMessage");
+                    }
+
+                } catch (IOException | ClassNotFoundException e) {
+                    ConsoleHelper.writeMessage("Didn't sent MESSAGE_LIST_REQUEST");
+                    System.out.println();
+                    throw new RuntimeException(e);
+                }
+
+            }
+
+
+
         }
     }
 
@@ -141,6 +171,11 @@ class ClientHandler extends Thread {
     public void setSelectedChannel(Channel selectedChannel)
     {
         this.selectedChannel = selectedChannel;
+    }
+
+    public void setMessagessListRequest(boolean messagessListRequest)
+    {
+        isMessagessListRequest = messagessListRequest;
     }
 }
 

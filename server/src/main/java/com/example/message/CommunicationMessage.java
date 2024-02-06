@@ -137,5 +137,10 @@ public class CommunicationMessage implements Serializable {
     {
         return server;
     }
+
+    public List<Message> getMessageList()
+    {
+        return messageList;
+    }
 }
 

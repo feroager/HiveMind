@@ -2,6 +2,7 @@ package com.example.client;
 
 import com.example.database.models.Channel;
 import com.example.database.models.Message;
+import com.example.utils.ConsoleHelper;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -63,13 +64,24 @@ public class ChannelsController
     {
         System.out.println("Button for channel clicked: " + channel.getName());
 
-        //List<Message> messageList = channelsForServer.get(channel);
-
-        //messagesController.updateMessgaesList(messageList);
+        clientHandler.setSelectedChannel(channel);
+        clientHandler.setMessagessListRequest(true);
     }
 
     public void setMessagesController(MessagesController messagesController)
     {
         this.messagesController = messagesController;
+    }
+
+    public void handleLoaderChannels(List<Message> messageList)
+    {
+        ConsoleHelper.writeMessage("List of messages");
+        for(Channel channel: channelList)
+        {
+            System.out.println(channel.getName());
+        }
+
+        // Update channel view
+        messagesController.updateMessgaesList(messageList);
     }
 }
