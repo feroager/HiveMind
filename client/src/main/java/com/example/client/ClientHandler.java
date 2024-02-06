@@ -42,7 +42,7 @@ class ClientHandler extends Thread {
         this.footerController = mainController.getFooterController();
         this.serversController = mainController.getServersController();
         this.channelsController = mainController.getChannelsController();
-        //this.messagesController = mainController.getMessagesController();
+        this.messagesController = mainController.getMessagesController();
         this.communicationMessage = communicationMessage;
         this.socket = socket;
         this.connectionHost = connectionHost;
@@ -54,8 +54,8 @@ class ClientHandler extends Thread {
         serversController.setChannelsController(channelsController);
         serversController.initializeServersList();
         channelsController.setClientHandler(this);
-        //messagesController.setClientHandler(this);
-        //channelsController.setMessagesController(messagesController);
+        messagesController.setClientHandler(this);
+        channelsController.setMessagesController(messagesController);
         isLogged = true;
         isChannelsListRequest = false;
         isMessagessListRequest = false;
@@ -128,6 +128,7 @@ class ClientHandler extends Thread {
                     CommunicationMessage response = connectionHost.receive();
                     if(response.getType().equals(MessageType.MESSAGE_LIST_RESPONSE))
                     {
+                        userChannelList = response.getChannelList();
                         channelsController.handleLoaderChannels(response.getMessageList());
                     }
                     else

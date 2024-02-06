@@ -211,6 +211,11 @@ public class ServerApplication {
                         ConsoleHelper.writeMessage("Recieve message CHANNEL_LIST_REQUEST");
                         handleChannelListRequest(connectionHost, request);
                     }
+                    else if(request.getType() == MessageType.MESSAGE_LIST_REQUEST)
+                    {
+                        ConsoleHelper.writeMessage("Recieve message MESSAGE_LIST_REQUEST");
+                        handleMessageListRequest(connectionHost, request);
+                    }
                     else
                     {
                         ConsoleHelper.writeMessage("Bad MessageType");
@@ -220,6 +225,23 @@ public class ServerApplication {
             }
             catch (IOException | ClassNotFoundException  e) {
                 ConsoleHelper.writeMessage("Error while communicating with " + socket.getRemoteSocketAddress());
+                e.printStackTrace();
+            }
+        }
+
+        private void handleMessageListRequest(ConnectionHost connectionHost, CommunicationMessage request)
+        {
+            channelSelected = request.getChannel();
+            try
+            {
+                UserInfoRetrievalHandler userInfoRetrievalHandler = new UserInfoRetrievalHandler(DbManager.getConnection());
+                List<Message> messageList = userInfoRetrievalHandler.getUserMessageList(channelSelected);
+                userInfoRetrievalHandler.closeConnection();
+                connectionHost.send(new CommunicationMessage(MessageType.MESSAGE_LIST_RESPONSE, messageList, null));
+                ConsoleHelper.writeMessage("Sent MESSAGE_LIST_RESPONSE");
+            } catch(SQLException | IOException e)
+            {
+                ConsoleHelper.writeMessage("Problem with load Message list");
                 e.printStackTrace();
             }
         }

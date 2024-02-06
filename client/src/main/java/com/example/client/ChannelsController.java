@@ -76,9 +76,9 @@ public class ChannelsController
     public void handleLoaderChannels(List<Message> messageList)
     {
         ConsoleHelper.writeMessage("List of messages");
-        for(Channel channel: channelList)
+        for(Message message: messageList)
         {
-            System.out.println(channel.getName());
+            System.out.println(message.getContent());
         }
 
         // Update channel view

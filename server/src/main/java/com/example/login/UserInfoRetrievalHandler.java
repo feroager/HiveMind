@@ -58,4 +58,13 @@ public class UserInfoRetrievalHandler {
         }
     }
 
+    public List<Message> getUserMessageList(Channel channel)
+    {
+        MessageDao messageDao = new MessageDao(connection);
+
+        List<Message> messageList = messageDao.getMessagesByChannelId(channel.getChannelId());
+
+        return messageList;
+
+    }
 }

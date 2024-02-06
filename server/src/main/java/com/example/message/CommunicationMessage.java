@@ -142,5 +142,10 @@ public class CommunicationMessage implements Serializable {
     {
         return messageList;
     }
+
+    public Channel getChannel()
+    {
+        return channel;
+    }
 }
 
