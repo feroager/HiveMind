@@ -30,6 +30,7 @@ class ClientHandler extends Thread {
     private User loggedUser;
     private List<Server> userServerList;
     private Server selectedServer;
+    private Channel selectedChannel;
     private List<Channel> userChannelList;
     private int testVarable = 0;
 
@@ -135,6 +136,11 @@ class ClientHandler extends Thread {
     public void setChannelsListRequest(boolean channelsListRequest)
     {
         isChannelsListRequest = channelsListRequest;
+    }
+
+    public void setSelectedChannel(Channel selectedChannel)
+    {
+        this.selectedChannel = selectedChannel;
     }
 }
 
