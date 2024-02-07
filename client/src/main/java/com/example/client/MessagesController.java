@@ -3,6 +3,7 @@ package com.example.client;
 import com.example.database.models.Channel;
 import com.example.database.models.Message;
 import com.example.database.models.Server;
+import com.example.database.models.User;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -47,8 +48,26 @@ public class MessagesController
         });
     }
 
+    private User associateUsernameWithIdMessage(Message message)
+    {
+        for(User user : clientHandler.getServerUserList())
+        {
+            if(user.getUserId() == message.getUserId())
+                return user;
+        }
+        return null;
+    }
+
+
+
     private Label createMessage(Message message) {
-        Label label = new Label("jan\n"+message.getTimestamp()+"\n"+message.getContent()+"\n\n");
+        String userName = "Unknown";
+        User user = associateUsernameWithIdMessage(message);
+        if(user != null)
+        {
+            userName = user.getUsername();
+        }
+        Label label = new Label(userName + "\n"+message.getTimestamp()+"\n"+message.getContent()+"\n\n");
         label.setPrefWidth(300);
 
         return label;

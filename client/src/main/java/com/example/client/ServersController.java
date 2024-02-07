@@ -1,7 +1,6 @@
 package com.example.client;
 
 import com.example.database.models.Channel;
-import com.example.database.models.Message;
 import com.example.database.models.Server;
 import com.example.utils.ConsoleHelper;
 import javafx.fxml.FXML;
@@ -13,10 +12,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
@@ -29,7 +25,7 @@ public class ServersController {
 
     public void initializeServersList() {
 
-        List<Server> serverList = clientHandler.getUserServerList();
+        List<Server> serverList = clientHandler.getServerList();
 
         // Iterate through the server list and create buttons
         for (Server server : serverList) {

@@ -192,6 +192,33 @@ public class UserDao {
     }
 
     /**
+     * Retrieves all users belonging to a specific server from the database.
+     *
+     * @param serverId The ID of the server.
+     * @return A list of users belonging to the specified server.
+     */
+    public List<User> getUsersByServerId(int serverId) {
+        String sql = "SELECT u.user_id, u.username, u.password, u.email " +
+                "FROM users u " +
+                "INNER JOIN server_memberships sm ON u.user_id = sm.user_id " +
+                "WHERE sm.server_id = ?";
+        List<User> users = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, serverId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    User user = mapUserFromResultSet(resultSet);
+                    users.add(user);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+
+    /**
      * Closes the database connection.
      */
     public void closeConnection() {

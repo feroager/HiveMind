@@ -3,14 +3,13 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-
 <BorderPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #343541;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.MainController">
     <!-- Top -->
     <top>
         <!-- Server bar with scrollbar -->
         <ScrollPane hbarPolicy="ALWAYS" prefHeight="74.0" style="-fx-background: #343541;" vbarPolicy="NEVER">
             <content>
-                <fx:include source="ServersView.fxml" fx:id="servers"/>
+                <fx:include fx:id="servers" source="ServersView.fxml" />
             </content>
         </ScrollPane>
     </top>
@@ -18,20 +17,20 @@
     <!-- Left -->
     <left>
         <!-- Channel list with scrollbar -->
-        <ScrollPane style="-fx-background: #343541;">
-            <fx:include source="ChannelsView.fxml" fx:id="channels" />
+        <ScrollPane hbarPolicy="NEVER" style="-fx-background: #343541;" vbarPolicy="ALWAYS">
+            <fx:include fx:id="channels" source="ChannelsView.fxml" />
         </ScrollPane>
     </left>
 
     <!-- Center -->
     <center>
          <!-- Message list -->
-         <ScrollPane prefHeight="300.0" prefWidth="564.0" style="-fx-background: #343541;">
-             <fx:include source="MessagesView.fxml" fx:id="messages" />
+         <ScrollPane hbarPolicy="NEVER" prefHeight="300.0" prefWidth="564.0" style="-fx-background: #343541;" vbarPolicy="ALWAYS">
+             <fx:include fx:id="messages" source="MessagesView.fxml" />
          </ScrollPane>
     </center>
 
     <bottom>
-        <fx:include source="FooterView.fxml" fx:id="footer"/>
+        <fx:include fx:id="footer" source="FooterView.fxml" />
     </bottom>
 </BorderPane>

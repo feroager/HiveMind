@@ -1,9 +1,6 @@
 package com.example.login;
 
-import com.example.database.dao.ServerMembershipDao;
-import com.example.database.dao.ServerDao;
-import com.example.database.dao.ChannelDao;
-import com.example.database.dao.MessageDao;
+import com.example.database.dao.*;
 import com.example.database.dbutils.DbManager;
 import com.example.database.models.*;
 
@@ -65,6 +62,20 @@ public class UserInfoRetrievalHandler {
         List<Message> messageList = messageDao.getMessagesByChannelId(channel.getChannelId());
 
         return messageList;
+
+    }
+
+    public List<User> getListUserChoiceServer(Server serverSelected)
+    {
+        UserDao userDao = new UserDao(connection);
+
+        List<User> userList = userDao.getUsersByServerId(serverSelected.getServerId());
+        for(User user : userList)
+        {
+            user.setPassword("");
+        }
+
+        return userList;
 
     }
 }

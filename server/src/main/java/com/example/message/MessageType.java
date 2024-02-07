@@ -44,12 +44,12 @@ public enum MessageType {
     CHANNEL_LIST_RESPONSE,
 
     /**
-     * Enumeration representing a message type for requesting a list of channels.
+     * Enumeration representing a message type for requesting a list of messages.
      */
     MESSAGE_LIST_REQUEST,
 
     /**
-     * Enumeration representing a message type for responding with a list of channels.
+     * Enumeration representing a message type for responding with a list of messages.
      */
     MESSAGE_LIST_RESPONSE;
 

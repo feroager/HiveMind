@@ -1,7 +1,6 @@
 package com.example.client;
 
 import com.example.database.models.Channel;
-import com.example.database.models.Message;
 import com.example.database.models.Server;
 import com.example.database.models.User;
 import com.example.message.CommunicationMessage;
@@ -12,7 +11,6 @@ import com.example.utils.ConsoleHelper;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.List;
-import java.util.Map;
 
 class ClientHandler extends Thread {
     private String serverIp;
@@ -29,10 +27,11 @@ class ClientHandler extends Thread {
     private volatile boolean isChannelsListRequest;
     private volatile boolean isMessagessListRequest;
     private User loggedUser;
-    private List<Server> userServerList;
+    private List<Server> serverList;
     private Server selectedServer;
     private Channel selectedChannel;
     private List<Channel> userChannelList;
+    private List<User> serverUserList;
     private int testVarable = 0;
 
     public ClientHandler(String serverIp, int serverPort, MainController mainController, CommunicationMessage communicationMessage, Socket socket, ConnectionHost connectionHost) {
@@ -47,7 +46,7 @@ class ClientHandler extends Thread {
         this.socket = socket;
         this.connectionHost = connectionHost;
         this.loggedUser = communicationMessage.getUser();
-        this.userServerList = communicationMessage.getServerList();
+        this.serverList = communicationMessage.getServerList();
         footerController.setClientHandler(this);
         footerController.setUsernameLabelFooter(communicationMessage);
         serversController.setClientHandler(this);
@@ -102,6 +101,7 @@ class ClientHandler extends Thread {
                     CommunicationMessage response = connectionHost.receive();
                     if(response.getType().equals(MessageType.CHANNEL_LIST_RESPONSE))
                     {
+                        serverUserList = response.getUserList();
                         serversController.handleLoaderChannels(response.getChannelList());
                     }
                     else
@@ -150,9 +150,9 @@ class ClientHandler extends Thread {
     }
 
 
-    public List<Server> getUserServerList()
+    public List<Server> getServerList()
     {
-        return userServerList;
+        return serverList;
     }
 
     public List<Channel> getUserChannelList()
@@ -177,6 +177,11 @@ class ClientHandler extends Thread {
     public void setMessagessListRequest(boolean messagessListRequest)
     {
         isMessagessListRequest = messagessListRequest;
+    }
+
+    public List<User> getServerUserList()
+    {
+        return serverUserList;
     }
 }
 

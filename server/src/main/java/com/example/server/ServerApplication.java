@@ -253,8 +253,9 @@ public class ServerApplication {
             {
                 UserInfoRetrievalHandler userInfoRetrievalHandler = new UserInfoRetrievalHandler(DbManager.getConnection());
                 List<Channel> channelList = userInfoRetrievalHandler.getUserChannelList(serverSelected);
+                List<User> userList = userInfoRetrievalHandler.getListUserChoiceServer(serverSelected);
                 userInfoRetrievalHandler.closeConnection();
-                connectionHost.send(new CommunicationMessage(MessageType.CHANNEL_LIST_RESPONSE, channelList));
+                connectionHost.send(new CommunicationMessage(MessageType.CHANNEL_LIST_RESPONSE, channelList, userList));
                 ConsoleHelper.writeMessage("Sent CHANNEL_LIST_RESPONSE");
             } catch(SQLException | IOException e)
             {
