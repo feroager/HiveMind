@@ -35,7 +35,7 @@ public class CommunicationMessage implements Serializable {
     private List<User> userList;
     private User user;
     private Server server;
-    private  Channel channel;
+    private Channel channel;
     private Message message;
 
     /**
@@ -45,29 +45,6 @@ public class CommunicationMessage implements Serializable {
      */
     public CommunicationMessage(MessageType type) {
         this.type = type;
-    }
-
-    public CommunicationMessage(MessageType type, Message message, User user) {
-        this.type = type;
-        this.message = message;
-        this.user = user;
-    }
-
-    public CommunicationMessage(MessageType type, List<Channel> channelList, List<User> userList) {
-        this.type = type;
-        this.channelList = channelList;
-        this.userList = userList;
-    }
-
-    public CommunicationMessage(MessageType type, List<Message> messageList, Message message) {
-        this.type = type;
-        this.messageList = messageList;
-    }
-
-    public CommunicationMessage(MessageType type, User user)
-    {
-        this.type = type;
-        this.user = user;
     }
 
     /**
@@ -81,33 +58,92 @@ public class CommunicationMessage implements Serializable {
         this.data = data;
     }
 
-
-    public CommunicationMessage(MessageType type, User user, String data)
-    {
+    /**
+     * Constructs a message with the specified type, message, and user.
+     *
+     * @param type    The type of the message.
+     * @param message The message object.
+     * @param user    The user associated with the message.
+     */
+    public CommunicationMessage(MessageType type, Message message, User user) {
         this.type = type;
+        this.message = message;
         this.user = user;
-        this.data = data;
     }
 
+    /**
+     * Constructs a message with the specified type, channel list, and user list.
+     *
+     * @param type        The type of the message.
+     * @param channelList The list of channels.
+     * @param userList    The list of users.
+     */
+    public CommunicationMessage(MessageType type, List<Channel> channelList, List<User> userList) {
+        this.type = type;
+        this.channelList = channelList;
+        this.userList = userList;
+    }
+
+    /**
+     * Constructs a message with the specified type, message list, and message.
+     *
+     * @param type         The type of the message.
+     * @param messageList  The list of messages.
+     * @param latestMessage The latest message.
+     */
+    public CommunicationMessage(MessageType type, List<Message> messageList, Message latestMessage) {
+        this.type = type;
+        this.messageList = messageList;
+        this.message = latestMessage;
+    }
+
+    /**
+     * Constructs a message with the specified type and user.
+     *
+     * @param type The type of the message.
+     * @param user The user associated with the message.
+     */
+    public CommunicationMessage(MessageType type, User user) {
+        this.type = type;
+        this.user = user;
+    }
+
+    /**
+     * Constructs a message with the specified type, user, server list, and data.
+     *
+     * @param type       The type of the message.
+     * @param user       The user associated with the message.
+     * @param serverList The list of servers.
+     * @param data       The data associated with the message.
+     */
     public CommunicationMessage(MessageType type, User user, List<Server> serverList, String data) {
         this.type = type;
         this.user = user;
-        this.data = data;
         this.serverList = serverList;
+        this.data = data;
     }
 
-    public CommunicationMessage(MessageType messageType, Server server)
-    {
-        this.type = messageType;
+    /**
+     * Constructs a message with the specified type and server.
+     *
+     * @param type   The type of the message.
+     * @param server The server associated with the message.
+     */
+    public CommunicationMessage(MessageType type, Server server) {
+        this.type = type;
         this.server = server;
     }
 
-    public CommunicationMessage(MessageType messageType, Channel channel)
-    {
-        this.type = messageType;
+    /**
+     * Constructs a message with the specified type and channel.
+     *
+     * @param type    The type of the message.
+     * @param channel The channel associated with the message.
+     */
+    public CommunicationMessage(MessageType type, Channel channel) {
+        this.type = type;
         this.channel = channel;
     }
-
 
     /**
      * Gets the type of the message.
@@ -127,45 +163,75 @@ public class CommunicationMessage implements Serializable {
         return data;
     }
 
-    public User getUser()
-    {
+    /**
+     * Gets the user associated with the message.
+     *
+     * @return The user associated with the message.
+     */
+    public User getUser() {
         return user;
     }
 
-
-    public List<Server> getServerList()
-    {
+    /**
+     * Gets the list of servers.
+     *
+     * @return The list of servers.
+     */
+    public List<Server> getServerList() {
         return serverList;
     }
 
-    public List<Channel> getChannelList()
-    {
+    /**
+     * Gets the list of channels.
+     *
+     * @return The list of channels.
+     */
+    public List<Channel> getChannelList() {
         return channelList;
     }
 
-    public Server getServer()
-    {
+    /**
+     * Gets the server associated with the message.
+     *
+     * @return The server associated with the message.
+     */
+    public Server getServer() {
         return server;
     }
 
-    public List<Message> getMessageList()
-    {
+    /**
+     * Gets the list of messages.
+     *
+     * @return The list of messages.
+     */
+    public List<Message> getMessageList() {
         return messageList;
     }
 
-    public Channel getChannel()
-    {
+    /**
+     * Gets the channel associated with the message.
+     *
+     * @return The channel associated with the message.
+     */
+    public Channel getChannel() {
         return channel;
     }
 
-    public List<User> getUserList()
-    {
+    /**
+     * Gets the list of users.
+     *
+     * @return The list of users.
+     */
+    public List<User> getUserList() {
         return userList;
     }
 
-    public Message getMessage()
-    {
+    /**
+     * Gets the message object.
+     *
+     * @return The message object.
+     */
+    public Message getMessage() {
         return message;
     }
 }
-

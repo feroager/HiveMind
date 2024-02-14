@@ -25,16 +25,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * The ServerApplication class represents the main server application responsible for handling
+ * client connections and communication.
+ */
 public class ServerApplication {
     private int port;
     private ServerSettingsController serverSettingsController;
     private static Map<User, HandlerUser> connectionMap = new ConcurrentHashMap<>();
 
+    /**
+     * Constructs a new ServerApplication with the specified port and server settings controller.
+     *
+     * @param port The port number on which the server will listen for incoming connections.
+     * @param serverSettingsController The controller for server settings.
+     */
     public ServerApplication(int port, ServerSettingsController serverSettingsController) {
         this.port = port;
         this.serverSettingsController = serverSettingsController;
     }
 
+    /**
+     * Starts the server, listens for incoming connections, and handles them in separate threads.
+     */
     public void startServer() {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             serverSettingsController.serverOn();
@@ -48,12 +61,24 @@ public class ServerApplication {
         }
     }
 
+    /**
+     * The Handler class represents a thread that handles communication with a specific client.
+     */
     private static class Handler extends Thread {
         private Socket socket;
 
+        /**
+         * Constructs a new Handler instance with the specified socket.
+         *
+         * @param socket The socket representing the connection to a client.
+         */
         public Handler(Socket socket) {
             this.socket = socket;
         }
+
+        /**
+         * Overrides the run method of the Thread class to handle communication with the client.
+         */
         @Override
         public void run()
         {
@@ -90,6 +115,14 @@ public class ServerApplication {
             }
         }
 
+        /**
+         * Handles a registration request from a client.
+         *
+         * @param connection The connection host for communicating with the client.
+         * @param request The communication message containing the registration request.
+         * @throws IOException If an I/O error occurs.
+         * @throws SQLException If an SQL error occurs.
+         */
         private void handleRegisterRequest(ConnectionHost connection, CommunicationMessage request) throws IOException, SQLException {
             // Perform registration using RegistrationHandler
             UserDao userDao = new UserDao(DbManager.getConnection());
@@ -127,6 +160,14 @@ public class ServerApplication {
             connection.send(response);
         }
 
+        /**
+         * Handles a login request from a client.
+         *
+         * @param connection The connection host for communicating with the client.
+         * @param request The communication message containing the login request.
+         * @throws IOException If an I/O error occurs.
+         * @throws SQLException If an SQL error occurs.
+         */
         private void handleLoginRequest(ConnectionHost connection, CommunicationMessage request) throws IOException, SQLException {
             CommunicationMessage response;
 
@@ -181,6 +222,9 @@ public class ServerApplication {
 
     }
 
+    /**
+     * A thread handler for managing communication with a single user.
+     */
     private static class HandlerUser extends Thread {
         private Socket socket;
         private ConnectionHost connectionHost;
@@ -188,6 +232,13 @@ public class ServerApplication {
         private Server serverSelected;
         private Channel channelSelected;
 
+        /**
+         * Constructs a new HandlerUser instance.
+         *
+         * @param socket The socket associated with the user.
+         * @param connectionHost The connection host for communicating with the user.
+         * @param user The user being handled.
+         */
         public HandlerUser(Socket socket, ConnectionHost connectionHost, User user)
         {
             this.socket = socket;
@@ -236,6 +287,13 @@ public class ServerApplication {
             }
         }
 
+
+        /**
+         * Handles a message request from the user.
+         *
+         * @param connectionHost The connection host for communicating with the user.
+         * @param request The communication message containing the message request.
+         */
         private void handleMessageRequest(ConnectionHost connectionHost, CommunicationMessage request)
         {
             try
@@ -261,6 +319,12 @@ public class ServerApplication {
             }
         }
 
+        /**
+         * Handles a message list request from the user.
+         *
+         * @param connectionHost The connection host for communicating with the user.
+         * @param request The communication message containing the message list request.
+         */
         private void handleMessageListRequest(ConnectionHost connectionHost, CommunicationMessage request)
         {
             channelSelected = request.getChannel();
@@ -278,6 +342,12 @@ public class ServerApplication {
             }
         }
 
+        /**
+         * Handles a channel list request from the user.
+         *
+         * @param connectionHost The connection host for communicating with the user.
+         * @param request The communication message containing the channel list request.
+         */
         private void handleChannelListRequest(ConnectionHost connectionHost, CommunicationMessage request)
         {
             serverSelected = request.getServer();
@@ -298,6 +368,12 @@ public class ServerApplication {
 
         }
 
+        /**
+         * Handles a logout request from the user.
+         *
+         * @param connectionHost The connection host for communicating with the user.
+         * @param request The communication message containing the logout request.
+         */
         private void handleLogutRequest(ConnectionHost connectionHost, CommunicationMessage request)
         {
             User user = request.getUser();

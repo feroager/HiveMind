@@ -1,8 +1,6 @@
 package com.example.registration;
 
 import com.example.database.models.User;
-import com.example.registration.RegistrationHandler;
-import com.example.registration.RegistrationStatus;
 import com.example.database.dao.UserDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,9 +9,13 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+/**
+ * Test class for RegistrationHandler.
+ */
 public class RegistrationHandlerTest {
 
     @Mock
@@ -21,11 +23,17 @@ public class RegistrationHandlerTest {
     @InjectMocks
     private RegistrationHandler registrationHandler;
 
+    /**
+     * Sets up the mock objects before each test method.
+     */
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
     }
 
+    /**
+     * Tests the registerUser method for successful registration.
+     */
     @Test
     public void testRegistrationHandler_SuccessfulRegistration() {
         // Arrange
@@ -46,6 +54,9 @@ public class RegistrationHandlerTest {
         verify(userDao, times(1)).addUser(testUser);
     }
 
+    /**
+     * Tests the registerUser method when the username is taken.
+     */
     @Test
     public void testRegistrationHandler_UsernameTaken() {
         // Arrange
@@ -64,6 +75,9 @@ public class RegistrationHandlerTest {
         verify(userDao, never()).addUser(any(User.class));
     }
 
+    /**
+     * Tests the registerUser method when the email is taken.
+     */
     @Test
     public void testRegistrationHandler_EmailTaken() {
         // Arrange

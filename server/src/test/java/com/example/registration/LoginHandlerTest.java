@@ -1,9 +1,9 @@
 package com.example.registration;
 
+import com.example.database.dao.UserDao;
 import com.example.database.models.User;
 import com.example.login.LoginHandler;
 import com.example.login.LoginStatus;
-import com.example.database.dao.UserDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,6 +14,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+/**
+ * Test class for LoginHandler.
+ */
 public class LoginHandlerTest {
 
     @Mock
@@ -21,11 +24,17 @@ public class LoginHandlerTest {
     @InjectMocks
     private LoginHandler loginHandler;
 
+    /**
+     * Sets up the mock objects before each test method.
+     */
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
     }
 
+    /**
+     * Tests the loginUser method for successful login.
+     */
     @Test
     public void testLoginHandler_SuccessfulLogin() {
         // Arrange
@@ -42,6 +51,9 @@ public class LoginHandlerTest {
         verify(userDao, times(1)).getUserByUsername("testUsername");
     }
 
+    /**
+     * Tests the loginUser method when the user is not found.
+     */
     @Test
     public void testLoginHandler_UserNotFound() {
         // Arrange
@@ -58,6 +70,9 @@ public class LoginHandlerTest {
         verify(userDao, times(1)).getUserByUsername("nonExistingUsername");
     }
 
+    /**
+     * Tests the loginUser method for invalid password.
+     */
     @Test
     public void testLoginHandler_InvalidPassword() {
         // Arrange

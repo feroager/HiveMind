@@ -47,38 +47,65 @@ public class RegistrationHandler {
         }
     }
 
+    /**
+     * Checks if the user object is valid.
+     *
+     * @param user The user object to validate.
+     * @return True if the user is valid, false otherwise.
+     */
     private boolean isUserValid(User user) {
         return isValidUsername(user.getUsername()) && isValidEmail(user.getEmail());
     }
 
+    /**
+     * Checks if the username is valid.
+     *
+     * @param username The username to validate.
+     * @return True if the username is valid, false otherwise.
+     */
     private boolean isValidUsername(String username) {
         return username != null && !username.isEmpty();
     }
 
+    /**
+     * Checks if the given username is already taken.
+     *
+     * @param username The username to check.
+     * @return True if the username is taken, false otherwise.
+     */
     private boolean isUsernameTaken(String username) {
         try {
             User existingUser = userDao.getUserByUsername(username);
             return existingUser != null;
         } catch (Exception e) {
-            e.printStackTrace(); // Handle the exception according to your needs
+            e.printStackTrace();
             return true; // Assume username is taken in case of an error
         }
     }
 
+    /**
+     * Checks if the given email is already taken.
+     *
+     * @param email The email to check.
+     * @return True if the email is taken, false otherwise.
+     */
     private boolean isEmailTaken(String email) {
         try {
             User existingUser = userDao.getUserByEmail(email);
             return existingUser != null;
         } catch (Exception e) {
-            e.printStackTrace(); // Handle the exception according to your needs
+            e.printStackTrace();
             return true; // Assume email is taken in case of an error
         }
     }
 
+    /**
+     * Checks if the email is valid.
+     *
+     * @param email The email to validate.
+     * @return True if the email is valid, false otherwise.
+     */
     private boolean isValidEmail(String email) {
-        // Implement your email validation logic here
-        // You may use regular expressions or other validation methods
-        // For simplicity, this example assumes any non-null and non-empty email is valid
         return email != null && !email.isEmpty();
     }
 

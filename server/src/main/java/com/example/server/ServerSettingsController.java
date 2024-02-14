@@ -1,7 +1,6 @@
 package com.example.server;
 
 import com.example.database.dbutils.DbManager;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -39,6 +38,8 @@ public class ServerSettingsController {
 
     /**
      * Starts the server based on the user-provided information.
+     *
+     * @param event The action event triggered by the user.
      */
     @FXML
     void startServer(ActionEvent event) {
@@ -68,6 +69,9 @@ public class ServerSettingsController {
         }
     }
 
+    /**
+     * Updates the database status label to indicate that the database is off.
+     */
     public void dataBaseOff() {
         Platform.runLater(() -> {
             dbStatusLabel.setText("OFF");
@@ -75,6 +79,9 @@ public class ServerSettingsController {
         });
     }
 
+    /**
+     * Updates the server status label to indicate that the server is off.
+     */
     public void serverOff() {
         Platform.runLater(() -> {
             serverStatusLabel.setText("OFF");
@@ -82,6 +89,9 @@ public class ServerSettingsController {
         });
     }
 
+    /**
+     * Updates the database status label to indicate that the database is on.
+     */
     public void dataBaseOn() {
         Platform.runLater(() -> {
             dbStatusLabel.setText("ON");
@@ -89,6 +99,9 @@ public class ServerSettingsController {
         });
     }
 
+    /**
+     * Updates the server status label to indicate that the server is on.
+     */
     public void serverOn() {
         Platform.runLater(() -> {
             serverStatusLabel.setText("ON");
