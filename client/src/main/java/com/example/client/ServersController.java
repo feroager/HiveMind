@@ -16,6 +16,9 @@ import java.util.List;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
+/**
+ * The ServersController class controls the display and interaction of servers in the GUI.
+ */
 public class ServersController {
 
     @FXML
@@ -23,6 +26,9 @@ public class ServersController {
     private ClientHandler clientHandler;
     private ChannelsController channelsController;
 
+    /**
+     * Initializes the list of servers.
+     */
     public void initializeServersList() {
 
         List<Server> serverList = clientHandler.getServerList();
@@ -34,6 +40,12 @@ public class ServersController {
         }
     }
 
+    /**
+     * Creates a button for a server.
+     *
+     * @param server The server for which to create the button.
+     * @return The created server button.
+     */
     private Button createServerButton(Server server) {
         // Create a button with the letter "S"
         Button button = new Button("S");
@@ -67,6 +79,11 @@ public class ServersController {
         return button;
     }
 
+    /**
+     * Handles the click event for a server button.
+     *
+     * @param server The server associated with the clicked button.
+     */
     private void handleServerButtonClick(Server server) {
 
         System.out.println("Button for server clicked: " + server.getName());
@@ -75,9 +92,14 @@ public class ServersController {
         clientHandler.setChannelsListRequest(true);
     }
 
+    /**
+     * Handles the list of channels received from the server.
+     *
+     * @param channelList The list of channels received from the server.
+     */
     public void handleLoaderChannels(List<Channel> channelList)
     {
-        ConsoleHelper.writeMessage("List of channals");
+        ConsoleHelper.writeMessage("List of channels");
         for(Channel channel: channelList)
         {
             System.out.println(channel.getName());
@@ -87,12 +109,12 @@ public class ServersController {
         channelsController.updateChannelsList(channelList);
     }
 
-//    private Map<Channel, List<Message>> getChannelsForServer(Server server) {
-//        Map<Channel, List<Message>> help = clientHandler.getUserServerInfo().get(server);
-//        return help;
-//    }
-
-
+    /**
+     * Generates a color based on the server name.
+     *
+     * @param serverName The name of the server.
+     * @return The generated color.
+     */
     private Color generateColor(String serverName) {
         // Simple algorithm to generate color based on the server name
         int hash = serverName.hashCode();
@@ -100,12 +122,24 @@ public class ServersController {
         return Color.hsb(hue * 360, 0.8, 0.8); // Convert to color in HSB space
     }
 
+    /**
+     * Determines the text color based on the background color.
+     *
+     * @param backgroundColor The background color.
+     * @return The text color.
+     */
     private Color determineTextColor(Color backgroundColor) {
         // Check the brightness of the background color and adjust the text color
         double brightness = backgroundColor.getBrightness();
         return (brightness > 0.5) ? Color.BLACK : Color.WHITE;
     }
 
+    /**
+     * Converts a color to its RGB code.
+     *
+     * @param color The color to convert.
+     * @return The RGB code of the color.
+     */
     private String toRGBCode(Color color) {
         // Convert color to RGB code
         return String.format("#%02X%02X%02X",
@@ -114,10 +148,20 @@ public class ServersController {
                 (int) (color.getBlue() * 255));
     }
 
+    /**
+     * Sets the client handler for communication with the server.
+     *
+     * @param clientHandler The client handler to set.
+     */
     public void setClientHandler(ClientHandler clientHandler) {
         this.clientHandler = clientHandler;
     }
 
+    /**
+     * Sets the channels controller.
+     *
+     * @param channelsController The channels controller to set.
+     */
     public void setChannelsController(ChannelsController channelsController)
     {
         this.channelsController = channelsController;

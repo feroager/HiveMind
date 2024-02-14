@@ -15,6 +15,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * The RegistrationController class controls the registration process in the GUI.
+ */
 public class RegistrationController {
 
 
@@ -42,6 +45,11 @@ public class RegistrationController {
     @FXML
     private Label resultLabelRegistartion;
 
+    /**
+     * Sets the text of the result label for registration feedback.
+     *
+     * @param result The communication message containing the registration result.
+     */
     public void setResultLabelRegistartionText(CommunicationMessage result)
     {
         Platform.runLater(() -> {
@@ -57,10 +65,21 @@ public class RegistrationController {
         });
     }
 
+    /**
+     * Handles the action event for the back button during registration.
+     *
+     * @param event The action event triggered by clicking the back button.
+     */
     @FXML
     void onActionBackRegistration(ActionEvent event) {
         setHelloView(BackRegistration);
     }
+
+    /**
+     * Handles the action event for the sign up button during registration.
+     *
+     * @param event The action event triggered by clicking the sign up button.
+     */
     @FXML
     void onActionSignUpRegistration(ActionEvent event) {
         ClientApplication clientApplication = new ClientApplication(ipRegistartion.getText(), Integer.parseInt(portRegistartion.getText()));
@@ -68,6 +87,11 @@ public class RegistrationController {
         clientApplication.register(userNameRegistartion.getText(), passwordRegistartion.getText(), emailRegistartion.getText());
     }
 
+    /**
+     * Sets the hello view when clicking the back button.
+     *
+     * @param button The back button.
+     */
     public static void setHelloView(Button button) {
         try {
             FXMLLoader loader = new FXMLLoader(HelloController.class.getResource("/com/example/client/HelloView.fxml"));

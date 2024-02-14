@@ -15,6 +15,10 @@ import java.net.Socket;
 import java.sql.Timestamp;
 import java.util.List;
 
+/**
+ * The ClientHandler class manages communication between the client and the server.
+ * It handles sending and receiving messages, as well as processing responses from the server.
+ */
 public class ClientHandler extends Thread {
     private final String serverIp;
     private final int serverPort;
@@ -37,6 +41,16 @@ public class ClientHandler extends Thread {
     private List<Channel> userChannelList;
     private List<User> serverUserList;
 
+    /**
+     * Constructs a new ClientHandler instance.
+     *
+     * @param serverIp             The IP address of the server
+     * @param serverPort           The port number of the server
+     * @param mainController       The main controller of the client application
+     * @param communicationMessage The initial communication message
+     * @param socket               The socket for communication with the server
+     * @param connectionHost       The connection host for sending and receiving messages
+     */
     public ClientHandler(String serverIp, int serverPort, MainController mainController, CommunicationMessage communicationMessage, Socket socket, ConnectionHost connectionHost) {
         this.serverIp = serverIp;
         this.serverPort = serverPort;
@@ -64,6 +78,9 @@ public class ClientHandler extends Thread {
         isMessagesListRequest = false;
     }
 
+    /**
+     * Handles the logout process by sending a logout request to the server.
+     */
     public void handleLogout() {
         isLogged = false;
         CommunicationMessage logOutRequest = new CommunicationMessage(MessageType.LOGOUT_REQUEST, loggedUser);
@@ -82,6 +99,10 @@ public class ClientHandler extends Thread {
         }
     }
 
+    /**
+     * Runs the ClientHandler thread.
+     * It manages the communication with the server and handles incoming messages.
+     */
     @Override
     public void run() {
         Thread messageReceiverThread = new Thread(() -> {
@@ -91,7 +112,7 @@ public class ClientHandler extends Thread {
                     handleReceivedMessage(receivedMessage);
                 } catch (IOException | ClassNotFoundException e) {
                     ConsoleHelper.writeMessage("Error receiving message: " + e.getMessage());
-                    // Obsługa błędu, np. ponowne połączenie z serwerem
+                    // Handle error, e.g., reconnecting to the server
                 }
             }
         });
@@ -118,6 +139,11 @@ public class ClientHandler extends Thread {
         messageReceiverThread.interrupt();
     }
 
+    /**
+     * Handles a received message from the server.
+     *
+     * @param receivedMessage The received CommunicationMessage
+     */
     private void handleReceivedMessage(CommunicationMessage receivedMessage) {
         MessageType messageType = receivedMessage.getType();
         switch (messageType) {
@@ -130,27 +156,45 @@ public class ClientHandler extends Thread {
             case MESSAGE_RESPONSE:
                 handleMessageResponse(receivedMessage);
                 break;
-            // Obsługa innych typów wiadomości, jeśli są potrzebne
+            // Handle other message types if needed
         }
     }
 
+    /**
+     * Handles a response containing a list of channels from the server.
+     *
+     * @param response The received CommunicationMessage containing the channel list
+     */
     private void handleChannelListResponse(CommunicationMessage response) {
         serverUserList = response.getUserList();
         serversController.handleLoaderChannels(response.getChannelList());
     }
 
+    /**
+     * Handles a response containing a list of messages from the server.
+     *
+     * @param response The received CommunicationMessage containing the message list
+     */
     private void handleMessageListResponse(CommunicationMessage response) {
         userChannelList = response.getChannelList();
         channelsController.handleLoaderChannels(response.getMessageList());
     }
 
+    /**
+     * Handles a response containing a single message from the server.
+     *
+     * @param response The received CommunicationMessage containing the message
+     */
     private void handleMessageResponse(CommunicationMessage response) {
         if (selectedChannel != null) {
             List<Message> messageList = response.getMessageList();
-            Platform.runLater(() -> messagesController.updateMessgaesList(messageList));
+            Platform.runLater(() -> messagesController.updateMessagesList(messageList));
         }
     }
 
+    /**
+     * Sends a request to the server to retrieve the list of channels.
+     */
     private void sendChannelListRequest() {
         try {
             ConsoleHelper.writeMessage("CHANNEL_LIST_REQUEST");
@@ -161,6 +205,9 @@ public class ClientHandler extends Thread {
         }
     }
 
+    /**
+     * Sends a request to the server to retrieve the list of messages for the selected channel.
+     */
     private void sendMessagesListRequest() {
         try {
             ConsoleHelper.writeMessage("MESSAGE_LIST_REQUEST");
@@ -171,6 +218,9 @@ public class ClientHandler extends Thread {
         }
     }
 
+    /**
+     * Sends a message to the server.
+     */
     private void sendMessage() {
         try {
             System.out.println(mainController.getMessageString());
@@ -182,34 +232,74 @@ public class ClientHandler extends Thread {
         }
     }
 
+    /**
+     * Retrieves the list of servers.
+     *
+     * @return The list of servers
+     */
     public List<Server> getServerList() {
         return serverList;
     }
 
+    /**
+     * Retrieves the list of user channels.
+     *
+     * @return The list of user channels
+     */
     public List<Channel> getUserChannelList() {
         return userChannelList;
     }
 
+    /**
+     * Sets the selected server.
+     *
+     * @param selectedServer The selected server
+     */
     public void setSelectedServer(Server selectedServer) {
         this.selectedServer = selectedServer;
     }
 
+    /**
+     * Sets the flag indicating whether a request for channel list is needed.
+     *
+     * @param channelsListRequest true if a request for channel list is needed, false otherwise
+     */
     public void setChannelsListRequest(boolean channelsListRequest) {
         isChannelsListRequest = channelsListRequest;
     }
 
+    /**
+     * Sets the selected channel.
+     *
+     * @param selectedChannel The selected channel
+     */
     public void setSelectedChannel(Channel selectedChannel) {
         this.selectedChannel = selectedChannel;
     }
 
+    /**
+     * Sets the flag indicating whether a request for message list is needed.
+     *
+     * @param messagesListRequest true if a request for message list is needed, false otherwise
+     */
     public void setMessagesListRequest(boolean messagesListRequest) {
         isMessagesListRequest = messagesListRequest;
     }
 
+    /**
+     * Retrieves the list of users in the server.
+     *
+     * @return The list of users in the server
+     */
     public List<User> getServerUserList() {
         return serverUserList;
     }
 
+    /**
+     * Sets the flag indicating whether a message needs to be sent.
+     *
+     * @param sendMessage true if a message needs to be sent, false otherwise
+     */
     public void setSendMessage(boolean sendMessage) {
         isSendMessage = sendMessage;
     }

@@ -8,36 +8,34 @@ import com.example.utils.ConsoleHelper;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Set;
 
+/**
+ * The main application class responsible for client-server communication and user interaction.
+ */
 public class ClientApplication {
     private String serverIp;
     private int serverPort;
     private RegistrationController registrationController;
     private LoginController loginController;
 
+    /**
+     * Constructs a new ClientApplication with the specified server IP address and port.
+     *
+     * @param serverIp   The IP address of the server.
+     * @param serverPort The port number of the server.
+     */
     public ClientApplication(String serverIp, int serverPort) {
         this.serverIp = serverIp;
         this.serverPort = serverPort;
     }
 
-    public void startServer() {
-        try(Socket socket = new Socket(serverIp, serverPort))
-        {
-            try (ConnectionHost connectionHost = new ConnectionHost(socket)) {
-                while (true) {
 
-                }
-            }
-            catch (IOException e) {
-                ConsoleHelper.writeMessage("Error while communicating with " + socket.getRemoteSocketAddress());
-                e.printStackTrace();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Logs in the user with the provided username and password.
+     *
+     * @param username The username of the user.
+     * @param password The password of the user.
+     */
     public void login(String username, String password) {
         User loginUser = new User(0, username, password, null);
         CommunicationMessage loginRequest = new CommunicationMessage(MessageType.LOGIN_REQUEST, loginUser);
@@ -60,8 +58,7 @@ public class ClientApplication {
                     MainController mainController = loginController.getMainController();
                     if (mainController == null)
                         System.out.println("mainContorller is null");
-                    for(var helpMe: response.getServerList())
-                    {
+                    for (var helpMe : response.getServerList()) {
                         System.out.println(helpMe.getName());
                     }
                     new ClientHandler(serverIp, serverPort, mainController, response, socket, connectionHost).start();
@@ -80,6 +77,13 @@ public class ClientApplication {
     }
 
 
+    /**
+     * Registers a new user with the provided username, password, and email.
+     *
+     * @param username The username of the new user.
+     * @param password The password of the new user.
+     * @param email    The email of the new user.
+     */
     public void register(String username, String password, String email) {
         User registerUser = new User(0, username, password, email);
         CommunicationMessage registerRequest = new CommunicationMessage(MessageType.REGISTER_REQUEST, registerUser);
@@ -92,7 +96,7 @@ public class ClientApplication {
                 CommunicationMessage response = connectionHost.receive();
 
                 if (response.getType() == MessageType.REGISTER_RESPONSE) {
-                    if(registrationController!=null)
+                    if (registrationController != null)
                         registrationController.setResultLabelRegistartionText(response);
                     ConsoleHelper.writeMessage(response.getData());
                 } else {
@@ -107,13 +111,21 @@ public class ClientApplication {
         }
     }
 
-    public void setRegistrationController(RegistrationController registrationController)
-    {
+    /**
+     * Sets the registration controller for this client application.
+     *
+     * @param registrationController The registration controller to be set.
+     */
+    public void setRegistrationController(RegistrationController registrationController) {
         this.registrationController = registrationController;
     }
 
-    public void setLoginController(LoginController loginController)
-    {
+    /**
+     * Sets the login controller for this client application.
+     *
+     * @param loginController The login controller to be set.
+     */
+    public void setLoginController(LoginController loginController) {
         this.loginController = loginController;
     }
 }

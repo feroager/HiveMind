@@ -65,22 +65,22 @@ public class LoginController {
 
     public void setMainView() {
         //Platform.runLater(() -> {
-            try {
-                FXMLLoader loader = new FXMLLoader(MainController.class.getResource("/com/example/client/MainView.fxml"));
-                Parent mainView = loader.load();
-                Stage primaryStage = (Stage) BackLogin.getScene().getWindow();
-                primaryStage.setResizable(true);
-                primaryStage.setScene(new Scene(mainView));
-                MainController mainController = loader.getController();
-                this.mainController = mainController;
-                // Setting the closing event handler
-                primaryStage.setOnCloseRequest(event -> {
-                    mainController.getFooterController().onActionLogoutButton();
-                });
+        try {
+            FXMLLoader loader = new FXMLLoader(MainController.class.getResource("/com/example/client/MainView.fxml"));
+            Parent mainView = loader.load();
+            Stage primaryStage = (Stage) BackLogin.getScene().getWindow();
+            primaryStage.setResizable(true);
+            primaryStage.setScene(new Scene(mainView));
+            MainController mainController = loader.getController();
+            this.mainController = mainController;
+            // Setting the closing event handler
+            primaryStage.setOnCloseRequest(event -> {
+                mainController.getFooterController().onActionLogoutButton();
+            });
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         //});
     }
 
