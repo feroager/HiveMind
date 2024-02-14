@@ -1,5 +1,6 @@
 package com.example.server;
 
+import com.example.database.dao.MessageDao;
 import com.example.database.dao.UserDao;
 import com.example.database.dbutils.DbManager;
 import com.example.database.models.Channel;
@@ -216,16 +217,45 @@ public class ServerApplication {
                         ConsoleHelper.writeMessage("Recieve message MESSAGE_LIST_REQUEST");
                         handleMessageListRequest(connectionHost, request);
                     }
+                    else if(request.getType() == MessageType.MESSAGE_REQUEST)
+                    {
+                        ConsoleHelper.writeMessage("Recieve message MESSAGE_REQUEST");
+                        handleMessageRequest(connectionHost, request);
+                    }
                     else
                     {
                         ConsoleHelper.writeMessage("Bad MessageType");
                     }
+
                 }
 
             }
             catch (IOException | ClassNotFoundException  e) {
                 ConsoleHelper.writeMessage("Error while communicating with " + socket.getRemoteSocketAddress());
                 e.printStackTrace();
+            }
+        }
+
+        private void handleMessageRequest(ConnectionHost connectionHost, CommunicationMessage request)
+        {
+            try
+            {
+                MessageDao messageDao = new MessageDao(DbManager.getConnection());
+                int numberNewMessage = messageDao.addMessage(request.getMessage());
+                Message message = messageDao.getMessageById(numberNewMessage);
+                for (Map.Entry<User, HandlerUser> entry : connectionMap.entrySet()) {
+                    HandlerUser handlerUser = entry.getValue();
+                    if(handlerUser.channelSelected.getChannelId() == channelSelected.getServerId())
+                    {
+                        handlerUser.connectionHost.send(new CommunicationMessage(MessageType.MESSAGE_RESPONSE, message, request.getUser()));
+                    }
+                    ConsoleHelper.writeMessage("User: " + user + ", HandlerUser: " + handlerUser);
+                }
+
+            }
+            catch(SQLException | IOException e)
+            {
+
             }
         }
 
