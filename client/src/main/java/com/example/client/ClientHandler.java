@@ -1,6 +1,7 @@
 package com.example.client;
 
 import com.example.database.models.Channel;
+import com.example.database.models.Message;
 import com.example.database.models.Server;
 import com.example.database.models.User;
 import com.example.message.CommunicationMessage;
@@ -10,6 +11,7 @@ import com.example.utils.ConsoleHelper;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.sql.Timestamp;
 import java.util.List;
 
 class ClientHandler extends Thread {
@@ -26,6 +28,7 @@ class ClientHandler extends Thread {
     private volatile boolean isLogged;
     private volatile boolean isChannelsListRequest;
     private volatile boolean isMessagessListRequest;
+    private volatile boolean isSendMessage;
     private User loggedUser;
     private List<Server> serverList;
     private Server selectedServer;
@@ -144,6 +147,31 @@ class ClientHandler extends Thread {
 
             }
 
+            if (isSendMessage) {
+                isSendMessage = false;
+                try {
+                    Message message = new Message(-1, loggedUser.getUserId(), selectedChannel.getChannelId(), mainController.getMessageString(), new Timestamp(System.currentTimeMillis()));
+                    CommunicationMessage sendMessageRequest = new CommunicationMessage(MessageType.MESSAGE_REQUEST, message, loggedUser);
+                    connectionHost.send(sendMessageRequest);
+                    ConsoleHelper.writeMessage("Sent MESSAGE_REQUEST");
+                } catch (IOException  e) {
+                    ConsoleHelper.writeMessage("Didn't sent MESSAGE_REQUEST");
+                    System.out.println();
+                    throw new RuntimeException(e);
+                }
+
+                try
+                {
+                    connectionHost.close();
+                    socket.close();
+                } catch(IOException e)
+                {
+                    ConsoleHelper.writeMessage("Error connectionHost or socket close.");
+                    throw new RuntimeException(e);
+                }
+                break;
+            }
+
 
 
         }
@@ -182,6 +210,11 @@ class ClientHandler extends Thread {
     public List<User> getServerUserList()
     {
         return serverUserList;
+    }
+
+    public void setSendMessage(boolean sendMessage)
+    {
+        isSendMessage = sendMessage;
     }
 }
 
