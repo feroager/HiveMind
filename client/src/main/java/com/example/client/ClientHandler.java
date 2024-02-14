@@ -8,26 +8,27 @@ import com.example.message.CommunicationMessage;
 import com.example.message.MessageType;
 import com.example.utils.ConnectionHost;
 import com.example.utils.ConsoleHelper;
+import javafx.application.Platform;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.sql.Timestamp;
 import java.util.List;
 
-class ClientHandler extends Thread {
-    private String serverIp;
-    private int serverPort;
-    private MainController mainController;
-    private FooterController footerController;
-    private ServersController serversController;
-    private ChannelsController channelsController;
-    private MessagesController messagesController;
-    private CommunicationMessage communicationMessage;
-    private Socket socket;
-    private ConnectionHost connectionHost;
+public class ClientHandler extends Thread {
+    private final String serverIp;
+    private final int serverPort;
+    private final MainController mainController;
+    private final FooterController footerController;
+    private final ServersController serversController;
+    private final ChannelsController channelsController;
+    private final MessagesController messagesController;
+    private final CommunicationMessage communicationMessage;
+    private final Socket socket;
+    private final ConnectionHost connectionHost;
     private volatile boolean isLogged;
     private volatile boolean isChannelsListRequest;
-    private volatile boolean isMessagessListRequest;
+    private volatile boolean isMessagesListRequest;
     private volatile boolean isSendMessage;
     private User loggedUser;
     private List<Server> serverList;
@@ -35,7 +36,6 @@ class ClientHandler extends Thread {
     private Channel selectedChannel;
     private List<Channel> userChannelList;
     private List<User> serverUserList;
-    private int testVarable = 0;
 
     public ClientHandler(String serverIp, int serverPort, MainController mainController, CommunicationMessage communicationMessage, Socket socket, ConnectionHost connectionHost) {
         this.serverIp = serverIp;
@@ -50,6 +50,7 @@ class ClientHandler extends Thread {
         this.connectionHost = connectionHost;
         this.loggedUser = communicationMessage.getUser();
         this.serverList = communicationMessage.getServerList();
+        mainController.setClientHandler(this);
         footerController.setClientHandler(this);
         footerController.setUsernameLabelFooter(communicationMessage);
         serversController.setClientHandler(this);
@@ -60,161 +61,156 @@ class ClientHandler extends Thread {
         channelsController.setMessagesController(messagesController);
         isLogged = true;
         isChannelsListRequest = false;
-        isMessagessListRequest = false;
-
+        isMessagesListRequest = false;
     }
 
     public void handleLogout() {
         isLogged = false;
+        CommunicationMessage logOutRequest = new CommunicationMessage(MessageType.LOGOUT_REQUEST, loggedUser);
+        try {
+            ConsoleHelper.writeMessage("Sent LOGOUT_REQUEST");
+            connectionHost.send(logOutRequest);
+        } catch (IOException e) {
+            ConsoleHelper.writeMessage("Failed to send LOGOUT_REQUEST: " + e.getMessage());
+        }
+
+        try {
+            connectionHost.close();
+            socket.close();
+        } catch (IOException e) {
+            ConsoleHelper.writeMessage("Error closing connection: " + e.getMessage());
+        }
     }
 
     @Override
     public void run() {
-        while (true) {
-            if (!isLogged) {
-                CommunicationMessage logOutRequest = new CommunicationMessage(MessageType.LOGOUT_REQUEST, loggedUser);
+        Thread messageReceiverThread = new Thread(() -> {
+            while (isLogged) {
                 try {
-                    ConsoleHelper.writeMessage("Sent LOGOUT_REQUEST");
-                    connectionHost.send(logOutRequest);
-                } catch (IOException e) {
-                    ConsoleHelper.writeMessage("Didn't sent LOGOUT_REQUEST");
-                    System.out.println();
-                    throw new RuntimeException(e);
+                    CommunicationMessage receivedMessage = connectionHost.receive();
+                    handleReceivedMessage(receivedMessage);
+                } catch (IOException | ClassNotFoundException e) {
+                    ConsoleHelper.writeMessage("Error receiving message: " + e.getMessage());
+                    // Obsługa błędu, np. ponowne połączenie z serwerem
                 }
-
-                try
-                {
-                    connectionHost.close();
-                    socket.close();
-                } catch(IOException e)
-                {
-                    ConsoleHelper.writeMessage("Error connectionHost or socket close.");
-                    throw new RuntimeException(e);
-                }
-                break;
             }
+        });
 
-            if (isChannelsListRequest)
-            {
+        messageReceiverThread.start();
+
+        while (isLogged) {
+            if (isChannelsListRequest) {
                 isChannelsListRequest = false;
-                try {
-                    ConsoleHelper.writeMessage("CHANNEL_LIST_REQUEST");
-                    CommunicationMessage userChannelListRequest = new CommunicationMessage(MessageType.CHANNEL_LIST_REQUEST, selectedServer);
-                    connectionHost.send(userChannelListRequest);
-                    CommunicationMessage response = connectionHost.receive();
-                    if(response.getType().equals(MessageType.CHANNEL_LIST_RESPONSE))
-                    {
-                        serverUserList = response.getUserList();
-                        serversController.handleLoaderChannels(response.getChannelList());
-                    }
-                    else
-                    {
-                        ConsoleHelper.writeMessage("Bad type CommunicationMessage");
-                    }
-
-                } catch (IOException | ClassNotFoundException e) {
-                    ConsoleHelper.writeMessage("Didn't sent CHANNEL_LIST_REQUEST");
-                    System.out.println();
-                    throw new RuntimeException(e);
-                }
-
+                sendChannelListRequest();
             }
 
-
-            if (isMessagessListRequest)
-            {
-                isMessagessListRequest = false;
-                try {
-                    ConsoleHelper.writeMessage("Sent MESSAGE_LIST_REQUEST");
-                    CommunicationMessage userMessageListRequest = new CommunicationMessage(MessageType.MESSAGE_LIST_REQUEST, selectedChannel);
-                    connectionHost.send(userMessageListRequest);
-                    CommunicationMessage response = connectionHost.receive();
-                    if(response.getType().equals(MessageType.MESSAGE_LIST_RESPONSE))
-                    {
-                        userChannelList = response.getChannelList();
-                        channelsController.handleLoaderChannels(response.getMessageList());
-                    }
-                    else
-                    {
-                        ConsoleHelper.writeMessage("Bad type CommunicationMessage");
-                    }
-
-                } catch (IOException | ClassNotFoundException e) {
-                    ConsoleHelper.writeMessage("Didn't sent MESSAGE_LIST_REQUEST");
-                    System.out.println();
-                    throw new RuntimeException(e);
-                }
-
+            if (isMessagesListRequest) {
+                isMessagesListRequest = false;
+                sendMessagesListRequest();
             }
 
             if (isSendMessage) {
                 isSendMessage = false;
-                try {
-                    Message message = new Message(-1, loggedUser.getUserId(), selectedChannel.getChannelId(), mainController.getMessageString(), new Timestamp(System.currentTimeMillis()));
-                    CommunicationMessage sendMessageRequest = new CommunicationMessage(MessageType.MESSAGE_REQUEST, message, loggedUser);
-                    connectionHost.send(sendMessageRequest);
-                    ConsoleHelper.writeMessage("Sent MESSAGE_REQUEST");
-                } catch (IOException  e) {
-                    ConsoleHelper.writeMessage("Didn't sent MESSAGE_REQUEST");
-                    System.out.println();
-                    throw new RuntimeException(e);
-                }
-
-                try
-                {
-                    connectionHost.close();
-                    socket.close();
-                } catch(IOException e)
-                {
-                    ConsoleHelper.writeMessage("Error connectionHost or socket close.");
-                    throw new RuntimeException(e);
-                }
-                break;
+                sendMessage();
             }
+        }
 
+        messageReceiverThread.interrupt();
+    }
 
-
+    private void handleReceivedMessage(CommunicationMessage receivedMessage) {
+        MessageType messageType = receivedMessage.getType();
+        switch (messageType) {
+            case CHANNEL_LIST_RESPONSE:
+                handleChannelListResponse(receivedMessage);
+                break;
+            case MESSAGE_LIST_RESPONSE:
+                handleMessageListResponse(receivedMessage);
+                break;
+            case MESSAGE_RESPONSE:
+                handleMessageResponse(receivedMessage);
+                break;
+            // Obsługa innych typów wiadomości, jeśli są potrzebne
         }
     }
 
+    private void handleChannelListResponse(CommunicationMessage response) {
+        serverUserList = response.getUserList();
+        serversController.handleLoaderChannels(response.getChannelList());
+    }
 
-    public List<Server> getServerList()
-    {
+    private void handleMessageListResponse(CommunicationMessage response) {
+        userChannelList = response.getChannelList();
+        channelsController.handleLoaderChannels(response.getMessageList());
+    }
+
+    private void handleMessageResponse(CommunicationMessage response) {
+        if (selectedChannel != null) {
+            List<Message> messageList = response.getMessageList();
+            Platform.runLater(() -> messagesController.updateMessgaesList(messageList));
+        }
+    }
+
+    private void sendChannelListRequest() {
+        try {
+            ConsoleHelper.writeMessage("CHANNEL_LIST_REQUEST");
+            CommunicationMessage userChannelListRequest = new CommunicationMessage(MessageType.CHANNEL_LIST_REQUEST, selectedServer);
+            connectionHost.send(userChannelListRequest);
+        } catch (IOException e) {
+            ConsoleHelper.writeMessage("Error sending CHANNEL_LIST_REQUEST: " + e.getMessage());
+        }
+    }
+
+    private void sendMessagesListRequest() {
+        try {
+            ConsoleHelper.writeMessage("MESSAGE_LIST_REQUEST");
+            CommunicationMessage userMessageListRequest = new CommunicationMessage(MessageType.MESSAGE_LIST_REQUEST, selectedChannel);
+            connectionHost.send(userMessageListRequest);
+        } catch (IOException e) {
+            ConsoleHelper.writeMessage("Error sending MESSAGE_LIST_REQUEST: " + e.getMessage());
+        }
+    }
+
+    private void sendMessage() {
+        try {
+            System.out.println(mainController.getMessageString());
+            Message message = new Message(-1, loggedUser.getUserId(), selectedChannel.getChannelId(), mainController.getMessageString(), new Timestamp(System.currentTimeMillis()));
+            CommunicationMessage sendMessageRequest = new CommunicationMessage(MessageType.MESSAGE_REQUEST, message, loggedUser);
+            connectionHost.send(sendMessageRequest);
+        } catch (IOException e) {
+            ConsoleHelper.writeMessage("Error sending MESSAGE_REQUEST: " + e.getMessage());
+        }
+    }
+
+    public List<Server> getServerList() {
         return serverList;
     }
 
-    public List<Channel> getUserChannelList()
-    {
+    public List<Channel> getUserChannelList() {
         return userChannelList;
     }
 
-    public void setSelectedServer(Server selectedServer)
-    {
+    public void setSelectedServer(Server selectedServer) {
         this.selectedServer = selectedServer;
     }
-    public void setChannelsListRequest(boolean channelsListRequest)
-    {
+
+    public void setChannelsListRequest(boolean channelsListRequest) {
         isChannelsListRequest = channelsListRequest;
     }
 
-    public void setSelectedChannel(Channel selectedChannel)
-    {
+    public void setSelectedChannel(Channel selectedChannel) {
         this.selectedChannel = selectedChannel;
     }
 
-    public void setMessagessListRequest(boolean messagessListRequest)
-    {
-        isMessagessListRequest = messagessListRequest;
+    public void setMessagesListRequest(boolean messagesListRequest) {
+        isMessagesListRequest = messagesListRequest;
     }
 
-    public List<User> getServerUserList()
-    {
+    public List<User> getServerUserList() {
         return serverUserList;
     }
 
-    public void setSendMessage(boolean sendMessage)
-    {
+    public void setSendMessage(boolean sendMessage) {
         isSendMessage = sendMessage;
     }
 }
-

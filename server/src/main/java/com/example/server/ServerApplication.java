@@ -243,6 +243,7 @@ public class ServerApplication {
                 MessageDao messageDao = new MessageDao(DbManager.getConnection());
                 int numberNewMessage = messageDao.addMessage(request.getMessage());
                 Message message = messageDao.getMessageById(numberNewMessage);
+                messageDao.closeConnection();
                 for (Map.Entry<User, HandlerUser> entry : connectionMap.entrySet()) {
                     HandlerUser handlerUser = entry.getValue();
                     if(handlerUser.channelSelected.getChannelId() == channelSelected.getServerId())
@@ -255,7 +256,8 @@ public class ServerApplication {
             }
             catch(SQLException | IOException e)
             {
-
+                ConsoleHelper.writeMessage("Error HandleMessageRequest");
+                e.printStackTrace();
             }
         }
 

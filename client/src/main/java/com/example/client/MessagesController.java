@@ -37,12 +37,14 @@ public class MessagesController
     public void updateMessgaesList(List<Message> messagesList)
     {
         Platform.runLater(() -> {
+            System.out.println("testUpdateMessgaesList");
             this.messagesList = messagesList;
             messagesContainer.getChildren().clear();
 
             for(Message message: this.messagesList)
             {
                 Label messageLabel = createMessage(message);
+                System.out.println(messageLabel);
                 messagesContainer.getChildren().add(messageLabel);
             }
         });
@@ -55,6 +57,7 @@ public class MessagesController
             if(user.getUserId() == message.getUserId())
                 return user;
         }
+        System.out.println("cos poszlo nie tak");
         return null;
     }
 
@@ -73,6 +76,11 @@ public class MessagesController
         return label;
     }
 
+
+    public List<Message> getMessagesList()
+    {
+        return messagesList;
+    }
 
 
 

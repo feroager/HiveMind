@@ -65,7 +65,7 @@ public class ChannelsController
         System.out.println("Button for channel clicked: " + channel.getName());
 
         clientHandler.setSelectedChannel(channel);
-        clientHandler.setMessagessListRequest(true);
+        clientHandler.setMessagesListRequest(true);
     }
 
     public void setMessagesController(MessagesController messagesController)

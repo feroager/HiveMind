@@ -29,6 +29,8 @@ public class MainController
 
     private String messageString;
 
+    ClientHandler clientHandler;
+
     public FooterController getFooterController() {
         return footerController;
     }
@@ -54,12 +56,17 @@ public class MainController
     }
     public void sendMessages()
     {
-        this.messageString = textField.toString();
-
+        this.messageString = textField.getText();
+        this.clientHandler.setSendMessage(true);
     }
 
     public String getMessageString()
     {
         return messageString;
+    }
+
+    public void setClientHandler(ClientHandler clientHandler)
+    {
+        this.clientHandler = clientHandler;
     }
 }
