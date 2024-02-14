@@ -51,8 +51,17 @@ public enum MessageType {
     /**
      * Enumeration representing a message type for responding with a list of messages.
      */
-    MESSAGE_LIST_RESPONSE;
+    MESSAGE_LIST_RESPONSE,
 
+    /**
+     * Representing requesting insert message in the channel.
+     */
+    MESSAGE_REQUEST,
+
+    /**
+     * Send new message to login users.
+     */
+    MESSAGE_RESPONSE;
 
     /**
      * Converts the message type to its string representation.

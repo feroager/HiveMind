@@ -47,11 +47,10 @@
                 </AnchorPane>
                 <AnchorPane maxHeight="22" minHeight="22.0" minWidth="0.0" prefHeight="22.0" prefWidth="400.0">
                     <children>
-                        <!-- HBox z TextField, który dostosowuje się do szerokości -->
                         <HBox maxHeight="22" prefHeight="22" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <children>
-                                <TextField minHeight="15.0" HBox.hgrow="ALWAYS" />
-                                <Button mnemonicParsing="false" text="➤">
+                                <TextField fx:id="textField" minHeight="15.0" HBox.hgrow="ALWAYS" />
+                                <Button mnemonicParsing="false" onAction="#sendMessages" text="➤">
                                     <font>
                                         <Font name="System Bold" size="13.0" />
                                     </font></Button>

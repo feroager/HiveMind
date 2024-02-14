@@ -1,6 +1,8 @@
 package com.example.client;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
 
 public class MainController
 {
@@ -20,6 +22,9 @@ public class MainController
 
     @FXML
     private MessagesController messagesController;
+
+    @FXML
+    private TextField textField;
 
     public FooterController getFooterController() {
         return footerController;
@@ -46,5 +51,8 @@ public class MainController
     }
 
 
+    public void sendMessages()
+    {
 
+    }
 }
