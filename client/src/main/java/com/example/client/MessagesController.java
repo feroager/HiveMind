@@ -16,7 +16,6 @@ public class MessagesController
 {
     @FXML
     private VBox messagesContainer;
-
     private ClientHandler clientHandler;
     private List<Message> messagesList;
 
@@ -33,21 +32,24 @@ public class MessagesController
     /**
      * Updates the list of messages displayed in the GUI.
      *
-     * @param messagesList The updated list of messages.
+     * @param messageList The updated list of messages.
      */
-    public void updateMessagesList(List<Message> messagesList)
-    {
+    public void updateMessagesList(List<Message> messageList) {
         Platform.runLater(() -> {
-            this.messagesList = messagesList;
-            messagesContainer.getChildren().clear();
+            if (messageList != null) {
+                this.messagesList = messageList;
+                messagesContainer.getChildren().clear();
 
-            for (Message message : this.messagesList)
-            {
-                Label messageLabel = createMessage(message);
-                messagesContainer.getChildren().add(messageLabel);
+                for (Message message : messagesList) {
+                    Label messageLabel = createMessage(message);
+                    messagesContainer.getChildren().add(messageLabel);
+                }
+            } else {
+                System.err.println("Received null message list.");
             }
         });
     }
+
 
     /**
      * Associates the user ID with the corresponding username in the message.
@@ -91,5 +93,16 @@ public class MessagesController
     public List<Message> getMessagesList()
     {
         return messagesList;
+    }
+
+    /**
+     * Add single message to messagesList and refresh GUI
+     *
+     * @param message The message to add to messagesList.
+     */
+    public void addMessageToListAndDisplay(Message message)
+    {
+        messagesList.add(message);
+        updateMessagesList(this.messagesList);
     }
 }

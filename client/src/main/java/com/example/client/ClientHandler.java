@@ -8,7 +8,6 @@ import com.example.message.CommunicationMessage;
 import com.example.message.MessageType;
 import com.example.utils.ConnectionHost;
 import com.example.utils.ConsoleHelper;
-import javafx.application.Platform;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -187,8 +186,9 @@ public class ClientHandler extends Thread {
      */
     private void handleMessageResponse(CommunicationMessage response) {
         if (selectedChannel != null) {
-            List<Message> messageList = response.getMessageList();
-            Platform.runLater(() -> messagesController.updateMessagesList(messageList));
+            Message message = response.getMessage();
+            System.out.println("Wiadomosc ODEBRANA z serwera: " + message.getContent());
+            messagesController.addMessageToListAndDisplay(message);
         }
     }
 
