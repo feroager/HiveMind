@@ -102,7 +102,9 @@ public class MessagesController
      */
     public void addMessageToListAndDisplay(Message message)
     {
-        messagesList.add(message);
-        updateMessagesList(this.messagesList);
+        Platform.runLater(() -> {
+            messagesList.add(message);
+            updateMessagesList(this.messagesList);
+        });
     }
 }
