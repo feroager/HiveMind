@@ -1,5 +1,9 @@
 package com.example.database.dbutils;
 
+import com.example.server.ServerApplication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -8,6 +12,7 @@ import java.sql.SQLException;
  * Manages the database connection.
  */
 public class DbManager {
+    private static final Logger logger = LoggerFactory.getLogger(DbManager.class);
     private static String dbUrl;
     private static String dbUsername;
     private static String dbPassword;
@@ -40,7 +45,7 @@ public class DbManager {
             Class.forName("com.mysql.cj.jdbc.Driver");
             return DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace(); // or handle it in a different way
+            logger.error("Error occurred:", e);
             throw new SQLException("Database driver not found.");
         }
     }

@@ -1,6 +1,8 @@
 package com.example.database.dao;
 
 import com.example.database.models.ServerMembership;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,6 +15,8 @@ import java.util.List;
  * Data Access Object for ServerMembership entity.
  */
 public class ServerMembershipDao {
+
+    private static final Logger logger = LoggerFactory.getLogger(ServerMembershipDao.class);
     private final Connection connection;
 
     /**
@@ -40,7 +44,7 @@ public class ServerMembershipDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
         return null;
     }
@@ -63,7 +67,7 @@ public class ServerMembershipDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
         return serverMemberships;
     }
@@ -88,7 +92,7 @@ public class ServerMembershipDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
         return serverMemberships;
     }
@@ -115,7 +119,7 @@ public class ServerMembershipDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
         return -1;
     }
@@ -137,7 +141,7 @@ public class ServerMembershipDao {
             int affectedRows = statement.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
         return false;
     }
@@ -156,7 +160,7 @@ public class ServerMembershipDao {
             int affectedRows = statement.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
         return false;
     }
@@ -186,7 +190,7 @@ public class ServerMembershipDao {
                 connection.close();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
     }
 }

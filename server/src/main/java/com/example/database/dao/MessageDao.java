@@ -1,6 +1,8 @@
 package com.example.database.dao;
 
 import com.example.database.models.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ import java.util.List;
  * Data Access Object for Message entity.
  */
 public class MessageDao {
+    private static final Logger logger = LoggerFactory.getLogger(MessageDao.class);
     private final Connection connection;
 
     /**
@@ -37,7 +40,7 @@ public class MessageDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
         return null;
     }
@@ -60,7 +63,7 @@ public class MessageDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
         return messages;
     }
@@ -88,7 +91,7 @@ public class MessageDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
         return -1;
     }
@@ -111,7 +114,7 @@ public class MessageDao {
             int affectedRows = statement.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
         return false;
     }
@@ -130,7 +133,7 @@ public class MessageDao {
             int affectedRows = statement.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
         return false;
     }
@@ -161,7 +164,7 @@ public class MessageDao {
                 connection.close();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
     }
 }

@@ -2,6 +2,7 @@ module com.example.server {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires slf4j.api;
 
 
     opens com.example.server to javafx.fxml;

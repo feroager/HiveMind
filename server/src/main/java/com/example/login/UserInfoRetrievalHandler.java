@@ -10,6 +10,9 @@ import com.example.database.models.Message;
 import com.example.database.models.Server;
 import com.example.database.models.ServerMembership;
 import com.example.database.models.User;
+import com.example.registration.RegistrationHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -22,6 +25,7 @@ import java.util.List;
  */
 public class UserInfoRetrievalHandler {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserInfoRetrievalHandler.class);
     private final Connection connection;
 
     /**
@@ -76,7 +80,8 @@ public class UserInfoRetrievalHandler {
                 connection.close();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Problem with closing the database");
+            logger.error("Error occurred:", e);
         }
     }
 

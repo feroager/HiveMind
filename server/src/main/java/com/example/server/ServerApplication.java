@@ -15,7 +15,6 @@ import com.example.message.MessageType;
 import com.example.registration.RegistrationHandler;
 import com.example.registration.RegistrationStatus;
 import com.example.utils.ConnectionHost;
-import com.example.utils.ConsoleHelper;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -24,6 +23,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The ServerApplication class represents the main server application responsible for handling
@@ -33,6 +34,7 @@ public class ServerApplication {
     private int port;
     private ServerSettingsController serverSettingsController;
     private static Map<User, HandlerUser> connectionMap = new ConcurrentHashMap<>();
+    private static final Logger logger = LoggerFactory.getLogger(ServerApplication.class);
 
     /**
      * Constructs a new ServerApplication with the specified port and server settings controller.
@@ -102,7 +104,7 @@ public class ServerApplication {
                         connectionHost.close();
                     } catch(IOException e)
                     {
-                        ConsoleHelper.writeMessage("Problem with close.");
+                        logger.error("Problem with close.");
                         throw new RuntimeException(e);
                     }
                 }
@@ -110,8 +112,8 @@ public class ServerApplication {
 
             }
             catch (IOException | ClassNotFoundException | SQLException e) {
-                ConsoleHelper.writeMessage("Error while communicating with " + socket.getRemoteSocketAddress());
-                e.printStackTrace();
+                logger.error("Error while communicating with " + socket.getRemoteSocketAddress());
+                logger.error("Error occurred:", e);
             }
         }
 
@@ -180,6 +182,7 @@ public class ServerApplication {
             if(connectionMap.containsKey(request.getUser()))
             {
                 response = new CommunicationMessage(MessageType.LOGIN_RESPONSE,"This user is already logged in.");
+                logger.warn("Attempt to log in to an account of a user who is already logged in. User account: " + request.getUser().getUsername());
             }
             else if(loginStatus == LoginStatus.INTERNAL_ERROR)
             {
@@ -205,7 +208,7 @@ public class ServerApplication {
                 handlerUser.start();
                 connectionMap.put(userLogin, handlerUser);
                 response = new CommunicationMessage(MessageType.LOGIN_RESPONSE, userLogin, serverList, "true");
-                ConsoleHelper.writeMessage(request.getUser().getUsername() + " has logged in.");
+                logger.info(request.getUser().getUsername() + " has logged in.");
             }
             else
             {
@@ -260,30 +263,30 @@ public class ServerApplication {
                     }
                     else if(request.getType() == MessageType.CHANNEL_LIST_REQUEST)
                     {
-                        ConsoleHelper.writeMessage("Recieve message CHANNEL_LIST_REQUEST");
+                        logger.info("Recieve message CHANNEL_LIST_REQUEST");
                         handleChannelListRequest(connectionHost, request);
                     }
                     else if(request.getType() == MessageType.MESSAGE_LIST_REQUEST)
                     {
-                        ConsoleHelper.writeMessage("Recieve message MESSAGE_LIST_REQUEST");
+                        logger.info("Recieve message MESSAGE_LIST_REQUEST");
                         handleMessageListRequest(connectionHost, request);
                     }
                     else if(request.getType() == MessageType.MESSAGE_REQUEST)
                     {
-                        ConsoleHelper.writeMessage("Recieve message MESSAGE_REQUEST");
+                        logger.info("Recieve message MESSAGE_REQUEST");
                         handleMessageRequest(connectionHost, request);
                     }
                     else
                     {
-                        ConsoleHelper.writeMessage("Bad MessageType");
+                        logger.info("Bad MessageType");
                     }
 
                 }
 
             }
             catch (IOException | ClassNotFoundException  e) {
-                ConsoleHelper.writeMessage("Error while communicating with " + socket.getRemoteSocketAddress());
-                e.printStackTrace();
+                logger.error("Error while communicating with " + socket.getRemoteSocketAddress());
+                logger.error("Error occurred:", e);
             }
         }
 
@@ -298,6 +301,7 @@ public class ServerApplication {
         {
             try
             {
+                logger.info("User " + user.getUsername() + " wants send message.");
                 MessageDao messageDao = new MessageDao(DbManager.getConnection());
                 int numberNewMessage = messageDao.addMessage(request.getMessage());
                 Message message = messageDao.getMessageById(numberNewMessage);
@@ -307,15 +311,16 @@ public class ServerApplication {
                     if(handlerUser.channelSelected.getChannelId() == channelSelected.getServerId())
                     {
                         handlerUser.connectionHost.send(new CommunicationMessage(MessageType.MESSAGE_RESPONSE, message, request.getUser()));
+                        logger.info("A message has been sent to " + entry.getKey().getUsername());
                     }
-                    ConsoleHelper.writeMessage("User: " + user + ", HandlerUser: " + handlerUser);
+
                 }
 
             }
             catch(SQLException | IOException e)
             {
-                ConsoleHelper.writeMessage("Error HandleMessageRequest");
-                e.printStackTrace();
+                logger.error("Error HandleMessageRequest");
+                logger.error("Error occurred:", e);
             }
         }
 
@@ -334,11 +339,11 @@ public class ServerApplication {
                 List<Message> messageList = userInfoRetrievalHandler.getUserMessageList(channelSelected);
                 userInfoRetrievalHandler.closeConnection();
                 connectionHost.send(new CommunicationMessage(MessageType.MESSAGE_LIST_RESPONSE, messageList, null));
-                ConsoleHelper.writeMessage("Sent MESSAGE_LIST_RESPONSE");
+                logger.info("Sent MESSAGE_LIST_RESPONSE");
             } catch(SQLException | IOException e)
             {
-                ConsoleHelper.writeMessage("Problem with load Message list");
-                e.printStackTrace();
+                logger.error("Problem with load Message list");
+                logger.error("Error occurred:", e);
             }
         }
 
@@ -358,11 +363,11 @@ public class ServerApplication {
                 List<User> userList = userInfoRetrievalHandler.getListUserChoiceServer(serverSelected);
                 userInfoRetrievalHandler.closeConnection();
                 connectionHost.send(new CommunicationMessage(MessageType.CHANNEL_LIST_RESPONSE, channelList, userList));
-                ConsoleHelper.writeMessage("Sent CHANNEL_LIST_RESPONSE");
+                logger.info("Sent CHANNEL_LIST_RESPONSE");
             } catch(SQLException | IOException e)
             {
-                ConsoleHelper.writeMessage("Problem with load Channel list");
-                e.printStackTrace();
+                logger.error("Problem with load Channel list");
+                logger.error("Error occurred:", e);
             }
 
 
@@ -379,7 +384,7 @@ public class ServerApplication {
             User user = request.getUser();
             if(connectionMap.containsKey(user))
             {
-                ConsoleHelper.writeMessage(request.getUser().getUsername() + " has logged out.");
+                logger.info(request.getUser().getUsername() + " has logged out.");
                 connectionMap.remove(user);
             }
             try
@@ -387,7 +392,7 @@ public class ServerApplication {
                 connectionHost.close();
             } catch(IOException e)
             {
-                ConsoleHelper.writeMessage("Problem with conntectionHost close.");
+                logger.error("Problem with conntectionHost close.");
                 throw new RuntimeException(e);
             }
         }

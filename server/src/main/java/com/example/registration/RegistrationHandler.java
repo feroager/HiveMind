@@ -2,12 +2,16 @@ package com.example.registration;
 
 import com.example.database.dao.UserDao;
 import com.example.database.models.User;
+import com.example.login.LoginHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Handles user registration.
  */
 public class RegistrationHandler {
 
+    private static final Logger logger = LoggerFactory.getLogger(RegistrationHandler.class);
     private final UserDao userDao;
 
     /**
@@ -27,22 +31,27 @@ public class RegistrationHandler {
      */
     public RegistrationStatus registerUser(User user) {
         if (!isUserValid(user)) {
+            logger.warn("An internal error occurred during the registration process.");
             return RegistrationStatus.INTERNAL_ERROR;
         }
 
         if (isUsernameTaken(user.getUsername())) {
+            logger.warn("An attempt to create a user with a name existing in the database");
             return RegistrationStatus.USERNAME_TAKEN;
         }
 
         if (isEmailTaken(user.getEmail())) {
+            logger.warn("An attempt to create a user with an existing email in the database");
             return RegistrationStatus.EMAIL_TAKEN;
         }
 
         try {
             userDao.addUser(user);
+            logger.info("Created new user named " + user.getUsername());
             return RegistrationStatus.SUCCESS;
         } catch (Exception e) {
-            e.printStackTrace(); // Handle the exception according to your needs
+            logger.error("Database error when trying to register");
+            logger.error("Error occurred:", e);
             return RegistrationStatus.DATABASE_ERROR;
         }
     }

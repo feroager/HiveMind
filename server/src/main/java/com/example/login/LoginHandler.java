@@ -2,12 +2,15 @@ package com.example.login;
 
 import com.example.database.dao.UserDao;
 import com.example.database.models.User;
+import com.example.server.ServerApplication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Handles user login.
  */
 public class LoginHandler {
-
+    private static final Logger logger = LoggerFactory.getLogger(LoginHandler.class);
     private final UserDao userDao;
 
     /**
@@ -30,16 +33,19 @@ public class LoginHandler {
         String password = user.getPassword();
 
         if (!isValidUsername(username) || !isValidPassword(password)) {
+            logger.warn("Login error. Incorrect login or password entered");
             return LoginStatus.INTERNAL_ERROR;
         }
 
         User retrievedUser = userDao.getUserByUsername(username);
 
         if (retrievedUser == null) {
+            logger.warn("Login error. User not exist");
             return LoginStatus.USER_NOT_FOUND;
         }
 
         if (!retrievedUser.getPassword().equals(password)) {
+            logger.warn("Login error. Password incorrect");
             return LoginStatus.INVALID_PASSWORD;
         }
 

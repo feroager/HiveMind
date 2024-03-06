@@ -1,6 +1,9 @@
 package com.example.database.dao;
 
+import com.example.database.dbutils.DbManager;
 import com.example.database.models.Channel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,6 +16,7 @@ import java.util.List;
  * Data Access Object for Channel entity.
  */
 public class ChannelDao {
+    private static final Logger logger = LoggerFactory.getLogger(ChannelDao.class);
     private final Connection connection;
 
     /**
@@ -40,7 +44,7 @@ public class ChannelDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
         return null;
     }
@@ -63,7 +67,7 @@ public class ChannelDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
         return channels;
     }
@@ -90,7 +94,7 @@ public class ChannelDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
         return -1;
     }
@@ -112,7 +116,7 @@ public class ChannelDao {
             int affectedRows = statement.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
         return false;
     }
@@ -131,7 +135,7 @@ public class ChannelDao {
             int affectedRows = statement.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
         return false;
     }
@@ -161,7 +165,7 @@ public class ChannelDao {
                 connection.close();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
     }
 }

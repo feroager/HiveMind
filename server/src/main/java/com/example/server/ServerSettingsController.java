@@ -6,6 +6,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -14,6 +16,8 @@ import java.sql.SQLException;
  * Controller for the server settings UI.
  */
 public class ServerSettingsController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ServerSettingsController.class);
     private static ServerApplication serverApplication;
     @FXML
     private TextField dbIpField;
@@ -54,16 +58,19 @@ public class ServerSettingsController {
             // Get a connection to the database
             Connection connection = DbManager.getConnection();
             dataBaseOn();
+            logger.info("Connection to database succeed");
 
             // Start the server in a new thread
             new Thread(() -> {
                 new ServerApplication(Integer.parseInt(portField.getText()), this).startServer();
             }).start();
 
+            logger.info("Server is working");
+
 
         } catch (SQLException e) {
-            e.printStackTrace(); // or handle it in a different way
-            // Update statuses in case of an error
+            logger.error("Connection to database failed");
+            logger.error("Error occurred:", e);
             serverOff();
             dataBaseOff();
         }
