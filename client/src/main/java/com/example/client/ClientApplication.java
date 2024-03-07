@@ -4,7 +4,8 @@ import com.example.message.CommunicationMessage;
 import com.example.database.models.User;
 import com.example.message.MessageType;
 import com.example.utils.ConnectionHost;
-import com.example.utils.ConsoleHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -13,6 +14,8 @@ import java.net.Socket;
  * The main application class responsible for client-server communication and user interaction.
  */
 public class ClientApplication {
+
+    private static final Logger logger = LoggerFactory.getLogger(ClientApplication.class);
     private String serverIp;
     private int serverPort;
     private RegistrationController registrationController;
@@ -48,16 +51,21 @@ public class ClientApplication {
             connectionHost = new ConnectionHost(socket);
 
             connectionHost.send(loginRequest);
+            logger.info("Sent LOGIN_REQUEST");
 
             CommunicationMessage response = connectionHost.receive();
 
             if (response.getType() == MessageType.LOGIN_RESPONSE) {
+                logger.info("Recieve LOGIN_RESPONSE");
                 if (loginController != null && Boolean.parseBoolean(response.getData())) {
-                    ConsoleHelper.writeMessage("Login");
+                    logger.info("User " + response.getUser() + " has logged in");
                     loginController.setMainView();
                     MainController mainController = loginController.getMainController();
                     if (mainController == null)
-                        System.out.println("mainContorller is null");
+                    {
+                        logger.error("mainContorller is null");
+                        throw new Error();
+                    }
                     for (var helpMe : response.getServerList()) {
                         System.out.println(helpMe.getName());
                     }
@@ -65,14 +73,15 @@ public class ClientApplication {
                 } else if (loginController != null) {
                     loginController.setResultLabelLogin(response);
                 } else {
-                    ConsoleHelper.writeMessage("LoginContoller error.");
+                    logger.error("LoginContoller error.");
+                    throw new Error();
                 }
             } else {
-                ConsoleHelper.writeMessage("Unexpected response type from the server.");
+                logger.warn("Unexpected response type from the server.");
             }
         } catch (IOException | ClassNotFoundException e) {
-            ConsoleHelper.writeMessage("Error while communicating with " + (socket != null ? socket.getRemoteSocketAddress() : "unknown"));
-            e.printStackTrace();
+            logger.error("Error while communicating with " + (socket != null ? socket.getRemoteSocketAddress() : "unknown"));
+            logger.error("Error occurred:", e);
         }
     }
 
@@ -92,22 +101,26 @@ public class ClientApplication {
             try (ConnectionHost connectionHost = new ConnectionHost(socket)) {
 
                 connectionHost.send(registerRequest);
+                logger.info("Sent REGISTER_REQUEST");
 
                 CommunicationMessage response = connectionHost.receive();
 
                 if (response.getType() == MessageType.REGISTER_RESPONSE) {
+                    logger.info("Recieve REGISTER_RESPONSE");
                     if (registrationController != null)
+                    {
                         registrationController.setResultLabelRegistartionText(response);
-                    ConsoleHelper.writeMessage(response.getData());
+                        logger.info("Status registration: " + response.getData());
+                    }
                 } else {
-                    ConsoleHelper.writeMessage("Unexpected response type from the server.");
+                    logger.warn("Unexpected response type from the server.");
                 }
             } catch (IOException | ClassNotFoundException e) {
-                ConsoleHelper.writeMessage("Error while communicating with " + socket.getRemoteSocketAddress());
-                e.printStackTrace();
+                logger.error("Error while communicating with " + socket.getRemoteSocketAddress());
+                logger.error("Error occurred:", e);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
     }
 

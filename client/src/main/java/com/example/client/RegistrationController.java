@@ -12,6 +12,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -19,7 +21,7 @@ import java.io.IOException;
  * The RegistrationController class controls the registration process in the GUI.
  */
 public class RegistrationController {
-
+    private static final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
 
     @FXML
     private Button BackRegistration;
@@ -99,7 +101,7 @@ public class RegistrationController {
             Stage primaryStage = (Stage) button.getScene().getWindow();
             primaryStage.setScene(new Scene(loginView));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
     }
 

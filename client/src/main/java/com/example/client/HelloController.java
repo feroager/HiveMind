@@ -7,6 +7,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -14,6 +16,9 @@ import java.io.IOException;
  * The HelloController class controls the actions and events in the HelloView.fxml.
  */
 public class HelloController {
+
+    private static final Logger logger = LoggerFactory.getLogger(HelloController.class);
+
     @FXML
     private Button SignInHello;
     @FXML
@@ -55,7 +60,7 @@ public class HelloController {
             Stage primaryStage = (Stage) button.getScene().getWindow();
             primaryStage.setScene(new Scene(loginView));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
     }
 
@@ -71,7 +76,7 @@ public class HelloController {
             Stage primaryStage = (Stage) button.getScene().getWindow();
             primaryStage.setScene(new Scene(loginView));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error occurred:", e);
         }
     }
 }

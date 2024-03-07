@@ -8,6 +8,8 @@ import com.example.message.CommunicationMessage;
 import com.example.message.MessageType;
 import com.example.utils.ConnectionHost;
 import com.example.utils.ConsoleHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -19,6 +21,7 @@ import java.util.List;
  * It handles sending and receiving messages, as well as processing responses from the server.
  */
 public class ClientHandler extends Thread {
+    private static final Logger logger = LoggerFactory.getLogger(ClientHandler.class);
     private final String serverIp;
     private final int serverPort;
     private final MainController mainController;
@@ -84,17 +87,17 @@ public class ClientHandler extends Thread {
         isLogged = false;
         CommunicationMessage logOutRequest = new CommunicationMessage(MessageType.LOGOUT_REQUEST, loggedUser);
         try {
-            ConsoleHelper.writeMessage("Sent LOGOUT_REQUEST");
             connectionHost.send(logOutRequest);
+            logger.info("Sent LOGOUT_REQUEST");
         } catch (IOException e) {
-            ConsoleHelper.writeMessage("Failed to send LOGOUT_REQUEST: " + e.getMessage());
+            logger.warn("Failed to send LOGOUT_REQUEST: " + e.getMessage());
         }
 
         try {
             connectionHost.close();
             socket.close();
         } catch (IOException e) {
-            ConsoleHelper.writeMessage("Error closing connection: " + e.getMessage());
+            logger.warn("Error closing connection: " + e.getMessage());
         }
     }
 
@@ -110,8 +113,7 @@ public class ClientHandler extends Thread {
                     CommunicationMessage receivedMessage = connectionHost.receive();
                     handleReceivedMessage(receivedMessage);
                 } catch (IOException | ClassNotFoundException e) {
-                    ConsoleHelper.writeMessage("Error receiving message: " + e.getMessage());
-                    // Handle error, e.g., reconnecting to the server
+                    logger.warn("Error receiving message: " + e.getMessage());
                 }
             }
         });
@@ -147,12 +149,15 @@ public class ClientHandler extends Thread {
         MessageType messageType = receivedMessage.getType();
         switch (messageType) {
             case CHANNEL_LIST_RESPONSE:
+                logger.info("Receive CHANNEL_LIST_RESPONSE");
                 handleChannelListResponse(receivedMessage);
                 break;
             case MESSAGE_LIST_RESPONSE:
+                logger.info("Receive MESSAGE_LIST_RESPONSE");
                 handleMessageListResponse(receivedMessage);
                 break;
             case MESSAGE_RESPONSE:
+                logger.info("Receive MESSAGE_RESPONSE");
                 handleMessageResponse(receivedMessage);
                 break;
             // Handle other message types if needed
