@@ -66,12 +66,14 @@ public class ClientApplication {
                         logger.error("mainContorller is null");
                         throw new Error();
                     }
-                    for (var helpMe : response.getServerList()) {
-                        System.out.println(helpMe.getName());
+                    logger.info("List of servers");
+                    for (var server : response.getServerList()) {
+                        logger.info("Server name: {}", server.getName());
                     }
                     new ClientHandler(serverIp, serverPort, mainController, response, socket, connectionHost).start();
                 } else if (loginController != null) {
                     loginController.setResultLabelLogin(response);
+                    logger.warn(response.getData());
                 } else {
                     logger.error("LoginContoller error.");
                     throw new Error();

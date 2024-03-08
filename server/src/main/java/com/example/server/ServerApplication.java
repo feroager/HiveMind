@@ -274,6 +274,8 @@ public class ServerApplication {
                     else if(request.getType() == MessageType.MESSAGE_REQUEST)
                     {
                         logger.info("Recieve message MESSAGE_REQUEST");
+                        logger.debug("User selected server {}", (serverSelected != null) ? serverSelected.getName() : "null");
+                        logger.debug("User selected channel {}", (channelSelected != null) ? channelSelected.getName() : "null");
                         handleMessageRequest(connectionHost, request);
                     }
                     else
@@ -306,10 +308,14 @@ public class ServerApplication {
                 int numberNewMessage = messageDao.addMessage(request.getMessage());
                 Message message = messageDao.getMessageById(numberNewMessage);
                 messageDao.closeConnection();
+                int counter=0;
                 for (Map.Entry<User, HandlerUser> entry : connectionMap.entrySet()) {
+                    counter++;
+                    logger.debug("Checked " + counter + " user");
                     HandlerUser handlerUser = entry.getValue();
                     if(handlerUser.channelSelected.getChannelId() == channelSelected.getServerId())
                     {
+                        logger.debug("Channel name user sending message: " + channelSelected.getName() + " and next logged user " + handlerUser.channelSelected.getName());
                         handlerUser.connectionHost.send(new CommunicationMessage(MessageType.MESSAGE_RESPONSE, message, request.getUser()));
                         logger.info("A message has been sent to " + entry.getKey().getUsername());
                     }
