@@ -4,12 +4,15 @@ import com.example.database.models.Message;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The MainController class controls the actions and events in the MainView.fxml.
  */
 public class MainController
 {
+    private static final Logger logger = LoggerFactory.getLogger(MainController.class);
     @FXML
     private FooterController footerController;
 
@@ -64,11 +67,11 @@ public class MainController
      */
     @FXML
     public void initialize() {
-        System.out.println("MainController initialization.");
+        logger.info("MainController initialization.");
         if (footerController == null) {
-            System.out.println("FooterController is null.");
+            logger.warn("MainController initialization.");
         } else {
-            System.out.println("FooterController not is null.");
+            logger.warn("FooterController not is null.");
         }
     }
 

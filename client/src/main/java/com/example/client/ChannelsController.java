@@ -7,6 +7,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -16,7 +18,7 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
  * Controller class responsible for managing channels in the UI.
  */
 public class ChannelsController {
-
+    private static final Logger logger = LoggerFactory.getLogger(ChannelsController.class);
     @FXML
     private VBox channelsContainer;
     private ClientHandler clientHandler;
@@ -75,7 +77,7 @@ public class ChannelsController {
      * @param channel The channel associated with the clicked button.
      */
     private void handleChannelButtonClick(Channel channel) {
-        System.out.println("Button for channel clicked: " + channel.getName());
+        logger.info("Button for channel clicked: " + channel.getName());
 
         clientHandler.setSelectedChannel(channel);
         clientHandler.setMessagesListRequest(true);
@@ -96,9 +98,9 @@ public class ChannelsController {
      * @param messageList The list of messages to be loaded.
      */
     public void handleLoaderChannels(List<Message> messageList) {
-        ConsoleHelper.writeMessage("List of messages");
+        logger.info("List of messages");
         for (Message message : messageList) {
-            System.out.println(message.getContent());
+            logger.info(message.getContent());
         }
 
         messagesController.updateMessagesList(messageList);

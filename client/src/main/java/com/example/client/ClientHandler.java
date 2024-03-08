@@ -192,7 +192,6 @@ public class ClientHandler extends Thread {
     private void handleMessageResponse(CommunicationMessage response) {
         if (selectedChannel != null) {
             Message message = response.getMessage();
-            System.out.println("Wiadomosc ODEBRANA z serwera: " + message.getContent());
             messagesController.addMessageToListAndDisplay(message);
         }
     }
@@ -202,11 +201,12 @@ public class ClientHandler extends Thread {
      */
     private void sendChannelListRequest() {
         try {
-            ConsoleHelper.writeMessage("CHANNEL_LIST_REQUEST");
             CommunicationMessage userChannelListRequest = new CommunicationMessage(MessageType.CHANNEL_LIST_REQUEST, selectedServer);
             connectionHost.send(userChannelListRequest);
+            logger.info("Sent CHANNEL_LIST_REQUEST");
         } catch (IOException e) {
-            ConsoleHelper.writeMessage("Error sending CHANNEL_LIST_REQUEST: " + e.getMessage());
+            logger.error("Error sending CHANNEL_LIST_REQUEST");
+            logger.error("Error occurred:", e);
         }
     }
 
@@ -215,11 +215,12 @@ public class ClientHandler extends Thread {
      */
     private void sendMessagesListRequest() {
         try {
-            ConsoleHelper.writeMessage("MESSAGE_LIST_REQUEST");
             CommunicationMessage userMessageListRequest = new CommunicationMessage(MessageType.MESSAGE_LIST_REQUEST, selectedChannel);
             connectionHost.send(userMessageListRequest);
+            logger.info("Sent MESSAGE_LIST_REQUEST");
         } catch (IOException e) {
-            ConsoleHelper.writeMessage("Error sending MESSAGE_LIST_REQUEST: " + e.getMessage());
+            logger.error("Error sending MESSAGE_LIST_REQUEST");
+            logger.error("Error occurred:", e);
         }
     }
 
@@ -232,8 +233,10 @@ public class ClientHandler extends Thread {
             Message message = new Message(-1, loggedUser.getUserId(), selectedChannel.getChannelId(), mainController.getMessageString(), new Timestamp(System.currentTimeMillis()));
             CommunicationMessage sendMessageRequest = new CommunicationMessage(MessageType.MESSAGE_REQUEST, message, loggedUser);
             connectionHost.send(sendMessageRequest);
+            logger.info("Sent MESSAGE_REQUEST");
         } catch (IOException e) {
-            ConsoleHelper.writeMessage("Error sending MESSAGE_REQUEST: " + e.getMessage());
+            logger.error("Error sending MESSAGE_REQUEST");
+            logger.error("Error occurred:", e);
         }
     }
 

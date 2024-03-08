@@ -11,6 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -20,7 +22,7 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
  * The ServersController class controls the display and interaction of servers in the GUI.
  */
 public class ServersController {
-
+    private static final Logger logger = LoggerFactory.getLogger(ServersController.class);
     @FXML
     private HBox serversContainer;
     private ClientHandler clientHandler;
@@ -85,8 +87,7 @@ public class ServersController {
      * @param server The server associated with the clicked button.
      */
     private void handleServerButtonClick(Server server) {
-
-        System.out.println("Button for server clicked: " + server.getName());
+        logger.info("Button for server clicked: " + server.getName());
 
         clientHandler.setSelectedServer(server);
         clientHandler.setChannelsListRequest(true);
@@ -99,10 +100,10 @@ public class ServersController {
      */
     public void handleLoaderChannels(List<Channel> channelList)
     {
-        ConsoleHelper.writeMessage("List of channels");
+        logger.info("List of channels");
         for(Channel channel: channelList)
         {
-            System.out.println(channel.getName());
+            logger.info(channel.getName());
         }
 
         // Update channel view
