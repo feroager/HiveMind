@@ -229,7 +229,7 @@ public class ClientHandler extends Thread {
      */
     private void sendMessage() {
         try {
-            System.out.println(mainController.getMessageString());
+            logger.info("Attempt to send a message with the following content: " + mainController.getMessageString());
             Message message = new Message(-1, loggedUser.getUserId(), selectedChannel.getChannelId(), mainController.getMessageString(), new Timestamp(System.currentTimeMillis()));
             CommunicationMessage sendMessageRequest = new CommunicationMessage(MessageType.MESSAGE_REQUEST, message, loggedUser);
             connectionHost.send(sendMessageRequest);
