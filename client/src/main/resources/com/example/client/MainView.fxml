@@ -49,7 +49,7 @@
                     <children>
                         <HBox maxHeight="23" prefHeight="23" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <children>
-                                <TextField fx:id="textField" minHeight="17.0" HBox.hgrow="ALWAYS" />
+                                <TextField fx:id="textField" minHeight="17.0" onKeyPressed="#sendMessagesIfEnter" HBox.hgrow="ALWAYS" />
                                 <Button mnemonicParsing="false" onAction="#sendMessages" text="➤">
                                     <font>
                                         <Font name="System Bold" size="13.0" />

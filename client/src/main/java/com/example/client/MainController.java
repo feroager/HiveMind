@@ -6,9 +6,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.security.Key;
 
 
 /**
@@ -89,6 +93,7 @@ public class MainController
     public void sendMessages()
     {
         this.messageString = textField.getText();
+        textField.setText("");
         this.clientHandler.setSendMessage(true);
     }
 
@@ -133,5 +138,13 @@ public class MainController
                 messagesScrollPane.setVvalue(1.0);
             }
         });
+    }
+
+    public void sendMessagesIfEnter(KeyEvent keyEvent)
+    {
+        if(keyEvent.getCode() == KeyCode.ENTER)
+        {
+            sendMessages();
+        }
     }
 }
