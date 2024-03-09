@@ -38,18 +38,18 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                     <children>
                         <!-- Message list -->
-                        <ScrollPane hbarPolicy="NEVER" style="-fx-background: #343541;" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <ScrollPane fx:id="messagesScrollPane" hbarPolicy="NEVER" style="-fx-background: #343541;" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <VBox VBox.vgrow="ALWAYS">
                                 <fx:include fx:id="messages" source="MessagesView.fxml" />
                             </VBox>
                         </ScrollPane>
                     </children>
                 </AnchorPane>
-                <AnchorPane maxHeight="22" minHeight="22.0" minWidth="0.0" prefHeight="22.0" prefWidth="400.0">
+                <AnchorPane maxHeight="23" minHeight="23.0" minWidth="0.0" prefHeight="23.0" prefWidth="400.0">
                     <children>
-                        <HBox maxHeight="22" prefHeight="22" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <HBox maxHeight="23" prefHeight="23" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <children>
-                                <TextField fx:id="textField" minHeight="15.0" HBox.hgrow="ALWAYS" />
+                                <TextField fx:id="textField" minHeight="17.0" HBox.hgrow="ALWAYS" />
                                 <Button mnemonicParsing="false" onAction="#sendMessages" text="➤">
                                     <font>
                                         <Font name="System Bold" size="13.0" />

@@ -1,11 +1,15 @@
 package com.example.client;
 
 import com.example.database.models.Message;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * The MainController class controls the actions and events in the MainView.fxml.
@@ -31,6 +35,9 @@ public class MainController
     private String messageString;
 
     private ClientHandler clientHandler;
+
+    @FXML
+    private ScrollPane messagesScrollPane;
 
     /**
      * Retrieves the FooterController associated with this MainController.
@@ -113,5 +120,18 @@ public class MainController
     public MessagesController getMessagesController()
     {
         return messagesController;
+    }
+
+    public void scrollMessagesPaneToBottom() {
+        Platform.runLater(() -> {
+            logger.debug((messagesScrollPane != null) ? "not null" : "null");
+            if (messagesScrollPane != null) {
+                double scrollPosition = messagesScrollPane.getVvalue();
+                logger.debug("Aktualna pozycja przewijania: " + scrollPosition);
+                messagesScrollPane.applyCss();
+                messagesScrollPane.layout();
+                messagesScrollPane.setVvalue(1.0);
+            }
+        });
     }
 }

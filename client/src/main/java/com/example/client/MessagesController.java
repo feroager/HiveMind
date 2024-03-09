@@ -4,7 +4,9 @@ import com.example.database.models.Message;
 import com.example.database.models.User;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,7 @@ public class MessagesController
     private VBox messagesContainer;
     private ClientHandler clientHandler;
     private List<Message> messagesList;
+
 
     /**
      * Sets the ClientHandler associated with this MessagesController.
@@ -47,6 +50,7 @@ public class MessagesController
                     Label messageLabel = createMessage(message);
                     messagesContainer.getChildren().add(messageLabel);
                 }
+
             } else {
                 logger.info("Received null message list.");
             }
@@ -108,6 +112,9 @@ public class MessagesController
         Platform.runLater(() -> {
             messagesList.add(message);
             updateMessagesList(this.messagesList);
+            clientHandler.getMainController().scrollMessagesPaneToBottom();
         });
     }
+
+
 }

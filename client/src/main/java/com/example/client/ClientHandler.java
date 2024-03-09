@@ -193,8 +193,10 @@ public class ClientHandler extends Thread {
         if (selectedChannel != null) {
             Message message = response.getMessage();
             messagesController.addMessageToListAndDisplay(message);
+            mainController.scrollMessagesPaneToBottom();
         }
     }
+
 
     /**
      * Sends a request to the server to retrieve the list of channels.
@@ -310,5 +312,10 @@ public class ClientHandler extends Thread {
      */
     public void setSendMessage(boolean sendMessage) {
         isSendMessage = sendMessage;
+    }
+
+    public MainController getMainController()
+    {
+        return mainController;
     }
 }
