@@ -273,11 +273,20 @@ public class ServerApplication {
                     }
                     else if(request.getType() == MessageType.MESSAGE_REQUEST)
                     {
+                        logger.info("Recieve message MESSAGE_REQUEST");
+                        logger.debug("User selected server {}", (serverSelected != null) ? serverSelected.getName() : "null");
+                        logger.debug("User selected channel {}", (channelSelected != null) ? channelSelected.getName() : "null");
+                        handleMessageRequest(connectionHost, request);
                         logger.info("Receive message CREATE_NEW_SERVER_REQUEST");
                         logger.debug("Name for the new server : {}", request.getData());
                         handleCreateNewServerRequest(connectionHost, request);
                     }
-
+                    else if(request.getType() == MessageType.CREATE_NEW_SERVER_REQUEST)
+                    {
+                        logger.info("Receive message CREATE_NEW_SERVER_REQUEST");
+                        logger.debug("Name for the new server : {}", request.getData());
+                        handleCreateNewServerRequest(connectionHost, request);
+                    }
                     else
                     {
                         logger.info("Bad MessageType");
@@ -297,7 +306,8 @@ public class ServerApplication {
             try
             {
                 UserInfoRetrievalHandler userInfoRetrievalHandler = new UserInfoRetrievalHandler(DbManager.getConnection());
-                Server newServer = userInfoRetrievalHandler.createNewServer(request.getData(), user.getUserId());
+                Server newServer = null;
+                newServer = userInfoRetrievalHandler.createNewServer(request.getData(), user.getUserId());
                 userInfoRetrievalHandler.closeConnection();
                 connectionHost.send(new CommunicationMessage(MessageType.CREATE_NEW_SERVER_RESPONSE, newServer));
                 logger.info("Sent CREATE_NEW_SERVER_RESPONSE");

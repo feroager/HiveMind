@@ -1,10 +1,14 @@
 package com.example.client;
 
 import com.example.database.models.Channel;
+import com.example.database.models.Message;
 import com.example.database.models.Server;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -14,6 +18,7 @@ import javafx.scene.text.FontWeight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +30,8 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 public class ServersController {
     private static final Logger logger = LoggerFactory.getLogger(ServersController.class);
     @FXML
+    public Button addServerButton;
+    @FXML
     private HBox serversContainer;
     private ClientHandler clientHandler;
     private ChannelsController channelsController;
@@ -34,14 +41,28 @@ public class ServersController {
      * Initializes the list of servers.
      */
     public void initializeServersList() {
+        Platform.runLater(() -> {
+            List<Server> serverList = clientHandler.getServerList();
 
-        List<Server> serverList = clientHandler.getServerList();
+            // Clear all children of serversContainer except the add server button
+            ObservableList<Node> children = serversContainer.getChildren();
+            List<Node> toRemove = new ArrayList<>();
 
-        // Iterate through the server list and create buttons
-        for (Server server : serverList) {
-            Button serverButton = createServerButton(server);
-            serversContainer.getChildren().add(serverButton);
-        }
+            for (Node child : children) {
+                if (!(child instanceof Button && child == addServerButton))
+                {
+                    toRemove.add(child);
+                }
+            }
+
+            children.removeAll(toRemove);
+
+            // Iterate through the server list and create buttons
+            for (Server server : serverList) {
+                Button serverButton = createServerButton(server);
+                serversContainer.getChildren().add(serverButton);
+            }
+        });
     }
 
     /**
@@ -298,11 +319,14 @@ public class ServersController {
     private void createNewServer(String serverName) {
         logger.info("Creating new server: " + serverName);
         this.nameNewlyCreatedServer = serverName;
+        clientHandler.setCreateNewServerRequest(true);
     }
 
     public String getNameNewlyCreatedServer()
     {
         return nameNewlyCreatedServer;
     }
+
+
 
 }

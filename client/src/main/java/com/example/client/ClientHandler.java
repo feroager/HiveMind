@@ -167,7 +167,22 @@ public class ClientHandler extends Thread {
                 logger.info("Receive MESSAGE_RESPONSE");
                 handleMessageResponse(receivedMessage);
                 break;
+            case CREATE_NEW_SERVER_RESPONSE:
+                logger.info("Receive CREATE_NEW_SERVER_RESPONSE");
+                handleCreateNewServerResponse(receivedMessage);
+                break;
             // Handle other message types if needed
+        }
+    }
+
+    private void handleCreateNewServerResponse(CommunicationMessage receivedMessage)
+    {
+        if(receivedMessage.getServer() != null)
+        {
+            logger.debug("The name new created server: {}", receivedMessage.getServer().getName());
+            serverList.add(receivedMessage.getServer());
+            serversController.initializeServersList();
+            logger.info("Added new Server to serverList.");
         }
     }
 
@@ -336,5 +351,10 @@ public class ClientHandler extends Thread {
     public MainController getMainController()
     {
         return mainController;
+    }
+
+    public void setCreateNewServerRequest(boolean createNewServerRequest)
+    {
+        isCreateNewServerRequest = createNewServerRequest;
     }
 }
