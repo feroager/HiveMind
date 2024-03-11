@@ -196,9 +196,12 @@ public class ServersController {
         dialog.setResultConverter(buttonType -> {
             if (buttonType == createServerButtonType) {
                 dialog.close();
+                logger.info("Pressed createServerButtonType");
                 showCreateServerDialog();
             } else if (buttonType == joinServerButtonType) {
-                //dołącznie do istniejcącego serwera
+                dialog.close();
+                logger.info("Pressed joinServerButtonType");
+                showJoinServerDialog();
             }
             return null;
         });
@@ -236,8 +239,8 @@ public class ServersController {
         if(result.get() == createButtonType)
         {
             String serverName = serverNameField.getText();
-            createNewServer(serverName);
             logger.info("Pressed createButtonType");
+            createNewServer(serverName);
         }
         else if(result.get() == backButtonType)
         {
@@ -245,7 +248,50 @@ public class ServersController {
             logger.info("Pressed backButtonType");
             showDialogServer();
         }
+    }
 
+    private void showJoinServerDialog() {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Join to exists server");
+
+        Label messageLabel = new Label("Enter the server code of an existing server:");
+        messageLabel.setStyle("-fx-text-fill: white;");
+
+        TextField serverCodeField = new TextField();
+        serverCodeField.setPromptText("Enter server code");
+        serverCodeField.setEditable(true);
+        serverCodeField.setVisible(true);
+        serverCodeField.setManaged(true);
+
+        VBox content = new VBox();
+        content.getChildren().addAll(messageLabel, serverCodeField);
+        content.layout();
+
+        dialog.getDialogPane().setContent(content);
+        dialog.getDialogPane().setBackground(new Background(new BackgroundFill(Color.valueOf("#343541"), CornerRadii.EMPTY, Insets.EMPTY)));
+
+        ButtonType joinButtonType = new ButtonType("Join", ButtonBar.ButtonData.OK_DONE);
+        ButtonType backButtonType = new ButtonType("Back", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(joinButtonType, backButtonType);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+
+        if(result.get() == joinButtonType)
+        {
+            String serverCode = serverCodeField.getText();
+            logger.info("Pressed joinButtonType");
+            joinNewServer(serverCode);
+        }
+        else if(result.get() == backButtonType)
+        {
+            dialog.close();
+            logger.info("Pressed backButtonType");
+            showDialogServer();
+        }
+    }
+
+    private void joinNewServer(String serverCode) {
+        logger.info("Join to server. Server code: " + serverCode);
     }
 
     private void createNewServer(String serverName) {
