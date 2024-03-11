@@ -294,7 +294,20 @@ public class ServerApplication {
 
         private void handleCreateNewServerRequest(ConnectionHost connectionHost, CommunicationMessage request)
         {
+            try
+            {
+                UserInfoRetrievalHandler userInfoRetrievalHandler = new UserInfoRetrievalHandler(DbManager.getConnection());
+                Server newServer = userInfoRetrievalHandler.createNewServer(request.getData(), user.getUserId());
+                userInfoRetrievalHandler.closeConnection();
+                connectionHost.send(new CommunicationMessage(MessageType.CREATE_NEW_SERVER_RESPONSE, newServer));
+                logger.info("Sent CREATE_NEW_SERVER_RESPONSE");
 
+            }
+            catch(SQLException | IOException e)
+            {
+                logger.error("Problem with handleCreateNewServerRequest()");
+                logger.error("Error occurred:", e);
+            }
 
         }
 
