@@ -5,10 +5,7 @@ import com.example.database.models.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,7 +80,13 @@ public class ChannelDao {
         try (PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, channel.getServerId());
             statement.setString(2, channel.getName());
-            statement.setInt(3, channel.getLastMessageId());
+
+            // Jeśli lastMessageId jest nullem, użyj metody setNull
+            if (channel.getLastMessageId() <= 0) {
+                statement.setNull(3, Types.INTEGER);
+            } else {
+                statement.setInt(3, channel.getLastMessageId());
+            }
 
             int affectedRows = statement.executeUpdate();
             if (affectedRows > 0) {

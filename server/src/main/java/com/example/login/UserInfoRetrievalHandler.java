@@ -143,7 +143,30 @@ public class UserInfoRetrievalHandler {
             throw new SQLException();
         }
 
+        Channel channel = new Channel(-1,resultAddServer, "SERVER_CODE", 0);
+        ChannelDao channelDao = new ChannelDao(connection);
+        int resultAddChannel = channelDao.addChannel(channel);
+
+        if(resultAddServerMembership == -1)
+        {
+            serverDao.deleteServer(resultAddServer);
+            serverMembershipDao.deleteServerMembership(resultAddServerMembership);
+            throw new SQLException();
+        }
+
         newServer = serverDao.getServerById(resultAddServer);
+
+        Message message = new Message(-1, idUserCreatingServer, resultAddChannel, newServer.getServerCode(), new Timestamp(System.currentTimeMillis()));
+        MessageDao messageDao = new MessageDao(connection);
+        int resultAddMessage = messageDao.addMessage(message);
+        if(resultAddMessage == -1)
+        {
+            serverDao.deleteServer(resultAddServer);
+            serverMembershipDao.deleteServerMembership(resultAddServerMembership);
+            channelDao.deleteChannel(resultAddChannel);
+            throw new SQLException();
+        }
+
         return newServer;
 
     }
