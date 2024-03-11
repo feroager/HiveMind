@@ -28,6 +28,7 @@ public class ServersController {
     private HBox serversContainer;
     private ClientHandler clientHandler;
     private ChannelsController channelsController;
+    private String nameNewlyCreatedServer;
 
     /**
      * Initializes the list of servers.
@@ -296,5 +297,12 @@ public class ServersController {
 
     private void createNewServer(String serverName) {
         logger.info("Creating new server: " + serverName);
+        this.nameNewlyCreatedServer = serverName;
     }
+
+    public String getNameNewlyCreatedServer()
+    {
+        return nameNewlyCreatedServer;
+    }
+
 }

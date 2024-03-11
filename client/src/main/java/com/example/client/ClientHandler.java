@@ -36,6 +36,7 @@ public class ClientHandler extends Thread {
     private volatile boolean isChannelsListRequest;
     private volatile boolean isMessagesListRequest;
     private volatile boolean isSendMessage;
+    private volatile boolean isCreateNewServerRequest;
     private User loggedUser;
     private List<Server> serverList;
     private Server selectedServer;
@@ -78,6 +79,7 @@ public class ClientHandler extends Thread {
         isLogged = true;
         isChannelsListRequest = false;
         isMessagesListRequest = false;
+        isCreateNewServerRequest = false;
     }
 
     /**
@@ -134,6 +136,11 @@ public class ClientHandler extends Thread {
             if (isSendMessage) {
                 isSendMessage = false;
                 sendMessage();
+            }
+
+            if (isCreateNewServerRequest) {
+                isCreateNewServerRequest = false;
+                sendCreateNewServerRequest();
             }
         }
 
@@ -238,6 +245,18 @@ public class ClientHandler extends Thread {
             logger.info("Sent MESSAGE_REQUEST");
         } catch (IOException e) {
             logger.error("Error sending MESSAGE_REQUEST");
+            logger.error("Error occurred:", e);
+        }
+    }
+
+    private void sendCreateNewServerRequest()
+    {
+        try {
+            CommunicationMessage sendCreateNewServerRequest = new CommunicationMessage(MessageType.CREATE_NEW_SERVER_REQUEST, serversController.getNameNewlyCreatedServer());
+            connectionHost.send(sendCreateNewServerRequest);
+            logger.info("Sent CREATE_NEW_SERVER_REQUEST");
+        } catch (IOException e) {
+            logger.error("Error sending CREATE_NEW_SERVER_REQUEST");
             logger.error("Error occurred:", e);
         }
     }
