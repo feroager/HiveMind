@@ -47,6 +47,27 @@ public class ServerDao {
     }
 
     /**
+     * Retrieves a server by server code.
+     *
+     * @param serverCode The Server code of the server.
+     * @return The server with the specified server code, or null if not found.
+     */
+    public Server getServerByServerCode(String serverCode) {
+        String sql = "SELECT * FROM servers WHERE server_code = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, serverCode);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return mapServerFromResultSet(resultSet);
+                }
+            }
+        } catch (SQLException e) {
+            logger.error("Error occurred:", e);
+        }
+        return null;
+    }
+
+    /**
      * Retrieves all servers from the database.
      *
      * @return A list of all servers.
@@ -77,7 +98,7 @@ public class ServerDao {
         try (PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, server.getName());
             statement.setInt(2, server.getAdminId());
-            statement.setString(3, server.getServerCode()); // Zmiana na server.getServerCode()
+            statement.setString(3, server.getServerCode());
 
             int affectedRows = statement.executeUpdate();
             if (affectedRows > 0) {

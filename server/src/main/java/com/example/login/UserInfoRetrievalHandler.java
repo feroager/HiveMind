@@ -11,12 +11,14 @@ import com.example.database.models.Server;
 import com.example.database.models.ServerMembership;
 import com.example.database.models.User;
 import com.example.registration.RegistrationHandler;
+import com.example.utils.UniqueCodeGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,5 +111,40 @@ public class UserInfoRetrievalHandler {
             user.setPassword(""); // Ensure passwords are not included
         }
         return userList;
+    }
+
+    public Server createNewServer(String nameNewServer, int idUserCreatingServer) throws SQLException
+    {
+        ServerDao serverDao = new ServerDao(connection);
+        Server newServer;
+        while(true)
+        {
+            newServer = new Server(-1, nameNewServer, idUserCreatingServer, UniqueCodeGenerator.generateUniqueCode(), null);
+            if(serverDao.getServerByServerCode(newServer.getServerCode()) == null)
+            {
+                break;
+            }
+        }
+        int resultAddServer = serverDao.addServer(newServer);
+        if(resultAddServer == -1)
+        {
+            throw new SQLException();
+        }
+
+        ServerMembershipDao serverMembershipDao = new ServerMembershipDao(connection);
+
+        ServerMembership serverMembership = new ServerMembership(-1, idUserCreatingServer, resultAddServer, "admin");
+
+        int resultAddServerMembership = serverMembershipDao.addServerMembership(serverMembership);
+
+        if(resultAddServerMembership == -1)
+        {
+            serverDao.deleteServer(resultAddServer);
+            throw new SQLException();
+        }
+
+        newServer = serverDao.getServerById(resultAddServer);
+        return newServer;
+
     }
 }

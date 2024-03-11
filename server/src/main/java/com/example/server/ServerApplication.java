@@ -263,21 +263,21 @@ public class ServerApplication {
                     }
                     else if(request.getType() == MessageType.CHANNEL_LIST_REQUEST)
                     {
-                        logger.info("Recieve message CHANNEL_LIST_REQUEST");
+                        logger.info("Receive message CHANNEL_LIST_REQUEST");
                         handleChannelListRequest(connectionHost, request);
                     }
                     else if(request.getType() == MessageType.MESSAGE_LIST_REQUEST)
                     {
-                        logger.info("Recieve message MESSAGE_LIST_REQUEST");
+                        logger.info("Receive message MESSAGE_LIST_REQUEST");
                         handleMessageListRequest(connectionHost, request);
                     }
                     else if(request.getType() == MessageType.MESSAGE_REQUEST)
                     {
-                        logger.info("Recieve message MESSAGE_REQUEST");
-                        logger.debug("User selected server {}", (serverSelected != null) ? serverSelected.getName() : "null");
-                        logger.debug("User selected channel {}", (channelSelected != null) ? channelSelected.getName() : "null");
-                        handleMessageRequest(connectionHost, request);
+                        logger.info("Receive message CREATE_NEW_SERVER_REQUEST");
+                        logger.debug("Name for the new server : {}", request.getData());
+                        handleCreateNewServerRequest(connectionHost, request);
                     }
+
                     else
                     {
                         logger.info("Bad MessageType");
@@ -290,6 +290,12 @@ public class ServerApplication {
                 logger.error("Error while communicating with " + socket.getRemoteSocketAddress());
                 logger.error("Error occurred:", e);
             }
+        }
+
+        private void handleCreateNewServerRequest(ConnectionHost connectionHost, CommunicationMessage request)
+        {
+
+
         }
 
 
