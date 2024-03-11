@@ -61,7 +61,18 @@ public enum MessageType {
     /**
      * Send new message to login users.
      */
-    MESSAGE_RESPONSE;
+    MESSAGE_RESPONSE,
+
+    /**
+     * Request create new server
+     */
+    CREATE_NEW_SERVER_REQUEST,
+
+    /**
+     * Response create new server
+     */
+    CREATE_NEW_SERVER_RESPONSE;
+
 
     /**
      * Converts the message type to its string representation.
