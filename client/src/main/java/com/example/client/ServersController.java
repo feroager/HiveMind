@@ -2,11 +2,11 @@ package com.example.client;
 
 import com.example.database.models.Channel;
 import com.example.database.models.Server;
-import com.example.utils.ConsoleHelper;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Tooltip;
-import javafx.scene.layout.HBox;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Optional;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
@@ -166,5 +167,88 @@ public class ServersController {
     public void setChannelsController(ChannelsController channelsController)
     {
         this.channelsController = channelsController;
+    }
+
+    private void showDialog() {
+
+    }
+
+    public void showDialogServer() {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Choose option");
+
+        Label headerLabel = new Label("Decide whether you want to create a new server or join an existing one.");
+        headerLabel.setStyle("-fx-text-fill: white;");
+        BorderPane header = new BorderPane();
+        header.setStyle("-fx-background-color: #343541;");
+        header.setPadding(new Insets(10));
+        header.setCenter(headerLabel);
+
+        dialog.getDialogPane().setContent(new VBox());
+        dialog.getDialogPane().setContentText(null);
+        dialog.getDialogPane().setHeader(header);
+        dialog.getDialogPane().setBackground(new Background(new BackgroundFill(Color.valueOf("#343541"), CornerRadii.EMPTY, Insets.EMPTY)));
+
+        ButtonType createServerButtonType = new ButtonType("Create");
+        ButtonType joinServerButtonType = new ButtonType("Join");
+        dialog.getDialogPane().getButtonTypes().addAll(createServerButtonType, joinServerButtonType, ButtonType.CANCEL);
+
+        dialog.setResultConverter(buttonType -> {
+            if (buttonType == createServerButtonType) {
+                dialog.close();
+                showCreateServerDialog();
+            } else if (buttonType == joinServerButtonType) {
+                //dołącznie do istniejcącego serwera
+            }
+            return null;
+        });
+
+        dialog.show();
+    }
+
+
+    private void showCreateServerDialog() {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Create a new server");
+
+        Label messageLabel = new Label("Please enter the name for the new server:");
+        messageLabel.setStyle("-fx-text-fill: white;");
+
+        TextField serverNameField = new TextField();
+        serverNameField.setPromptText("Enter server name");
+        serverNameField.setEditable(true);
+        serverNameField.setVisible(true);
+        serverNameField.setManaged(true);
+
+        VBox content = new VBox();
+        content.getChildren().addAll(messageLabel, serverNameField);
+        content.layout();
+
+        dialog.getDialogPane().setContent(content);
+        dialog.getDialogPane().setBackground(new Background(new BackgroundFill(Color.valueOf("#343541"), CornerRadii.EMPTY, Insets.EMPTY)));
+
+        ButtonType createButtonType = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
+        ButtonType backButtonType = new ButtonType("Back", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(createButtonType, backButtonType);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+
+        if(result.get() == createButtonType)
+        {
+            String serverName = serverNameField.getText();
+            createNewServer(serverName);
+            logger.info("Pressed createButtonType");
+        }
+        else if(result.get() == backButtonType)
+        {
+            dialog.close();
+            logger.info("Pressed backButtonType");
+            showDialogServer();
+        }
+
+    }
+
+    private void createNewServer(String serverName) {
+        logger.info("Creating new server: " + serverName);
     }
 }

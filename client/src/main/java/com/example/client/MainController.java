@@ -4,6 +4,8 @@ import com.example.database.models.Message;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -147,4 +149,6 @@ public class MainController
             sendMessages();
         }
     }
+
+
 }
