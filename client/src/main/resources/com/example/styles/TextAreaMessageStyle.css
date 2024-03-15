@@ -1,0 +1,30 @@
+.scroll-pane{
+    -fx-hbar-policy:never;
+    -fx-vbar-policy:never;
+    //-fx-background-color: transparent;
+    //-fx-background-insets: 0;
+    //-fx-padding: 0;
+    //-fx-text-box-border: transparent;
+    //-fx-control-inner-background: transparent;
+    -fx-font-size: 13px;
+    -fx-font-family: "System";
+    -fx-text-fill: white;
+    //-fx-highlight-fill: rgba(0,0,0,0);
+    //-fx-highlight-text-fill: white;
+    //-fx-font-smoothing-type: gray;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    //-fx-text-area-border: transparent;
+}
+
+.text-area-context-menu .context-menu {
+    -fx-background-color: DARKGREY;
+}
+
+.text-area-context-menu .context-menu .menu-item {
+    -fx-text-fill: white;
+}
+
+.text-area-context-menu .context-menu .menu-item:hover {
+    -fx-background-color: gray;
+}

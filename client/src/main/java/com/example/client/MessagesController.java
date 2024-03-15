@@ -107,6 +107,9 @@ public class MessagesController
         textArea.setPrefHeight(Region.USE_COMPUTED_SIZE);
         textArea.setMaxHeight(Double.MAX_VALUE);
         textArea.setStyle("-fx-control-inner-background:#343541;");
+        textArea.getStylesheets().add(getClass().getResource("/com/example/styles/TextAreaMessageStyle.css").toExternalForm());
+        textArea.getStyleClass().add("scroll-pane");
+        textArea.getStyleClass().add("text-area-context-menu");
 
         textArea.setPrefRowCount(2);
 
