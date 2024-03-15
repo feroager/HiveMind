@@ -10,7 +10,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #343541;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.MainController">
+<BorderPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #343541;" stylesheets="@../styles/ScrollBar.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.MainController">
+    
     <!-- Top -->
     <top>
         <!-- Server bar with scrollbar -->
@@ -38,7 +39,7 @@
                 <AnchorPane>
                     <children>
                         <!-- Message list -->
-                        <ScrollPane fitToWidth="true" fx:id="messagesScrollPane" hbarPolicy="NEVER" style="-fx-background: #343541;" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <ScrollPane fx:id="messagesScrollPane" fitToWidth="true" hbarPolicy="NEVER" style="-fx-background: #343541;" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <VBox VBox.vgrow="ALWAYS">
                                 <fx:include fx:id="messages" source="MessagesView.fxml" />
                             </VBox>
@@ -53,7 +54,8 @@
                                 <Button mnemonicParsing="false" onAction="#sendMessages" text="➤">
                                     <font>
                                         <Font name="System Bold" size="13.0" />
-                                    </font></Button>
+                                    </font>
+                                </Button>
                             </children>
                         </HBox>
                     </children>
