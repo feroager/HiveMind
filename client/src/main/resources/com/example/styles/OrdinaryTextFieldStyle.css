@@ -1,0 +1,23 @@
+/* Style for TextField */
+.text-field {
+    -fx-background-color: #424242; /* Dark background color */
+    -fx-text-fill: white; /* White text color */
+    -fx-font-size: 14px; /* Font size */
+    -fx-padding: 5px 10px; /* Inner margins */
+    -fx-border-radius: 5px; /* Border radius */
+    -fx-background-radius: 5px; /* Background border radius */
+    -fx-border-color: #1F1F1F; /* Dark border color */
+    -fx-border-width: 2px; /* Border width */
+}
+
+/* Style for TextField when hovered */
+.text-field:hover {
+    -fx-background-color: #5E5E5E; /* Changed darker background color on hover */
+    -fx-border-color: #3E3E3E; /* Changed border color on hover */
+}
+
+/* Style for TextField when pressed */
+.text-field:pressed {
+    -fx-background-color: #2E2E2E; /* Changed even darker background color when pressed */
+    -fx-border-color: #0F0F0F; /* Changed border color when pressed */
+}
