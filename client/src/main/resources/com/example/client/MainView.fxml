@@ -35,10 +35,10 @@
     <center>
         <SplitPane dividerPositions="0.8" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
             <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                <AnchorPane>
                     <children>
                         <!-- Message list -->
-                        <ScrollPane fx:id="messagesScrollPane" hbarPolicy="NEVER" style="-fx-background: #343541;" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <ScrollPane fitToWidth="true" fx:id="messagesScrollPane" hbarPolicy="NEVER" style="-fx-background: #343541;" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <VBox VBox.vgrow="ALWAYS">
                                 <fx:include fx:id="messages" source="MessagesView.fxml" />
                             </VBox>

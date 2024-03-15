@@ -4,13 +4,23 @@ import com.example.database.models.Message;
 import com.example.database.models.User;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -47,8 +57,8 @@ public class MessagesController
                 messagesContainer.getChildren().clear();
 
                 for (Message message : messagesList) {
-                    Label messageLabel = createMessage(message);
-                    messagesContainer.getChildren().add(messageLabel);
+                    TextArea messageTextArea = createMessage(message);
+                    messagesContainer.getChildren().add(messageTextArea);
                 }
 
             } else {
@@ -75,22 +85,52 @@ public class MessagesController
     }
 
     /**
-     * Creates a label for displaying a message.
+     * Creates a textArea for displaying a message.
      *
      * @param message The message to be displayed.
-     * @return The Label instance representing the message.
+     * @return The TextArea instance representing the message.
      */
-    private Label createMessage(Message message) {
+    private TextArea createMessage(Message message)
+    {
         String userName = "Unknown";
         User user = associateUsernameWithIdMessage(message);
-        if (user != null)
-        {
+        if (user != null) {
             userName = user.getUsername();
         }
-        Label label = new Label(userName + "\n" + message.getTimestamp() + "\n" + message.getContent() + "\n\n");
-        label.setPrefWidth(300);
-        return label;
+
+        TextArea textArea = new TextArea(userName + "\n" + message.getTimestamp() + "\n" + message.getContent());
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+        textArea.setMaxWidth(Double.MAX_VALUE);
+        textArea.setPrefWidth(Region.USE_COMPUTED_SIZE);
+        textArea.setMinHeight(0);
+        textArea.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        textArea.setMaxHeight(Double.MAX_VALUE);
+        textArea.setStyle("-fx-control-inner-background:#343541;");
+
+        textArea.setPrefRowCount(2);
+
+        // Listener to change the width of the TextArea
+        textArea.widthProperty().addListener((obs, oldWidth, newWidth) -> {
+            // We calculate the number of lines needed to display the text
+            double actualWidth = newWidth.doubleValue();
+            double textWidth = textArea.getFont().getSize() * textArea.getText().length(); // Approximate text width
+            int linesNeeded = (int) (Math.ceil(textWidth / actualWidth)) / 2;
+            // We update the number of rows in the TextArea
+            textArea.setPrefRowCount(2 + linesNeeded + 1);
+        });
+
+        Stage stage = clientHandler.getStageWithMainContoller();
+        stage.maximizedProperty().addListener((obs, wasMaximized, isNowMaximized) -> {
+            if (isNowMaximized)
+            {
+                textArea.setPrefRowCount(2);
+            }
+        });
+
+        return textArea;
     }
+
 
     /**
      * Retrieves the list of messages currently displayed.

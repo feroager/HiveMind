@@ -8,6 +8,7 @@ import com.example.message.CommunicationMessage;
 import com.example.message.MessageType;
 import com.example.utils.ConnectionHost;
 import com.example.utils.ConsoleHelper;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +44,7 @@ public class ClientHandler extends Thread {
     private Channel selectedChannel;
     private List<Channel> userChannelList;
     private List<User> serverUserList;
+
 
     /**
      * Constructs a new ClientHandler instance.
@@ -356,5 +358,10 @@ public class ClientHandler extends Thread {
     public void setCreateNewServerRequest(boolean createNewServerRequest)
     {
         isCreateNewServerRequest = createNewServerRequest;
+    }
+
+    public Stage getStageWithMainContoller()
+    {
+        return mainController.getStage();
     }
 }

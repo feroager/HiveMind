@@ -73,6 +73,7 @@ public class LoginController {
             primaryStage.setScene(new Scene(mainView));
             MainController mainController = loader.getController();
             this.mainController = mainController;
+            this.mainController.setStage(primaryStage);
             // Setting the closing event handler
             primaryStage.setOnCloseRequest(event -> {
                 mainController.getFooterController().onActionLogoutButton();

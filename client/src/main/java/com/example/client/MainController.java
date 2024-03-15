@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +45,17 @@ public class MainController
 
     @FXML
     private ScrollPane messagesScrollPane;
+    private Stage stage;
+
+    public Stage getStage()
+    {
+        return stage;
+    }
+
+    public void setStage(Stage stage)
+    {
+        this.stage = stage;
+    }
 
     /**
      * Retrieves the FooterController associated with this MainController.
@@ -86,6 +98,7 @@ public class MainController
         } else {
             logger.warn("FooterController not is null.");
         }
+        //stage = (Stage) messagesScrollPane.getScene().getWindow();
     }
 
     /**
