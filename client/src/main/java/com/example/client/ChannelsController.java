@@ -65,6 +65,10 @@ public class ChannelsController {
         button.setMinWidth(USE_COMPUTED_SIZE);
         button.setMaxHeight(USE_COMPUTED_SIZE);
         button.setMaxWidth(USE_COMPUTED_SIZE);
+        button.getStylesheets().add(getClass().getResource("/com/example/styles/ChannelButtonStyle.css").toExternalForm());
+        button.getStyleClass().add("channel-button");
+        button.getStyleClass().add("channel-button:hover");
+        button.getStyleClass().add("channel-button:pressed");
 
         button.setOnAction(event -> handleChannelButtonClick(channel));
 

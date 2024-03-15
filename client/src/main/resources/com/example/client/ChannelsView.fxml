@@ -5,7 +5,7 @@
 
 <!-- fx:controller="com.example.client.ChannelsView" -->
 
-<VBox fx:id="channelsContainer"  prefWidth="200.0" style="-fx-background-color: #343541;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.ChannelsController">
+<VBox fx:id="channelsContainer" prefWidth="200.0" style="-fx-background-color: #343541;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.ChannelsController">
    <children>
       <Button alignment="CENTER" contentDisplay="CENTER" maxWidth="200.0" mnemonicParsing="false" text="Add Channels" />
    </children>

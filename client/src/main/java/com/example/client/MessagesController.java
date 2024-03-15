@@ -111,6 +111,12 @@ public class MessagesController
         textArea.getStyleClass().add("scroll-pane");
         textArea.getStyleClass().add("text-area-context-menu");
 
+        double actualWidthSingle = textArea.getWidth();
+        double textWidthSingle = textArea.getFont().getSize() * textArea.getText().length(); // Approximate text width
+        int linesNeededSingle = (int) (Math.ceil(textWidthSingle / actualWidthSingle)) / 2;
+        // We update the number of rows in the TextArea
+        textArea.setPrefRowCount(2 + linesNeededSingle + 1);
+
         textArea.setPrefRowCount(2);
 
         // Listener to change the width of the TextArea

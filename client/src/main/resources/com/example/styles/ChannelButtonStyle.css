@@ -1,0 +1,25 @@
+/* Styl dla przycisków wybierania kanałów */
+.channel-button {
+    -fx-background-color: #424242; /* Ciemny kolor tła */
+    -fx-text-fill: white; /* Biały kolor tekstu */
+    -fx-font-size: 14px; /* Rozmiar czcionki */
+    //-fx-pref-width: 120px; /* Preferowana szerokość */
+    //-fx-pref-height: 40px; /* Preferowana wysokość */
+    -fx-padding: 5px 10px; /* Wewnętrzne marginesy */
+    -fx-border-radius: 5px; /* Promień zaokrąglenia rogów */
+    -fx-background-radius: 5px; /* Promień zaokrąglenia rogów tła */
+    -fx-border-color: #1F1F1F; /* Ciemny kolor obramowania */
+    -fx-border-width: 2px; /* Grubość obramowania */
+}
+
+/* Styl dla przycisków wybierania kanałów po najechaniu myszką */
+.channel-button:hover {
+    -fx-background-color: #5E5E5E; /* Zmieniony ciemniejszy kolor tła na najechanie */
+    -fx-border-color: #3E3E3E; /* Zmieniony kolor obramowania na najechanie */
+}
+
+/* Styl dla przycisków wybierania kanałów po kliknięciu */
+.channel-button:pressed {
+    -fx-background-color: #2E2E2E; /* Zmieniony jeszcze ciemniejszy kolor tła po kliknięciu */
+    -fx-border-color: #0F0F0F; /* Zmieniony kolor obramowania po kliknięciu */
+}
