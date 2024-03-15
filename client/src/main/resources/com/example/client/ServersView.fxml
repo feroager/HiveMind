@@ -9,7 +9,7 @@
 
 <HBox fx:id="serversContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #343541;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.ServersController">
    <children>
-      <Button fx:id="addServerButton" mnemonicParsing="false" onAction="#showDialogServer" prefHeight="60.0" prefWidth="60.0">
+      <Button fx:id="addServerButton" mnemonicParsing="false" onAction="#showDialogServer" prefHeight="60.0" prefWidth="60.0" stylesheets="@../styles/AddServerButtonStyle.css">
          <graphic>
             <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                <image>

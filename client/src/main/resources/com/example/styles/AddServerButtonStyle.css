@@ -1,0 +1,21 @@
+/* Styl dla przycisku dodawania nowych serwerów */
+.add-server-button {
+    -fx-background-color: #4CAF50; /* Kolor tła */
+    -fx-text-fill: white; /* Kolor tekstu */
+    -fx-font-size: 14px; /* Rozmiar czcionki */
+    -fx-padding: 5px 10px; /* Wewnętrzne marginesy */
+    -fx-border-radius: 5px; /* Promień zaokrąglenia rogów */
+    -fx-background-radius: 5px; /* Promień zaokrąglenia rogów tła */
+    -fx-border-color: #388E3C; /* Kolor obramowania */
+    -fx-border-width: 2px; /* Grubość obramowania */
+}
+
+/* Styl dla przycisku dodawania nowych serwerów po najechaniu myszką */
+.add-server-button:hover {
+    -fx-background-color: #43A047; /* Zmieniony kolor tła na najechanie */
+}
+
+/* Styl dla przycisku dodawania nowych serwerów po kliknięciu */
+.add-server-button:pressed {
+    -fx-background-color: #388E3C; /* Zmieniony kolor tła po kliknięciu */
+}

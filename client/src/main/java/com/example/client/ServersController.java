@@ -1,11 +1,9 @@
 package com.example.client;
 
 import com.example.database.models.Channel;
-import com.example.database.models.Message;
 import com.example.database.models.Server;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -42,6 +40,11 @@ public class ServersController {
      */
     public void initializeServersList() {
         Platform.runLater(() -> {
+            addServerButton.getStylesheets().add(getClass().getResource("/com/example/styles/AddServerButtonStyle.css").toExternalForm());
+            addServerButton.getStyleClass().add("add-server-button");
+            addServerButton.getStyleClass().add("add-server-button:hover");
+            addServerButton.getStyleClass().add("add-server-button:pressed");
+
             List<Server> serverList = clientHandler.getServerList();
 
             // Clear all children of serversContainer except the add server button
