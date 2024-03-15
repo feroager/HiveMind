@@ -1,25 +1,25 @@
-/* Styl dla przycisków wybierania kanałów */
+/* Style for channel selection buttons */
 .channel-button {
-    -fx-background-color: #424242; /* Ciemny kolor tła */
-    -fx-text-fill: white; /* Biały kolor tekstu */
-    -fx-font-size: 14px; /* Rozmiar czcionki */
-    //-fx-pref-width: 120px; /* Preferowana szerokość */
-    //-fx-pref-height: 40px; /* Preferowana wysokość */
-    -fx-padding: 5px 10px; /* Wewnętrzne marginesy */
-    -fx-border-radius: 5px; /* Promień zaokrąglenia rogów */
-    -fx-background-radius: 5px; /* Promień zaokrąglenia rogów tła */
-    -fx-border-color: #1F1F1F; /* Ciemny kolor obramowania */
-    -fx-border-width: 2px; /* Grubość obramowania */
+    -fx-background-color: #424242; /* Dark background color */
+    -fx-text-fill: white; /* White text color */
+    -fx-font-size: 14px; /* Font size */
+    //-fx-pref-width: 120px; /* Preferred width */
+    //-fx-pref-height: 40px; /* Preferred height */
+    -fx-padding: 5px 10px; /* Inner margins */
+    -fx-border-radius: 5px; /* Corner radius */
+    -fx-background-radius: 5px; /* Background corner radius */
+    -fx-border-color: #1F1F1F; /* Dark border color */
+    -fx-border-width: 2px; /* Border thickness */
 }
 
-/* Styl dla przycisków wybierania kanałów po najechaniu myszką */
+/* Style for channel selection buttons on mouse hover */
 .channel-button:hover {
-    -fx-background-color: #5E5E5E; /* Zmieniony ciemniejszy kolor tła na najechanie */
-    -fx-border-color: #3E3E3E; /* Zmieniony kolor obramowania na najechanie */
+    -fx-background-color: #5E5E5E; /* Darker background color on hover */
+    -fx-border-color: #3E3E3E; /* Border color change on hover */
 }
 
-/* Styl dla przycisków wybierania kanałów po kliknięciu */
+/* Style for channel selection buttons when pressed */
 .channel-button:pressed {
-    -fx-background-color: #2E2E2E; /* Zmieniony jeszcze ciemniejszy kolor tła po kliknięciu */
-    -fx-border-color: #0F0F0F; /* Zmieniony kolor obramowania po kliknięciu */
+    -fx-background-color: #2E2E2E; /* Even darker background color when pressed */
+    -fx-border-color: #0F0F0F; /* Border color change when pressed */
 }

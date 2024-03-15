@@ -17,7 +17,7 @@
     <VBox alignment="CENTER" prefHeight="372.0" prefWidth="300.0">
       <HBox prefHeight="100.0" prefWidth="200.0" spacing="35.0">
          <children>
-            <Button fx:id="BackRegistration" mnemonicParsing="false" onAction="#onActionBackRegistration" text="⬅">
+            <Button fx:id="BackRegistration" mnemonicParsing="false" onAction="#onActionBackRegistration" stylesheets="@../styles/OrdinaryButtonStyle.css" text="⬅">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -101,7 +101,7 @@
             </padding>
         </HBox>
 
-        <Button fx:id="SignUpRegistration" onAction="#onActionSignUpRegistration" text="Sign Up">
+        <Button fx:id="SignUpRegistration" onAction="#onActionSignUpRegistration" stylesheets="@../styles/OrdinaryButtonStyle.css" text="Sign Up">
             <styleClass>
                 <String fx:value="button" />
             </styleClass>

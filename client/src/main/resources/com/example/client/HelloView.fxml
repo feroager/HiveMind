@@ -16,13 +16,13 @@
             </font>
         </Text>
 
-        <Button fx:id="SignInHello" onAction="#onActionSignInHello" text="Sign In">
+        <Button fx:id="SignInHello" onAction="#onActionSignInHello" stylesheets="@../styles/OrdinaryButtonStyle.css" text="Sign In">
             <styleClass>
                 <String fx:value="button" />
             </styleClass>
         </Button>
 
-        <Button fx:id="SignUpHello" onAction="#onActionSignUpHello" text="Sign Up">
+        <Button fx:id="SignUpHello" onAction="#onActionSignUpHello" stylesheets="@../styles/OrdinaryButtonStyle.css" text="Sign Up">
             <styleClass>
                 <String fx:value="button" />
             </styleClass>
