@@ -38,6 +38,8 @@ public class ClientHandler extends Thread {
     private volatile boolean isMessagesListRequest;
     private volatile boolean isSendMessage;
     private volatile boolean isCreateNewServerRequest;
+    private volatile boolean isJoinToServerRequest;
+
     private User loggedUser;
     private List<Server> serverList;
     private Server selectedServer;
@@ -82,6 +84,7 @@ public class ClientHandler extends Thread {
         isChannelsListRequest = false;
         isMessagesListRequest = false;
         isCreateNewServerRequest = false;
+        isJoinToServerRequest = false;
     }
 
     /**
@@ -144,10 +147,17 @@ public class ClientHandler extends Thread {
                 isCreateNewServerRequest = false;
                 sendCreateNewServerRequest();
             }
+
+            if (isJoinToServerRequest) {
+                isJoinToServerRequest = false;
+                sendJoinToServerRequest();
+            }
         }
 
         messageReceiverThread.interrupt();
     }
+
+
 
     /**
      * Handles a received message from the server.
@@ -278,6 +288,18 @@ public class ClientHandler extends Thread {
         }
     }
 
+    private void sendJoinToServerRequest()
+    {
+        try {
+            CommunicationMessage sendJoinToServerRequest = new CommunicationMessage(MessageType.CREATE_NEW_SERVER_REQUEST, serversController.getNameNewlyCreatedServer());
+            connectionHost.send(sendJoinToServerRequest);
+            logger.info("Sent JOIN_TO_SERVER_REQUEST");
+        } catch (IOException e) {
+            logger.error("Error sending JOIN_TO_SERVER_REQUEST");
+            logger.error("Error occurred:", e);
+        }
+    }
+
     /**
      * Retrieves the list of servers.
      *
@@ -363,5 +385,10 @@ public class ClientHandler extends Thread {
     public Stage getStageWithMainContoller()
     {
         return mainController.getStage();
+    }
+
+    public void setJoinToServerRequest(boolean joinToServerRequest)
+    {
+        isJoinToServerRequest = joinToServerRequest;
     }
 }

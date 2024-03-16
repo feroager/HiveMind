@@ -34,6 +34,7 @@ public class ServersController {
     private ClientHandler clientHandler;
     private ChannelsController channelsController;
     private String nameNewlyCreatedServer;
+    private String serverCode;
 
     /**
      * Initializes the list of servers.
@@ -309,7 +310,7 @@ public class ServersController {
         {
             String serverCode = serverCodeField.getText();
             logger.info("Pressed joinButtonType");
-            joinNewServer(serverCode);
+            joinToServer(serverCode);
         }
         else if(result.get() == backButtonType)
         {
@@ -319,8 +320,11 @@ public class ServersController {
         }
     }
 
-    private void joinNewServer(String serverCode) {
+    private void joinToServer(String serverCode)
+    {
         logger.info("Join to server. Server code: " + serverCode);
+        this.serverCode = serverCode;
+        clientHandler.setJoinToServerRequest(true);
     }
 
     private void createNewServer(String serverName) {
@@ -334,6 +338,8 @@ public class ServersController {
         return nameNewlyCreatedServer;
     }
 
-
-
+    public String getServerCode()
+    {
+        return serverCode;
+    }
 }
