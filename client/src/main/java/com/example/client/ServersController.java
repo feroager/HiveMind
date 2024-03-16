@@ -63,6 +63,10 @@ public class ServersController {
             // Iterate through the server list and create buttons
             for (Server server : serverList) {
                 Button serverButton = createServerButton(server);
+                serverButton.getStylesheets().add(getClass().getResource("/com/example/styles/ServerButtonStyle.css").toExternalForm());
+                serverButton.getStyleClass().add("server-button");
+                serverButton.getStyleClass().add("server-button:hover");
+                serverButton.getStyleClass().add("server-button:pressed");
                 serversContainer.getChildren().add(serverButton);
             }
         });
