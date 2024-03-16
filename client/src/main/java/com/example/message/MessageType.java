@@ -71,7 +71,19 @@ public enum MessageType {
     /**
      * Response create new server
      */
-    CREATE_NEW_SERVER_RESPONSE;
+    CREATE_NEW_SERVER_RESPONSE,
+
+    /**
+     * Request join to server
+     */
+    JOIN_TO_SERVER_REQUEST,
+
+    /**
+     * Response join to server
+     */
+    JOIN_TO_SERVER_RESPONSE;
+
+
 
 
     /**
