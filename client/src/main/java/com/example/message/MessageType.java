@@ -81,7 +81,17 @@ public enum MessageType {
     /**
      * Response join to server
      */
-    JOIN_TO_SERVER_RESPONSE;
+    JOIN_TO_SERVER_RESPONSE,
+
+    /**
+     * Request create new channel
+     */
+    CREATE_NEW_CHANNEL_REQUEST,
+
+    /**
+     * Response create new channel
+     */
+    CREATE_NEW_CHANNEL_RESPONSE;
 
 
 

@@ -172,4 +172,9 @@ public class ChannelsController {
 
         messagesController.updateMessagesList(messageList);
     }
+
+    public String getNameNewlyCreatedChannel()
+    {
+        return nameNewlyCreatedChannel;
+    }
 }

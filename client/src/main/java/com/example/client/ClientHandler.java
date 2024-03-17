@@ -39,7 +39,7 @@ public class ClientHandler extends Thread {
     private volatile boolean isSendMessage;
     private volatile boolean isCreateNewServerRequest;
     private volatile boolean isJoinToServerRequest;
-
+    private volatile boolean isCreateNewChannelRequest;
     private User loggedUser;
     private List<Server> serverList;
     private Server selectedServer;
@@ -85,6 +85,7 @@ public class ClientHandler extends Thread {
         isMessagesListRequest = false;
         isCreateNewServerRequest = false;
         isJoinToServerRequest = false;
+        isCreateNewChannelRequest = false;
     }
 
     /**
@@ -152,11 +153,16 @@ public class ClientHandler extends Thread {
                 isJoinToServerRequest = false;
                 sendJoinToServerRequest();
             }
+
+            if (isCreateNewChannelRequest) {
+                isCreateNewChannelRequest = false;
+                sendCreateNewChannelRequest();
+            }
+
         }
 
         messageReceiverThread.interrupt();
     }
-
 
 
     /**
@@ -315,6 +321,18 @@ public class ClientHandler extends Thread {
         }
     }
 
+    private void sendCreateNewChannelRequest()
+    {
+        try {
+            CommunicationMessage sendCreateNewServerRequest = new CommunicationMessage(MessageType.CREATE_NEW_CHANNEL_REQUEST, channelsController.getNameNewlyCreatedChannel());
+            connectionHost.send(sendCreateNewServerRequest);
+            logger.info("Sent CREATE_NEW_CHANNEL_REQUEST");
+        } catch (IOException e) {
+            logger.error("Error sending CREATE_NEW_CHANNEL_REQUEST");
+            logger.error("Error occurred:", e);
+        }
+    }
+
     /**
      * Retrieves the list of servers.
      *
@@ -405,5 +423,10 @@ public class ClientHandler extends Thread {
     public void setJoinToServerRequest(boolean joinToServerRequest)
     {
         isJoinToServerRequest = joinToServerRequest;
+    }
+
+    public void setCreateNewChannelRequest(boolean createNewChannelRequest)
+    {
+        isCreateNewChannelRequest = createNewChannelRequest;
     }
 }
