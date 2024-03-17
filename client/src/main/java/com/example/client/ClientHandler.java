@@ -183,7 +183,22 @@ public class ClientHandler extends Thread {
                 logger.info("Receive CREATE_NEW_SERVER_RESPONSE");
                 handleCreateNewServerResponse(receivedMessage);
                 break;
+            case JOIN_TO_SERVER_RESPONSE:
+                logger.info("Receive JOIN_TO_SERVER_RESPONSE");
+                handleJoinToServerResponse(receivedMessage);
+                break;
             // Handle other message types if needed
+        }
+    }
+
+    private void handleJoinToServerResponse(CommunicationMessage receivedMessage)
+    {
+        if(receivedMessage.getServer() != null)
+        {
+            logger.debug("Joined to server: {}", receivedMessage.getServer().getName());
+            serverList.add(receivedMessage.getServer());
+            serversController.initializeServersList();
+            logger.info("Added Server to serverList.");
         }
     }
 
@@ -291,7 +306,7 @@ public class ClientHandler extends Thread {
     private void sendJoinToServerRequest()
     {
         try {
-            CommunicationMessage sendJoinToServerRequest = new CommunicationMessage(MessageType.CREATE_NEW_SERVER_REQUEST, serversController.getNameNewlyCreatedServer());
+            CommunicationMessage sendJoinToServerRequest = new CommunicationMessage(MessageType.JOIN_TO_SERVER_REQUEST, serversController.getServerCode());
             connectionHost.send(sendJoinToServerRequest);
             logger.info("Sent JOIN_TO_SERVER_REQUEST");
         } catch (IOException e) {

@@ -263,33 +263,39 @@ public class ServerApplication {
                     }
                     else if(request.getType() == MessageType.CHANNEL_LIST_REQUEST)
                     {
-                        logger.info("Receive message CHANNEL_LIST_REQUEST");
+                        logger.info("Received message CHANNEL_LIST_REQUEST");
                         handleChannelListRequest(connectionHost, request);
                     }
                     else if(request.getType() == MessageType.MESSAGE_LIST_REQUEST)
                     {
-                        logger.info("Receive message MESSAGE_LIST_REQUEST");
+                        logger.info("Received message MESSAGE_LIST_REQUEST");
                         handleMessageListRequest(connectionHost, request);
                     }
                     else if(request.getType() == MessageType.MESSAGE_REQUEST)
                     {
-                        logger.info("Recieve message MESSAGE_REQUEST");
+                        logger.info("Received message MESSAGE_REQUEST");
                         logger.debug("User selected server {}", (serverSelected != null) ? serverSelected.getName() : "null");
                         logger.debug("User selected channel {}", (channelSelected != null) ? channelSelected.getName() : "null");
                         handleMessageRequest(connectionHost, request);
-                        logger.info("Receive message CREATE_NEW_SERVER_REQUEST");
+                        logger.info("Received message CREATE_NEW_SERVER_REQUEST");
                         logger.debug("Name for the new server : {}", request.getData());
                         handleCreateNewServerRequest(connectionHost, request);
                     }
                     else if(request.getType() == MessageType.CREATE_NEW_SERVER_REQUEST)
                     {
-                        logger.info("Receive message CREATE_NEW_SERVER_REQUEST");
+                        logger.info("Received message CREATE_NEW_SERVER_REQUEST");
                         logger.debug("Name for the new server : {}", request.getData());
                         handleCreateNewServerRequest(connectionHost, request);
                     }
+                    else if(request.getType() == MessageType.JOIN_TO_SERVER_REQUEST)
+                    {
+                        logger.info("Received message JOIN_TO_SERVER_REQUEST");
+                        logger.debug("Received server code: {}", request.getData());
+                        handleJoinToServerRequest(connectionHost, request);
+                    }
                     else
                     {
-                        logger.info("Bad MessageType");
+                        logger.warn("Bad MessageType");
                     }
 
                 }
@@ -297,6 +303,25 @@ public class ServerApplication {
             }
             catch (IOException | ClassNotFoundException  e) {
                 logger.error("Error while communicating with " + socket.getRemoteSocketAddress());
+                logger.error("Error occurred:", e);
+            }
+        }
+
+        private void handleJoinToServerRequest(ConnectionHost connectionHost, CommunicationMessage request)
+        {
+            try
+            {
+                UserInfoRetrievalHandler userInfoRetrievalHandler = new UserInfoRetrievalHandler(DbManager.getConnection());
+                Server server = null;
+                server = userInfoRetrievalHandler.joinToServer(request.getData(), user.getUserId());
+                userInfoRetrievalHandler.closeConnection();
+                connectionHost.send(new CommunicationMessage(MessageType.JOIN_TO_SERVER_RESPONSE, server));
+                logger.info("Sent JOIN_TO_SERVER_RESPONSE");
+
+            }
+            catch(SQLException | IOException e)
+            {
+                logger.error("Problem with handleJoinToServerRequest()");
                 logger.error("Error occurred:", e);
             }
         }

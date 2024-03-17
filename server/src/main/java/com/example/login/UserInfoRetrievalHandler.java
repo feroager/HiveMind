@@ -170,4 +170,21 @@ public class UserInfoRetrievalHandler {
         return newServer;
 
     }
+
+    public Server joinToServer(String codeServer, int idUserWantJoinToServer)
+    {
+        ServerDao serverDao = new ServerDao(connection);
+        Server server = serverDao.getServerByServerCode(codeServer);
+        if(server!=null)
+        {
+            ServerMembershipDao serverMembershipDao = new ServerMembershipDao(connection);
+            ServerMembership serverMembership = new ServerMembership(-1,idUserWantJoinToServer, server.getServerId(), "user");
+            int idServerMembership = serverMembershipDao.addServerMembership(serverMembership);
+            if(idServerMembership == -1)
+            {
+                server = null;
+            }
+        }
+        return server;
+    }
 }
