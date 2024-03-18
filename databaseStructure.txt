@@ -1,0 +1,90 @@
+Table users:
+    user_id (PK, AUTO_INCREMENT) - unique user identifier,
+    username - username,
+    password - user password,
+    email - user email address.
+
+Table servers:
+    server_id (PK, AUTO_INCREMENT) - unique server identifier,
+    name - server name,
+    admin_id (FK from users.user_id) - administrator identifier,
+    server_code - unique code used for user/server association,
+    creation_timestamp - timestamp indicating server creation time.
+
+Table channels:
+    channel_id (PK, AUTO_INCREMENT) - unique channel identifier,
+    server_id (FK from servers.server_id) - server identifier,
+    name - channel name,
+    last_message_id (FK from messages.message_id) - identifier of the last message sent on the channel.
+
+Table server_memberships:
+    membership_id (PK, AUTO_INCREMENT) - unique membership identifier,
+    user_id (FK from users.user_id) - user identifier,
+    server_id (FK from servers.server_id) - server identifier,
+    role - user's role within the context of the server (e.g., 'admin' or 'user').
+
+Table messages:
+    message_id (PK, AUTO_INCREMENT) - unique message identifier,
+    user_id (FK from users.user_id) - user identifier,
+    channel_id (FK from channels.channel_id) - channel identifier,
+    content - message content,
+    timestamp - timestamp indicating message addition time.
+
+------------------------------------------------------------------
+
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE servers (
+    server_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    admin_id INT,
+    server_code VARCHAR(255) UNIQUE,
+    creation_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE channels (
+    channel_id INT AUTO_INCREMENT PRIMARY KEY,
+    server_id INT,
+    name VARCHAR(255) NOT NULL,
+    last_message_id INT
+);
+
+CREATE TABLE server_memberships (
+    membership_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    server_id INT,
+    role ENUM('admin', 'user') NOT NULL
+);
+
+CREATE TABLE messages (
+    message_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    channel_id INT,
+    content TEXT NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Adding a foreign key for channels
+ALTER TABLE channels
+ADD FOREIGN KEY (server_id) REFERENCES servers(server_id),
+ADD FOREIGN KEY (last_message_id) REFERENCES messages(message_id);
+
+-- Adding a foreign key for server_memberships
+ALTER TABLE server_memberships
+ADD FOREIGN KEY (user_id) REFERENCES users(user_id),
+ADD FOREIGN KEY (server_id) REFERENCES servers(server_id);
+
+-- Adding a foreign key for messages
+ALTER TABLE messages
+ADD FOREIGN KEY (user_id) REFERENCES users(user_id),
+ADD FOREIGN KEY (channel_id) REFERENCES channels(channel_id);
+
+-- Adding a foreign key for servers
+ALTER TABLE servers
+ADD FOREIGN KEY (admin_id) REFERENCES users(user_id);
+
