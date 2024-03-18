@@ -9,19 +9,19 @@ Before starting the server, you must provide such data as the port on which the 
 
 Attention! The server only works with MySQL.
 
-![Server](screenshots/server.png)
+![Server](https://github.com/ravdal24/HiveMind/blob/master/screenshots/server.PNG)
 
 After starting the server and connecting to the database, you can create an account
 
-![Registration](screenshots/registration.png)
+![Registration](https://github.com/ravdal24/HiveMind/blob/master/screenshots/registration.PNG)
 
 Once we create an account, you can log in
 
-![log](screenshots/log.png)
+![Log](https://github.com/ravdal24/HiveMind/blob/master/screenshots/log.PNG)
 
 Both when logging in and registering, you must provide the server IP and port on which it is running
 
-![MainView](screenshots/client.png)
+![Client](https://github.com/ravdal24/HiveMind/blob/master/screenshots/client.PNG)
 
 After logging in, we will see the main screen. At the top we can see the list of servers we belong to and on the left the list of channels on the selected server. In the middle there are news on a given channel. A new server can be added using the green button with a plus sign at the top.
 
