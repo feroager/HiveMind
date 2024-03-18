@@ -111,7 +111,7 @@ public class ChannelsController {
     {
         logger.info("Creating new channel: " + channelName);
         this.nameNewlyCreatedChannel = channelName;
-        //clientHandler.setCreateNewServerRequest(true);
+        clientHandler.setCreateNewChannelRequest(true);
     }
 
     /**
@@ -165,12 +165,15 @@ public class ChannelsController {
      * @param messageList The list of messages to be loaded.
      */
     public void handleLoaderChannels(List<Message> messageList) {
-        logger.info("List of messages");
-        for (Message message : messageList) {
-            logger.info(message.getContent());
-        }
+        Platform.runLater(() -> {
+            logger.info("List of messages");
+            for (Message message : messageList) {
+                logger.info(message.getContent());
+            }
 
-        messagesController.updateMessagesList(messageList);
+            messagesController.updateMessagesList(messageList);
+        });
+
     }
 
     public String getNameNewlyCreatedChannel()

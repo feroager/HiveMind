@@ -293,6 +293,12 @@ public class ServerApplication {
                         logger.debug("Received server code: {}", request.getData());
                         handleJoinToServerRequest(connectionHost, request);
                     }
+                    else if(request.getType() == MessageType.CREATE_NEW_CHANNEL_REQUEST)
+                    {
+                        logger.info("Received message CREATE_NEW_CHANNEL_REQUEST");
+                        logger.debug("Name for the new server : {}", request.getData());
+                        handleCreateNewChannelRequest(connectionHost, request);
+                    }
                     else
                     {
                         logger.warn("Bad MessageType");
@@ -303,6 +309,26 @@ public class ServerApplication {
             }
             catch (IOException | ClassNotFoundException  e) {
                 logger.error("Error while communicating with " + socket.getRemoteSocketAddress());
+                logger.error("Error occurred:", e);
+            }
+        }
+
+        private void handleCreateNewChannelRequest(ConnectionHost connectionHost, CommunicationMessage request)
+        {
+            try
+            {
+                logger.info(user.getUsername() + " want create new channel to name " + request.getData());
+                UserInfoRetrievalHandler userInfoRetrievalHandler = new UserInfoRetrievalHandler(DbManager.getConnection());
+                Channel newChannel = null;
+                newChannel = userInfoRetrievalHandler.createNewChannel(request.getData(), serverSelected.getServerId());
+                userInfoRetrievalHandler.closeConnection();
+                connectionHost.send(new CommunicationMessage(MessageType.CREATE_NEW_CHANNEL_RESPONSE, newChannel));
+                logger.info("Sent CREATE_NEW_CHANNEL_RESPONSE");
+
+            }
+            catch(SQLException | IOException e)
+            {
+                logger.error("Problem with handleCreateNewChannelRequest()");
                 logger.error("Error occurred:", e);
             }
         }

@@ -193,7 +193,22 @@ public class ClientHandler extends Thread {
                 logger.info("Receive JOIN_TO_SERVER_RESPONSE");
                 handleJoinToServerResponse(receivedMessage);
                 break;
+            case CREATE_NEW_CHANNEL_RESPONSE:
+                logger.info("Receive CREATE_NEW_CHANNEL_RESPONSE");
+                handleCreateNewChannelResponse(receivedMessage);
+                break;
             // Handle other message types if needed
+        }
+    }
+
+    private void handleCreateNewChannelResponse(CommunicationMessage receivedMessage)
+    {
+        if(receivedMessage.getChannel() != null)
+        {
+            logger.debug("The name new created channel: {}", receivedMessage.getChannel().getName());
+            userChannelList.add(receivedMessage.getChannel());
+            channelsController.updateChannelsList(userChannelList);
+            logger.info("Added new Channel to userChannelList.");
         }
     }
 
@@ -226,6 +241,7 @@ public class ClientHandler extends Thread {
      */
     private void handleChannelListResponse(CommunicationMessage response) {
         serverUserList = response.getUserList();
+        userChannelList = response.getChannelList();
         serversController.handleLoaderChannels(response.getChannelList());
     }
 

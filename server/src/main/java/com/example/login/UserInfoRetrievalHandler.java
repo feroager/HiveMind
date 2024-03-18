@@ -187,4 +187,18 @@ public class UserInfoRetrievalHandler {
         }
         return server;
     }
+
+    public Channel createNewChannel(String nameNewChannel, int serverId)
+    {
+        Channel newChannel = new Channel(-1,serverId, nameNewChannel, 0);
+        ChannelDao channelDao = new ChannelDao(connection);
+        int resultAddChannel = channelDao.addChannel(newChannel);
+        logger.debug("resultAddChannel : {}", resultAddChannel);
+        newChannel = null;
+        if(resultAddChannel != -1)
+        {
+            newChannel = channelDao.getChannelById(resultAddChannel);
+        }
+        return newChannel;
+    }
 }
