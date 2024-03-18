@@ -1,0 +1,22 @@
+/* Styl dla przycisku dodawania nowego kanału */
+.add-channel-button {
+    -fx-background-color: #5D4037; /* Ciemnobrązowy kolor tła */
+    -fx-text-fill: white; /* Kolor tekstu */
+    -fx-font-size: 14px; /* Rozmiar czcionki */
+    -fx-padding: 10px 20px; /* Wewnętrzne marginesy */
+    -fx-border-radius: 5px; /* Promień zaokrąglenia rogów */
+    -fx-background-radius: 5px; /* Promień zaokrąglenia rogów tła */
+    -fx-border-color: #3E2723; /* Ciemny brązowy kolor obramowania */
+    -fx-border-width: 2px; /* Grubość obramowania */
+    -fx-cursor: hand; /* Kształt kursora */
+}
+
+/* Styl dla przycisku dodawania nowego kanału po najechaniu myszką */
+.add-channel-button:hover {
+    -fx-background-color: #6D4C41; /* Ciemniejszy brązowy kolor tła na najechanie */
+}
+
+/* Styl dla przycisku dodawania nowego kanału po kliknięciu */
+.add-channel-button:pressed {
+    -fx-background-color: #4E342E; /* Najciemniejszy brązowy kolor tła po kliknięciu */
+}

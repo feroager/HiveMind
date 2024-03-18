@@ -5,10 +5,10 @@ module com.example.server {
     requires slf4j.api;
 
 
-    opens com.example.server to javafx.fxml;
-    exports com.example.server;
-    exports com.example.message;
-    opens com.example.message to javafx.fxml;
-    exports com.example.utils;
-    opens com.example.utils to javafx.fxml;
+    opens com.hivemind.server to javafx.fxml;
+    exports com.hivemind.server;
+    exports com.hivemind.message;
+    opens com.hivemind.message to javafx.fxml;
+    exports com.hivemind.utils;
+    opens com.hivemind.utils to javafx.fxml;
 }

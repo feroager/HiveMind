@@ -5,6 +5,6 @@ module com.example.client {
     requires slf4j.api;
 
 
-    opens com.example.client to javafx.fxml;
-    exports com.example.client;
+    opens com.hivemind.client to javafx.fxml;
+    exports com.hivemind.client;
 }
